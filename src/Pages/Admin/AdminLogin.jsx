@@ -22,8 +22,9 @@ function AdminLogin() {
       dispatch(signInStart());
       const response = await axios.post("/admin/login", { username, password });
       const data = response
-      console.log(data)
+      console.log(data)                 
       localStorage.setItem("token", data.data.token);
+      console.log(localStorage,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
 
       if (data.data.success == false) {
         dispatch(signInFailure(data));
@@ -36,7 +37,7 @@ function AdminLogin() {
       dispatch(signInFailure("Invalid username or password"));
       console.error("Login error:", error);
     }
-  };
+  }
 
   return (
     <>

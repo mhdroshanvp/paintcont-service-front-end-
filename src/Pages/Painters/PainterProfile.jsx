@@ -51,7 +51,7 @@ function PainterProfile() {
             <div className="col-span-4 sm:col-span-9">
               <div className="bg-white shadow rounded-lg p-6 mt-7">
                 <div>
-                  <h2 className="text-xl font-bold mb-4">About Me</h2>
+                  <h2 cl  assName="text-xl font-bold mb-4">About Me</h2>
                 </div>
                 <p className="text-gray-700">
                   Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed

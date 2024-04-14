@@ -7,18 +7,23 @@ import ClientPosts from '../../Components/Clients/ClientPosts'
 
 function PainterHome() {
   return (
-    <>
-      <ClientNavbar />
-      <div className="flex  flex-col sm:flex-row h-screen">
+    <div className=''>
+
+      <div>
+       <ClientNavbar />
+      </div>
+
+
         <div className="fixed flex-initial w-full sm:w-96 bg-blue-500 h-screen  mt-14">
           <ClientCard />
           <ClientHash />
         </div>
+
         <div className="flex-1 bg-green-500">
           <ClientPosts />
         </div>
-      </div>
-    </>
+
+    </div>
   )
 }
 

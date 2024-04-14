@@ -14,6 +14,7 @@ import ClientProfile from "./Pages/Clients/ClientProfile";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import PainterHome from "./Pages/Painters/PainterHome";
 import PainterProfile from "./Pages/Painters/PainterProfile";
+import AdminUser from "./Pages/Admin/AdminUser";
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
           {/* Admin-side */}
           <Route path="admin/login" element={<AdminLogin />} />
           <Route path="admin/dashboard" element={<AdminDashboard />} />
+          <Route path="admin/user" element={<AdminUser />} />
           {/* Client/user-side */}
           <Route path="user/home" element={<ClientHome />} />
           <Route path="user/login" element={<ClientLogin />} />
