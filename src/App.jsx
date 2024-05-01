@@ -11,38 +11,114 @@ import PainterOtp from "./Pages/Painters/PainterOtp";
 import PainterResetPass from "./Pages/Painters/PainterResetPass";
 import ClientHome from "./Pages/Clients/ClientHome";
 import ClientProfile from "./Pages/Clients/ClientProfile";
-import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import PainterHome from "./Pages/Painters/PainterHome";
 import PainterProfile from "./Pages/Painters/PainterProfile";
 import AdminUser from "./Pages/Admin/AdminUser";
+import LandingPage from "./Pages/LandingPage";
+import PainterMail4Reset from "./Pages/Painters/PainterMail4Reset";
+import NotFoundPage from "./Pages/404";
+import AdminPainter from "./Pages/Admin/AdminPainter";
+import ClientPainterProfile from "./Pages/Clients/ClientPainterProfile";
+import ClientMail4Reset from "./Pages/Clients/ClientMail4Reset";
+
+import AdmnProtectedRoute from "./Components/adminProtectedRoute";
+import PainterProtectedRoute from "./Components/painterProtectedRoute";
+import UserProtectedRoute from "./Components/userProtectedRoute";
+
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
-  return (
-    <>
-      <BrowserRouter>
-        <Routes>
-          {/* Admin-side */}
-          <Route path="admin/login" element={<AdminLogin />} />
-          <Route path="admin/dashboard" element={<AdminDashboard />} />
-          <Route path="admin/user" element={<AdminUser />} />
-          {/* Client/user-side */}
-          <Route path="user/home" element={<ClientHome />} />
-          <Route path="user/login" element={<ClientLogin />} />
-          <Route path="user/signup" element={<ClientSignUp />} />
-          <Route path="user/otp" element={<ClientOtp />} />
-          <Route path="user/reset" element={<ClientResetPass />} />
-          <Route path="user/profile" element={<ClientProfile />} />
-          {/* Painter-side */}
-          <Route path="painter/home" element={<PainterHome />} />
-          <Route path="painter/login" element={<PainterLogin />} />
-          <Route path="painter/signup" element={<PainterSignup />} />
-          <Route path="painter/otp" element={<PainterOtp />} />
-          <Route path="painter/reset" element={<PainterResetPass />} />
-          <Route path="painter/profile" element={<PainterProfile />} />
-        </Routes>
-      </BrowserRouter>
-    </>
-  );
+    return (
+        <>
+            <BrowserRouter>
+                <Routes>
+                    {/* 404 */}
+                    <Route path="*" element={<NotFoundPage />} />
+                    <Route path="/" element={<LandingPage />} />
+
+                    {/* Admin-side */}
+                    <Route path="admin/login" element={<AdminLogin />} />
+                    <Route
+                        path="admin/user"
+                        element={
+                            <AdmnProtectedRoute allowedRole="admin">
+                                {" "}
+                                <AdminUser />{" "}
+                            </AdmnProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="admin/painter"
+                        element={
+                            <AdmnProtectedRoute allowedRole="admin">
+                                {" "}
+                                <AdminPainter />{" "}
+                            </AdmnProtectedRoute>
+                        }
+                    />
+
+                    {/* Client/user-side */}
+                    <Route
+                        path="user/home"
+                        element={
+                            <UserProtectedRoute allowedRole="user">
+                                {" "}
+                                <ClientHome />{" "}
+                            </UserProtectedRoute>
+                        }
+                    />
+                    <Route path="user/login" element={<ClientLogin />} />
+                    <Route path="user/signup" element={<ClientSignUp />} />
+                    <Route path="user/mail4reset" element={<ClientMail4Reset />} />
+                    <Route path="user/otp" element={<ClientOtp />} />
+                    <Route path="user/reset" element={<ClientResetPass />} />
+                    <Route
+                        path="user/profile"
+                        element={
+                            <UserProtectedRoute allowedRole="user">
+                                {" "}
+                                <ClientProfile />{" "}
+                            </UserProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="user/profile/painter "
+                        element={
+                            <UserProtectedRoute allowedRole="user">
+                                {" "}
+                                <ClientPainterProfile />{" "}
+                            </UserProtectedRoute>
+                        }
+                    />
+
+                    {/* Painter-side */}
+                    <Route
+                        path="painter/home"
+                        element={
+                            <PainterProtectedRoute allowedRole="painter">
+                                <PainterHome />
+                            </PainterProtectedRoute>
+                        }
+                    />
+                    <Route path="painter/login" element={<PainterLogin />} />
+                    <Route path="painter/signup" element={<PainterSignup />} />
+                    <Route path="painter/mail4reset" element={<PainterMail4Reset />} />
+                    <Route path="painter/otp" element={<PainterOtp />} />
+                    <Route path="painter/reset" element={<PainterResetPass />} />
+                    <Route
+                        path="painter/profile"
+                        element={
+                            <PainterProtectedRoute allowedRole="painter">
+                                <PainterProfile />
+                            </PainterProtectedRoute>
+                        }
+                    />
+                </Routes>
+            </BrowserRouter>
+            <ToastContainer />
+        </>
+    );
 }
 
 export default App;

@@ -3,6 +3,7 @@ import { Axios } from "axios";
 import React, { useState } from "react";
 import axios from "../../Services/axiosService";
 import { useNavigate } from "react-router-dom";
+import { PainterEndpoints } from "../../Services/endpoints/painter";
 
 
 
@@ -20,22 +21,21 @@ function PainterSignup() {
   });
 
   const formsubmit = async (e) => {
-    // Update state using functional update form of setState
+    
     setBody({
       username,
       email,
       password,
     });
-    console.log(body);
-    // alert(body.Bemail,body.Bpassword,body.Busername)
     e.preventDefault();
+
     try {
       console.log(body);
       console.log("username", username, "email", email, "password", password);
-      const response = await axios.post("/painter/signup", {username,email,password});
+      const response = await axios.post(PainterEndpoints.Signup, {username,email,password});
       if (response.data.success) {
         navigate('/painter/otp', { state: { userEmail: email } });
-        console.log("conmoignsiofdjg");
+        console.log("ok😌👍");
       }
     } catch (error) {
       console.log("error while sending otp req");
@@ -107,9 +107,7 @@ function PainterSignup() {
                   already have an account?{" "}
                 </span>
                 <a
-                  href="#"
-                  target="_blank"
-                  className="text-sm text-white opacity-10"
+                  href="/painter/login"
                 >
                   {" "}
                   Sign-In
@@ -119,7 +117,7 @@ function PainterSignup() {
             {/* <a href="#" className="border 1px text-center inline-block w-full px-6 py-4 text-white text-uppercase font-bold text-lg transition-all duration-500 hover:bg-[#FF6B00] hover:text-black hover:shadow-lg rounded-lg">
                  Submit
                </a> */}
-            <button onClick={(e) => formsubmit(e)}>submit</button>
+            <button className="border 1px text-center inline-block w-full px-6 py-4 text-white text-uppercase font-bold text-lg transition-all duration-500 hover:bg-[#FF6B00] hover:text-black hover:shadow-lg rounded-lg" onClick={(e) => formsubmit(e)}>submit</button>
           </form>
         </div>
       </div>

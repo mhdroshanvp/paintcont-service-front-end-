@@ -4,12 +4,12 @@ import { RiUserLine, RiLogoutCircleLine } from "react-icons/ri"; // Importing pr
 import {Navbar,Typography,IconButton,Button,Input,} from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 
-function ClientNavbar() {
+function PainterNavbar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    navigate("/user/login");
+    navigate("/painter/login");
   };
 
   return (
@@ -19,10 +19,10 @@ function ClientNavbar() {
 
         <div className="flex md:flex flex-wrap gap-4 sm:gap-14 md:mr-4 sm:mr-4">
           {/* Convert text into links */}
-          <a href="/user/home" className="text-white">
+          <a href="/painter/home" className="text-white">
             Home
           </a>
-          <a href="/user/home" className="text-white">
+          <a href="/painter/home" className="text-white">
             Painter
           </a>
           <a href="#" className="text-white">
@@ -51,7 +51,7 @@ function ClientNavbar() {
 
           {/* Adding profile and logout icons */}
           <div className="flex items-center gap-3">
-            <a href="/user/profile" className="text-white">
+            <a href="/painter/profile" className="text-white">
               <RiUserLine className="text-lg" />
             </a>
             <button onClick={handleLogout} className="text-white">
@@ -64,4 +64,4 @@ function ClientNavbar() {
   );
 }
 
-export default ClientNavbar;
+export default PainterNavbar

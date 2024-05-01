@@ -5,9 +5,10 @@ import toast from "react-hot-toast";
 import uploadImageToFirebase from "../../Services/firebaseconfig/imageUploader";
 import axios from "../../Services/axiosService";
 import { jwtDecode } from "jwt-decode";
-import { PainterEndpoints } from "../../Services/endpoints/painter";
+import { UserEndpoints } from "../../Services/endpoints/user";
 
-function PainterProfile() {
+
+function ClientPainterProfile() {
   // State to manage modal visibility
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
@@ -17,6 +18,8 @@ function PainterProfile() {
   const token = localStorage.getItem("Painter_token");
   const decode = jwtDecode(token);
   const id = decode.username;
+
+  
 
   console.log(decode, "[[[[]]]]]]]]");
 
@@ -48,7 +51,7 @@ function PainterProfile() {
         };
         console.log(data, "dat");
 
-        const urlImg = await axios.post(PainterEndpoints.Profile, { data });
+        const urlImg = await axios.post(UserEndpoints.UserPainterProfile, { data });
         setDescription("");
         closeModal();
       } catch (error) {
@@ -62,23 +65,13 @@ function PainterProfile() {
   const handleAvatarChange = (files) => {
     if (files && files.length > 0) {
       const selectedFile = files[0];
-      const allowedTypes = ["image/jpeg", "image/png", "image/gif"]; // Allowed image formats
-  
-      if (allowedTypes.includes(selectedFile.type)) {
-        setSelectedAvatar(selectedFile);
-        setPreviewAvatar(URL.createObjectURL(selectedFile)); // Create object URL for preview
-      } else {
-        // Display error message for invalid file format
-        toast.error("Invalid file format. Please select an image (JPEG, PNG, GIF).");
-        setSelectedAvatar(null);
-        setPreviewAvatar(null);
-      }
+      setSelectedAvatar(selectedFile);
+      setPreviewAvatar(URL.createObjectURL(selectedFile)); // Create object URL for preview
     } else {
       setSelectedAvatar(null);
       setPreviewAvatar(null);
     }
-  };
-   
+  };  
 
   console.log(selectedAvatar);
   return (
@@ -262,4 +255,4 @@ function PainterProfile() {
   );
 }
 
-export default PainterProfile;
+export default ClientPainterProfile

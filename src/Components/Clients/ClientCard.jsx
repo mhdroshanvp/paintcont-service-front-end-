@@ -1,9 +1,10 @@
 import React from "react";
+import homeDesignImage from "/src/assets/home-design-1.png";
 
 function ClientCard() {
   return (
     <>
-      <div class="mt-5 rounded-[22px] bg-[#411c5e]  m-5 h-40">Card</div>
+      <img src={homeDesignImage} alt="Home Design 1" className="h-48 w-auto object-contain rounded-[22px]"/>
     </>
   );
 }

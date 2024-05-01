@@ -1,27 +1,29 @@
 import React from 'react'
-import {
-    Card,
-    Typography,
-    List,
-    ListItem,
-    ListItemPrefix,
-    ListItemSuffix,
-    Chip,
-} from "@material-tailwind/react";
-import {
-    PresentationChartBarIcon,
-    ShoppingBagIcon,
-    UserCircleIcon,
-    Cog6ToothIcon,
-    InboxIcon,
-    PowerIcon,
-} from "@heroicons/react/24/solid";
+import {Card,Typography,List,ListItem,ListItemPrefix,ListItemSuffix,Chip,} from "@material-tailwind/react";
+import {PresentationChartBarIcon,ShoppingBagIcon,UserCircleIcon,Cog6ToothIcon,InboxIcon,PowerIcon,} from "@heroicons/react/24/solid";
+import { useNavigate } from 'react-router-dom';
 
 function AdminNav() {
+    
+    const navigate = useNavigate()
+
+    const handleLogout = () =>{
+        localStorage.removeItem('admin_token')
+        navigate('/admin/login')
+    }
+
+    const User = () => {
+        navigate('/admin/user')
+    }
+
+    const Painter = () => {
+        navigate('/admin/painter')
+    }
+
     return (
         <Card className="h-[calc(110vh-2rem)] w-full max-w-[14rem] p-4 shadow-xl shadow-blue-gray-900/5 bg-custom-color">
-            <div className="mb-2 p-4">
-                <Typography className='text-3xl' variant="h5" color="blue-gray">
+            <div  className="mb-2 p-4">
+                <Typography  className='text-3xl' variant="h5" color="blue-gray">
                     Paintcont
                 </Typography>
             </div>
@@ -32,13 +34,13 @@ function AdminNav() {
                     </ListItemPrefix>
                     Dashboard
                 </ListItem>
-                <ListItem className='m-2'>
+                <ListItem onClick={User} className='m-2'>
                     <ListItemPrefix>
                         <ShoppingBagIcon className="h-5 w-5" />
                     </ListItemPrefix>
                     Users   
                 </ListItem>
-                <ListItem className='m-2'>
+                <ListItem onClick={Painter} className='m-2'>
                     <ListItemPrefix>
                         <InboxIcon className="h-5 w-5" />
                     </ListItemPrefix>
@@ -59,7 +61,7 @@ function AdminNav() {
                     </ListItemPrefix>
                     Subscriptions
                 </ListItem >
-                <ListItem className='m-2'>
+                <ListItem className='m-2' onClick={handleLogout}>
                     <ListItemPrefix>
                         <PowerIcon className="h-5 w-5" />
                     </ListItemPrefix>
@@ -69,5 +71,4 @@ function AdminNav() {
         </Card>
     );
 }
-
 export default AdminNav;

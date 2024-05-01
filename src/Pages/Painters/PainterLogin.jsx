@@ -1,27 +1,70 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axios from '../../Services/axiosService'
+import { useDispatch } from 'react-redux';
+import {
+  signInStart,
+  signInFailure,
+  signInSuccess,
+} from "../../Redux/user/userSlice";
+import { useNavigate } from 'react-router-dom';
+import { PainterEndpoints } from '../../Services/endpoints/painter';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 function PainterLogin() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post('/painter/login', { username, password });
+      dispatch(signInStart())
+      const response = await axios.post(PainterEndpoints.Login, { username, password });
 
-      if (response.data.success) {
-        // Redirect to home page or do something else upon successful login
-        console.log("Login successful");
+
+
+      if (response.status === 200) {
+        if (response.data.success) {
+          const data = response.data;
+          localStorage.setItem("Painter_token", data.token);
+          dispatch(signInSuccess(data.admin));
+          navigate("/painter/home");
+        } else {
+          // Other login failure cases
+          if (response.data.message === 'Forbidden') {
+            // Painter account is blocked
+            toast.error('Your account is blocked. Please contact support.');
+          } else {
+            toast.error('Login failed. Please check your credentials.');
+          }
+        }
       } else {
-        // Handle login failure
-        console.log("Login failed");
+        // Handle other status codes, e.g., network errors
+        console.error('Login request failed:', response.status);
       }
+      
+
+
+
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+
+  const forgetPass = async (e) => {
+    e.preventDefault()
+
+    try {
+      navigate('/painter/mail4reset')
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   return (
     <>
@@ -61,6 +104,9 @@ function PainterLogin() {
                 Password
               </label>
             </div>
+            <div className="flex w-full justify-end">
+                <a onClick={forgetPass} target="_blank" className="text-sm text-white opacity-10">forget password</a>
+              </div>
             <button type="submit" className="border 1px text-center inline-block w-full px-6 py-4 text-white text-uppercase font-bold text-lg transition-all duration-500 hover:bg-[#FF6B00] hover:text-black hover:shadow-lg rounded-lg">
               Submit
             </button>

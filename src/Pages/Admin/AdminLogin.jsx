@@ -7,6 +7,10 @@ import {
 } from "../../Redux/user/userSlice";
 import { useNavigate } from "react-router-dom";
 import axios from "../../Services/axiosService";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { AdminEndpoints } from "../../Services/endpoints/admin";
+
 
 function AdminLogin() {
   const [username, setUsername] = useState("");
@@ -15,29 +19,34 @@ function AdminLogin() {
   const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
-    console.log(username,password)
     event.preventDefault();
-
+  
+    if (!username || !password) {
+      toast.error('Please enter both username and password.');
+      return;
+    }
+  
     try {
       dispatch(signInStart());
-      const response = await axios.post("/admin/login", { username, password });
-      const data = response
-      console.log(data)                 
-      localStorage.setItem("token", data.data.token);
-      console.log(localStorage,"<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<")
-
-      if (data.data.success == false) {
-        dispatch(signInFailure(data));
+      const response = await axios.post(AdminEndpoints.login, { username, password });
+      const data = response.data;
+  
+      if (!data.success) {
+        toast.error(data.message);
+        dispatch(signInFailure(data.message));
       } else {
-        dispatch(signInSuccess(data.admin));
-        console.log("Login successful", data);
-        navigate("/admin/dashboard");
+        localStorage.setItem("admin_token", data.token);
+        dispatch(signInSuccess(data.user));
+        toast.success('Login successful!');
+        navigate("/admin/user");
       }
     } catch (error) {
-      dispatch(signInFailure("Invalid username or password"));
+      toast.error('wrong credential. Please try again later.');
+      dispatch(signInFailure('wrong credential. Please try again later.'));
       console.error("Login error:", error);
     }
   }
+  
 
   return (
     <>
@@ -54,8 +63,7 @@ function AdminLogin() {
                 className="block w-full p-2 text-white border-b border-white outline-none bg-transparent peer"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                required
-              />
+                />
               <label
                 htmlFor="username"
                 className={`absolute top-0 left-0 p-2 text-white transition-all duration-500 ${
@@ -72,7 +80,7 @@ function AdminLogin() {
                 className="block w-full p-2 text-white border-b border-white outline-none bg-transparent peer"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
+                
               />
               <label
                 htmlFor="password"
