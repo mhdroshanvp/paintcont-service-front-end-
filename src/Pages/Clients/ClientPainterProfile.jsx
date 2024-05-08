@@ -246,6 +246,54 @@ function ClientPainterProfile() {
                     convallis. Aenean posuere risus non velit egestas suscipit.
                   </p>
                 </div>
+
+                <div className="flex flex-col bg-white h-[35rem] w-[50rem] rounded-2xl mb-6">
+          <p className="m-3 uppercase font-semibold">Available slots:</p>
+
+          {/* First set of blocks */}
+          <div className="flex flex-col sm:flex-row items-center justify-center m-5">
+            <div className="flex flex-col items-center justify-center">
+            <div className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 uppercase"> 12:00 am</div>
+            <div className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 uppercase"> 12:00 am</div>
+            </div>
+            <div className="flex flex-col items-center justify-center mt-5 sm:mt-0">
+            <div className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 uppercase"> no slot Available</div>
+            <div className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 uppercase"> no slot Available</div>
+            </div>
+          </div>
+
+          {/* "Afternoon" text */}
+          <p className="text-center mt-5 mb-2 uppercase font-semibold ">After noon:</p>
+
+          {/* Second set of blocks */}
+          <div className="flex flex-col sm:flex-row items-center justify-center m-5">
+            <div className="flex flex-col items-center justify-center">
+            <div className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 uppercase"> 12:00 am</div>
+            <div className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 uppercase"> 12:00 am</div>
+            </div>
+            <div className="flex flex-col items-center justify-center mt-5 sm:mt-0">
+            <div className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 uppercase"> no slot Available</div>
+            <div className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 uppercase"> no slot Available</div>
+            </div>
+          </div>
+
+          {/* Buttons */}
+          <div className="flex flex-row items-center justify-center m-5">
+            <div className="bg-amber-500 rounded-lg p-3 m-2">
+              <p>Add new slot</p>
+            </div>
+            <div className="bg-orange-900 p-3 rounded-lg">
+              <p>Edit slot</p>
+            </div>
+          </div>
+        </div>
+
+        {/* My posts  */} 
+
+        <div className=" min-w-[90rem] max-auto rounded-2xl bg-[#0D0E26] min-h-[30rem]">
+              
+        </div>
+
               </div>
             </div>
           </div>

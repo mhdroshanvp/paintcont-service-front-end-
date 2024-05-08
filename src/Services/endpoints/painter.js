@@ -4,5 +4,6 @@ export const PainterEndpoints = {
     MailForReset:"/painter/otp/resend",
     Otp:"/painter/otp",
     Profile:"/painter/create-post",
-    Signup:"/painter/signup"
+    Signup:"/painter/signup",
+    painterProfile:(painterId)=>`/painter/profile/${painterId}`
 }

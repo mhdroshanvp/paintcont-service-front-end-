@@ -38,12 +38,11 @@ function ClientLogin() {
         localStorage.setItem("token", response.data.token);
         navigate("/user/home");
       } else {
-        window.alert(response.data.message);
+        toast.error("Username or password is incorrect");
       }
-      throw new Error("Username or password is incorrect");
     } catch (error) {
       console.error("Error:", error.message);
-      toast.error(error.message); // Display error message as toast notification
+      toast.error("Wrong credentials, try again :(");
     }
   };
 

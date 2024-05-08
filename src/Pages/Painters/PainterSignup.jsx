@@ -64,7 +64,7 @@ function PainterSignup() {
                   username ? "text-sm -translate-y-4" : "text-base"
                 }`}
               >
-                Fullname
+                Username
               </label>
             </div>
             <div className="relative mb-6">

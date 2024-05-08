@@ -6,5 +6,6 @@ export const UserEndpoints = {
     UserPainterProfile:'/painter/create-post',
     userProfile:(userId)=>`/user/profile/${userId}`,
     SignUp:'/user/signup',
-    report:'/user/report'
+    report:'/user/report',
+    search:'/user/search'
 }   

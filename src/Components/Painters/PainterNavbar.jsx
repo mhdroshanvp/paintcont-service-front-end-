@@ -1,19 +1,24 @@
-import React from "react";
+import {useState} from "react";
 import { BellIcon, Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { RiUserLine, RiLogoutCircleLine } from "react-icons/ri"; // Importing profile and logout icons
 import {Navbar,Typography,IconButton,Button,Input,} from "@material-tailwind/react";
 import { useNavigate } from "react-router-dom";
 
 function PainterNavbar() {
+  
+  
   const navigate = useNavigate();
-
+  const [painterId, setPainterId] = useState("");
+  
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/painter/login");
   };
+  
+  const profileLink = painterId ? `/painter/profile/${painterId}` : "/painter/profile";
 
   return (
-    <Navbar variant="gradient" color="blue-gray"className="mx-auto max-w-screen-xl from-blue-gray-900 to-blue-gray-800 px-4 py-3 h-[60px] fixed z-50 bg-[#411c5e]">
+    <div variant="gradient" color="blue-gray"className="w-full mx-auto max-w-screen-xl from-blue-gray-900 to-blue-gray-800 px-4 py-3 h-[60px] fixed z-50 bg-[#411c5e]">
       <div className="flex flex-wrap items-center justify-between gap-y-4 text-white">
         <Typography as="a"href="/user/home"variant="h6"className="mr-4 ml-2 cursor-pointer py-1.5">Paintcont</Typography>
 
@@ -51,7 +56,7 @@ function PainterNavbar() {
 
           {/* Adding profile and logout icons */}
           <div className="flex items-center gap-3">
-            <a href="/painter/profile" className="text-white">
+            <a href={profileLink} className="text-white">
               <RiUserLine className="text-lg" />
             </a>
             <button onClick={handleLogout} className="text-white">
@@ -60,7 +65,7 @@ function PainterNavbar() {
           </div>
         </div>
       </div>
-    </Navbar>
+    </div>
   );
 }
 

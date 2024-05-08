@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import ClientNavbar from "../../Components/Clients/ClientNavbar";
 import Modal from "react-modal";
 import toast from "react-hot-toast";
@@ -7,18 +7,31 @@ import axios from "../../Services/axiosService";
 import { jwtDecode } from "jwt-decode";
 import { PainterEndpoints } from "../../Services/endpoints/painter";
 
+
 function PainterProfile() {
-  // State to manage modal visibility
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
   const [previewAvatar, setPreviewAvatar] = useState(null);
   const [description, setDescription] = useState("");
+  const [painter,setPainter] = useState(null)
   const descriptionRef = useRef(null);
   const token = localStorage.getItem("Painter_token");
   const decode = jwtDecode(token);
   const id = decode.username;
 
-  console.log(decode, "[[[[]]]]]]]]");
+  useEffect(()=>{
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get(PainterEndpoints.painterProfile(id))
+        console.log(response.data,"from the painterprofile");
+        setPainter(response.data)
+      }catch (error) {
+        console.log("Error fetching user profile:", error);
+        toast.error("Failed to fetch painter profile data")
+      }
+    }
+    fetchUser()
+  },[id])
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -38,7 +51,6 @@ function PainterProfile() {
         console.log("Uploaded URL:", fileUrl);
 
         console.log(id, decode.username, "oooooooooo");
-        // Access description value using useRef
         console.log("Description:", descriptionRef.current.value);
 
         const data = {

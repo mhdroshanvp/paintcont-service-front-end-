@@ -2,38 +2,28 @@ import React, { useState, useEffect } from "react";
 import ClientNavbar from "../../Components/Clients/ClientNavbar";
 import Modal from "react-modal";
 import { jwtDecode } from 'jwt-decode';
-
 import axios from "../../Services/axiosService";
 import { UserEndpoints } from "../../Services/endpoints/user";
 
+
 function ClientProfile() {
   const token=localStorage.getItem('token')
-
-  console.log(token)
   const decode=jwtDecode(token)
-
-  console.log(decode,"decoe")
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState({
-    houseNo: "",
-    location: "",
-    pin: "",
-  });
+  const [address, setAddress] = useState({ houseNo: "",location: "",pin: "", });
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    // Fetch user details from the backend and set the user state
     const fetchUser = async () => {
       try {
         const response = await axios.get(UserEndpoints.userProfile(decode?.username));
         console.log(response);
         setUser(response.data.user);
-      } catch (error) {
+      }catch (error) {
         console.log("Error fetching user profile:", error);
       }
     };
-
     fetchUser();
   }, []);
 
@@ -47,22 +37,21 @@ function ClientProfile() {
 
   const handleAddressSubmit = async (e) => {
     e.preventDefault();
-
     try {
       const data = {
         phoneNo: phone,
         address: { ...address },
+        userId:user?._id
       };
-
-      const response = await axios.post('/user/add-address', data);
-
+      const response = await axios.put('/user/add-address', data);
+      console.log(response,"from the client profile");
       setPhone("");
       setAddress({ houseNo: "", location: "", pin: "" });
       closeModal();
-    } catch (error) {
+    }catch (error) {
       console.log("Error adding address:", error);
     }
-  };
+  }
 
   const handleAddressChange = (e) => {
     setAddress({
@@ -91,10 +80,8 @@ function ClientProfile() {
       <div className="bg-purple-900 text-white border-b-2 border-purple-700 px-4 py-2 mb-2 rounded-md focus:outline-none w-64">{user.username}</div>
       <div className="bg-purple-900 text-white border-b-2 border-purple-700 px-4 py-2 mb-2 rounded-md focus:outline-none w-64">{user.email}</div>
       <div className="bg-purple-900 text-white border-b-2 border-purple-700 px-4 py-2 mb-2 rounded-md focus:outline-none w-64">
-        {user.address ? user.address.houseNo : "No house number available"}
-        {user.address ? user.address.location : "No location available"}
-        {user.address ? user.address.pin : "No pin available"}
-      </div>
+  {user.address? `${user.address.houseNo}, ${user.address.location}, ${user.address.pin}` : "No address available"}
+</div>
     </>
   ) : (
     <>

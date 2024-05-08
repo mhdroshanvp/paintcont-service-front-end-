@@ -27,93 +27,45 @@ import UserProtectedRoute from "./Components/userProtectedRoute";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ClientChatPage from "./Pages/Clients/ClientChatPage";
 
 function App() {
     return (
         <>
             <BrowserRouter>
                 <Routes>
-                    {/* 404 */}
+                    
+                    
+                    {/* Exxxtra */}
                     <Route path="*" element={<NotFoundPage />} />
                     <Route path="/" element={<LandingPage />} />
 
                     {/* Admin-side */}
                     <Route path="admin/login" element={<AdminLogin />} />
-                    <Route
-                        path="admin/user"
-                        element={
-                            <AdmnProtectedRoute allowedRole="admin">
-                                {" "}
-                                <AdminUser />{" "}
-                            </AdmnProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="admin/painter"
-                        element={
-                            <AdmnProtectedRoute allowedRole="admin">
-                                {" "}
-                                <AdminPainter />{" "}
-                            </AdmnProtectedRoute>
-                        }
-                    />
+                    <Route path="admin/user" element={<AdmnProtectedRoute allowedRole="admin"><AdminUser /></AdmnProtectedRoute>} />
+                    <Route path="admin/painter" element={<AdmnProtectedRoute allowedRole="admin"><AdminPainter /></AdmnProtectedRoute>} />
 
                     {/* Client/user-side */}
-                    <Route
-                        path="user/home"
-                        element={
-                            <UserProtectedRoute allowedRole="user">
-                                {" "}
-                                <ClientHome />{" "}
-                            </UserProtectedRoute>
-                        }
-                    />
+                    <Route path="user/home" element={<UserProtectedRoute allowedRole="user"><ClientHome /></UserProtectedRoute>} />
                     <Route path="user/login" element={<ClientLogin />} />
                     <Route path="user/signup" element={<ClientSignUp />} />
                     <Route path="user/mail4reset" element={<ClientMail4Reset />} />
                     <Route path="user/otp" element={<ClientOtp />} />
                     <Route path="user/reset" element={<ClientResetPass />} />
-                    <Route
-                        path="user/profile"
-                        element={
-                            <UserProtectedRoute allowedRole="user">
-                                {" "}
-                                <ClientProfile />{" "}
-                            </UserProtectedRoute>
-                        }
-                    />
-                    <Route
-                        path="user/profile/painter "
-                        element={
-                            <UserProtectedRoute allowedRole="user">
-                                {" "}
-                                <ClientPainterProfile />{" "}
-                            </UserProtectedRoute>
-                        }
-                    />
+                    <Route path="user/profile" element={<UserProtectedRoute allowedRole="user"><ClientProfile /></UserProtectedRoute>} />
+                    <Route path="user/painter/profile/:id" element={<UserProtectedRoute allowedRole="user"><ClientPainterProfile /></UserProtectedRoute>} />
+                    <Route path="user/chat" element={<UserProtectedRoute allowedRole="user"> <ClientChatPage /> </UserProtectedRoute>} />
 
                     {/* Painter-side */}
-                    <Route
-                        path="painter/home"
-                        element={
-                            <PainterProtectedRoute allowedRole="painter">
-                                <PainterHome />
-                            </PainterProtectedRoute>
-                        }
-                    />
+                    <Route path="painter/home" element={<PainterProtectedRoute allowedRole="painter"><PainterHome /></PainterProtectedRoute>} />
                     <Route path="painter/login" element={<PainterLogin />} />
                     <Route path="painter/signup" element={<PainterSignup />} />
                     <Route path="painter/mail4reset" element={<PainterMail4Reset />} />
                     <Route path="painter/otp" element={<PainterOtp />} />
                     <Route path="painter/reset" element={<PainterResetPass />} />
-                    <Route
-                        path="painter/profile"
-                        element={
-                            <PainterProtectedRoute allowedRole="painter">
-                                <PainterProfile />
-                            </PainterProtectedRoute>
-                        }
-                    />
+                    <Route path="painter/profile" element={<PainterProtectedRoute allowedRole="painter"><PainterProfile /></PainterProtectedRoute>} />
+                
+                
                 </Routes>
             </BrowserRouter>
             <ToastContainer />

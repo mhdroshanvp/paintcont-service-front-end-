@@ -18,14 +18,28 @@ function PainterLogin() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!username.trim() && !password.trim()) {
+      toast.error("Please enter username and password.");
+      return;
+    }
+
+    if (!username.trim()) {
+      toast.error("Username required");
+      return;
+    }
+
+    if (!password.trim()) {
+      toast.error("Password required");
+      return;
+    }
 
     try {
       dispatch(signInStart())
       const response = await axios.post(PainterEndpoints.Login, { username, password });
-
-
 
       if (response.status === 200) {
         if (response.data.success) {
@@ -34,24 +48,18 @@ function PainterLogin() {
           dispatch(signInSuccess(data.admin));
           navigate("/painter/home");
         } else {
-          // Other login failure cases
           if (response.data.message === 'Forbidden') {
-            // Painter account is blocked
             toast.error('Your account is blocked. Please contact support.');
           } else {
             toast.error('Login failed. Please check your credentials.');
           }
         }
       } else {
-        // Handle other status codes, e.g., network errors
         console.error('Login request failed:', response.status);
       }
-      
-
-
-
     } catch (error) {
       console.error("Error:", error);
+      toast.error("Login failed. Please try again later.");
     }
   };
 
@@ -79,7 +87,6 @@ function PainterLogin() {
                 className="block w-full p-2 text-white border-b border-white outline-none bg-transparent peer"
                 value={username}
                 onChange={(e) => setUsername(e.target.value)}
-                required
               />  
               <label
                 htmlFor="username"
@@ -95,7 +102,6 @@ function PainterLogin() {
                 className="block w-full p-2 text-white border-b border-white outline-none bg-transparent peer"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                required
               />
               <label
                 htmlFor="password"
