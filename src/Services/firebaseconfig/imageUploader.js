@@ -6,7 +6,7 @@ const uploadImageToFirebase = (image, folderRute) => {
     const metadata = {
         contentType: "image/jpeg",
     };
-
+    
     return new Promise((resolve, reject) => {
         const storageRef = ref(storage, folderRute + image.name);
         const uploadTask = uploadBytesResumable(storageRef, image, metadata);
@@ -18,13 +18,16 @@ const uploadImageToFirebase = (image, folderRute) => {
                 100;
             console.log(`Upload of ${image.name} is ${progress}% done`);
 
+
             // Check if upload is complete
             if (progress === 100) {
                 clearInterval(intervalId);
             }
+
         }, 500); // Adjust the interval duration as needed
 
         uploadTask.on(
+            
             "state_changed",
             () => {},
             (error) => {
@@ -32,6 +35,8 @@ const uploadImageToFirebase = (image, folderRute) => {
                 reject(error);
             },
             () => {
+        console.log("hereeeeeeeeeeeeeeeeeeee");
+
                 getDownloadURL(uploadTask.snapshot.ref)
                     .then((downloadURL) => {
                         clearInterval(intervalId);
@@ -44,6 +49,7 @@ const uploadImageToFirebase = (image, folderRute) => {
                     });
             }
         );
+        
     });
 };
 

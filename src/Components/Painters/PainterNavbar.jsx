@@ -11,7 +11,7 @@ function PainterNavbar() {
   const [painterId, setPainterId] = useState("");
   
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem("Painter_token");
     navigate("/painter/login");
   };
   
@@ -39,14 +39,7 @@ function PainterNavbar() {
         </div>
 
         <div className="flex items-center w-full sm:w-auto gap-10">
-          <Input
-            type="search"
-            color="white"
-            className="pr-10 bg-transparent border-b border-white focus:outline-none"
-            containerProps={{
-              className: "min-w-[288px]",
-            }}
-          />
+
           {/* <Button
             color="white"
             className=" ml-2 p-1 bg-transparent border border-white rounded hover:bg-white hover:text-blue-gray-900 transition duration-300 h-6 text-xm"

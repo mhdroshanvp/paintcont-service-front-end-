@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
   const navigate = useNavigate();
   const token = localStorage.getItem('Painter_token');
 
-  console.log(token,"oooooooooooooooooooooooo");
+  // console.log(token,"oooooooooooooooooooooooo");
 
   useEffect(() => {
     try {

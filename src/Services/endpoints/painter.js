@@ -5,5 +5,6 @@ export const PainterEndpoints = {
     Otp:"/painter/otp",
     Profile:"/painter/create-post",
     Signup:"/painter/signup",
-    painterProfile:(painterId)=>`/painter/profile/${painterId}`
+    painterProfile:(painterId)=>`/painter/profile/${painterId}`,
+    updateDetails: (painterId) => `/painter/update-profile/${painterId}`
 }

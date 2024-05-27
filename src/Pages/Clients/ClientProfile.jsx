@@ -8,18 +8,20 @@ import { UserEndpoints } from "../../Services/endpoints/user";
 
 function ClientProfile() {
   const token=localStorage.getItem('token')
-  const decode=jwtDecode(token)
+  const decode= jwtDecode(token)
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [phone, setPhone] = useState("");
   const [address, setAddress] = useState({ houseNo: "",location: "",pin: "", });
   const [user, setUser] = useState(null);
+
+  console.log(address,"address");
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const response = await axios.get(UserEndpoints.userProfile(decode?.username));
         console.log(response);
-        setUser(response.data.user);
+        setUser(response.data.user); 
       }catch (error) {
         console.log("Error fetching user profile:", error);
       }
@@ -38,15 +40,17 @@ function ClientProfile() {
   const handleAddressSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log(address,"<<<<<<<<<<<<<<<<<<<<<<<");
       const data = {
         phoneNo: phone,
         address: { ...address },
         userId:user?._id
       };
-      const response = await axios.put('/user/add-address', data);
+      const response = await axios.patch('/user/add-address', data);
       console.log(response,"from the client profile");
       setPhone("");
-      setAddress({ houseNo: "", location: "", pin: "" });
+      // setAddress({ houseNo: "", location: "", pin: "" });
+      setUser(response.data.user)
       closeModal();
     }catch (error) {
       console.log("Error adding address:", error);
@@ -60,10 +64,12 @@ function ClientProfile() {
     });
   };
 
+  console.log(user,";;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;");
+
   return (
     <>
       <ClientNavbar />
-      <div className="flex items-center justify-center h-screen">
+      <div className="flex items-center justify-center h-screen ">
         <div className="flex flex-col items-center bg-gradient-to-br from-purple-950 to-purple-950 rounded-3xl shadow-2xl p-8 h-[420px] w-96">
           <div className="bg-purple-900 rounded-full overflow-hidden w-24 h-24 mb-4">
             <img

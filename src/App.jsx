@@ -27,7 +27,8 @@ import UserProtectedRoute from "./Components/userProtectedRoute";
 
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import ClientChatPage from "./Pages/Clients/ClientChatPage";
+import Message from "./Pages/Common/Messages/Messages";
+
 
 function App() {
     return (
@@ -54,7 +55,8 @@ function App() {
                     <Route path="user/reset" element={<ClientResetPass />} />
                     <Route path="user/profile" element={<UserProtectedRoute allowedRole="user"><ClientProfile /></UserProtectedRoute>} />
                     <Route path="user/painter/profile/:id" element={<UserProtectedRoute allowedRole="user"><ClientPainterProfile /></UserProtectedRoute>} />
-                    <Route path="user/chat" element={<UserProtectedRoute allowedRole="user"> <ClientChatPage /> </UserProtectedRoute>} />
+                    <Route path="user/chat/:id" element={<UserProtectedRoute allowedRole="user"> <Message /> </UserProtectedRoute>} />
+                    <Route path="user/chat/" element={<UserProtectedRoute allowedRole="user"> <Message /> </UserProtectedRoute>} />
 
                     {/* Painter-side */}
                     <Route path="painter/home" element={<PainterProtectedRoute allowedRole="painter"><PainterHome /></PainterProtectedRoute>} />

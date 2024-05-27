@@ -9,21 +9,57 @@ import { jwtDecode } from 'jwt-decode';
 import { UserEndpoints } from "../../Services/endpoints/user";
 import toast from "react-hot-toast";
 import Modal from "react-modal";
+import userImg from "../../assets/user-removebg.png" 
 
-function ClientPosts({ post }) {
-  const [liked, setLiked] = useState(post );
-  const [countLike, setCountLike] = useState(post.likes);
+
+
+function ClientPosts({post}) {
+
+  const [liked, setLiked] = useState(post.liked);
+  const [countLike, setCountLike] = useState(post.likes.length);
   const [showReportButton, setShowReportButton] = useState(false);
   const [reported, setReported] = useState(false);
   const [showChatModal, setShowChatModal] = useState(false);
-  const token = localStorage.getItem('token');
+  const [comments, setComments] = useState([]);
+  const [newComment, setNewComment] = useState("");
+
+  let token = localStorage.getItem('Painter_token');
+  if(!token){
+    token = localStorage.getItem('token');
+  }
   const postId = post._id;
+  const decode = jwtDecode(token);
+  const userId = decode.username;
 
   
 
-//   useEffect(() => {
-// console.log('hello')
-//   }, []);
+  useEffect(() => {
+    if(post.likes.includes(userId)){
+      setLiked(true)
+    }else{
+      setLiked(false)
+    }
+  }, []);
+
+
+  const submitComment = async () => {
+    try {
+
+      const response = await axios.post("/user/post/comments", { postId: post._id, content: newComment,userId,painterId:post.painterId  });
+
+      if (response.data.success) {
+
+        setComments([...comments, response.data.comment]);
+        setNewComment(response.data);
+        console.log(newComment,"==================");
+
+      }
+
+    }catch (error) {
+      console.error(error);
+    }
+  };
+
 
   const openModal = () => {
     setShowChatModal(true);
@@ -33,29 +69,20 @@ function ClientPosts({ post }) {
     setShowChatModal(false);
   };
   
-  const toggleLike = async () => {
+const toggleLike = async () => {
     try {
-      console.log('coming here')
-      const decode = jwtDecode(token);
-      const userId = decode.username;
-      const data = { postId: postId, userId: userId, liked: !liked };
+      const data = { postId,userId};
       const response = await axios.post("/user/update-like", data);
-
-if(liked){
-  setLiked(false)
-      setCountLike(countLike-1)
-
-    }else if(!liked){
-      setLiked(true)
-      setCountLike(countLike+1)
-    }
-      // setLiked(!liked);
-
-
+  if(response.data.success){
+    setLiked(response.data.liked)
+    setCountLike(response.data.post.likes.length)
+  }
     } catch (error) {
       console.log(error);
     }
   };
+
+  
 
   const toggleReportButton = () => {
     setShowReportButton(!showReportButton);
@@ -63,30 +90,28 @@ if(liked){
 
   const handleReport = async () => {
     try {
-      console.log(postId,"llllllllllllllllllllllll");
       const response = await axios.post(UserEndpoints.report, { postId });
-      console.log('response -- ', response.data.reportLimitReached)
       if (response.data.success) {
         setReported(true);
       }
       if (response.data.reportLimitReached) toast.success('reported successfully')
-    } catch (error) {
-      console.log(postId)
+    } catch (error) { 
       console.log('kkkkkkkk`',error.message);
     }
   };
 
   return (
     <>
-      <div className="border rounded-[10px] block">
-        <div className="flex border bg-[#ffffff2b] m-2 w-[620px] h-7 rounded-[10px] items-center">
+    
+      <div div className=" rounded-[10px] block">
+        <div className="flex bg-[#ffffff2b] m-2 w-[98%] h-7 rounded-[10px] items-center">
           <Link to={`/user/painter/profile/${post.painterId._id}`} className="ml-4 flex items-center">
             <FaUser size={13} color="white " className='cursor-pointer' />
             <h1 className="ml-2 text-white">{post.painterId?.username}</h1>
           </Link>
           
           <div className="relative ml-auto mr-3">
-            <BiDotsVerticalRounded color="white" onClick={toggleReportButton} className="cursor-pointer"/>
+            <BiDotsVerticalRounded color="white" onClick={toggleReportButton} className="cursor-pointer"/>  
             {showReportButton && !reported && (
               <div className="absolute bg-gray-900 p-2 rounded-md bottom-7 right-0">
                 <button className="text-white" onClick={handleReport}>Report</button>
@@ -105,8 +130,8 @@ if(liked){
         </div>
 
         <div className="flex justify-center items-center">
-        <div className="h-300 border rounded-[20px] flex justify-center  w-[600px] ">
-          <img className="size-52 bg-center w-[300px] h-[300px] rounded-[22px] " src={post?.media} alt="Placeholder"/>
+        <div className="h-300 rounded-[20px] flex justify-center  w-[600px] ">
+          <img className="size-52 bg-center w-[600px] h-[300px] rounded-[20px] " src={post?.media} alt="Placeholder"/>
         </div>
         </div>
 
@@ -123,6 +148,7 @@ if(liked){
           </div>
         
         </div>
+
       </div>
       
       {/* Chat Modal */}
@@ -133,9 +159,21 @@ if(liked){
             <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">&times;</button>
           </div>
           <div className="h-96 border">
+            <div className="overflow-auto h-full">
+              {post.comments.map(comment => (
+                <div key={comment._id} className="flex items-start mb-4">
+                  <img src={userImg} alt="Avatar" className="w-10 h-10 rounded-full mr-3" />
+                  <div className="bg-gray-100 rounded-lg p-2">
+                    <p className="text-sm text-gray-700">{comment.text}</p>
+                    {/* <span className="text-xs text-gray-500">{ .fromNow()}</span> */}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
-          <div>
-            <input placeholder="  Add a comment" className="border rounded-lg w-full h-8 mt-3"  type="text" name="" id="" />
+          <div className="flex">
+            <input value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Add a comment" className="border rounded-lg w-full h-8 mt-3" type="text" name="" id="" />
+            <button onClick={submitComment} className="border bg-blue-600 w-12 h-8 mt-3">Send</button>
           </div>
         </div>
       </Modal>

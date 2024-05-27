@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import axios from '../../Services/axiosService'
 import { useDispatch } from 'react-redux';
+import { Link } from "react-router-dom";
 import {
   signInStart,
   signInFailure,
@@ -17,6 +18,15 @@ function PainterLogin() {
   const [password, setPassword] = useState('');
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+
+  useEffect(()=>{
+    const token = localStorage.getItem("Painter_token")
+
+    if(token){
+      navigate('/painter/home')
+    }
+  },[])
 
 
   const handleSubmit = async (e) => {
@@ -119,7 +129,11 @@ function PainterLogin() {
           </form>
           <div className="flex w-full justify-center p-2 space-x-2">
             <span className="text-white opacity-10 text-sm">Don't have an account?</span>
-            <a href="#" target="_blank" className="text-sm text-white opacity-10"> Sign-up</a>
+
+            <Link to={'/painter/signup'} className="text-sm text-white opacity-10">
+              Sign-up
+          </Link>
+
           </div>
         </div>
       </div>

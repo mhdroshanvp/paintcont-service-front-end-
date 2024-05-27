@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+  import React, { useState,useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   signInStart,
@@ -17,6 +17,14 @@ function AdminLogin() {
   const [password, setPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(()=>{
+    const token = localStorage.getItem("admin_token")
+
+    if(token){
+      navigate('/admin/user')
+    }
+  },[])
 
   const handleSubmit = async (event) => {
     event.preventDefault();

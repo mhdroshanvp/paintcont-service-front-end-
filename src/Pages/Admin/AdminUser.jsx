@@ -9,7 +9,7 @@ import { AdminEndpoints } from "../../Services/endpoints/admin";
 
 function AdminUser() {
     const [currentPage, setCurrentPage] = useState(0);
-    const [users,setUsers] = useState([])
+    const [users, setUsers] = useState([]);
     const pageSize = 20;
 
     useEffect(() => {
@@ -31,7 +31,7 @@ function AdminUser() {
         if (response.data.success) {
           const updatedUsers = users.map(user => {
             if (user._id === userId) {
-              return { ...user, isBlocked: !user.isBlocked };
+              return {...user, isBlocked:!user.isBlocked};
             }
             return user;
           });
@@ -39,7 +39,7 @@ function AdminUser() {
           
           if (updatedUsers.some(user => user._id === userId && user.isBlocked)) {
             toast.success('User blocked successfully');
-          } else if (updatedUsers.some(user => user._id === userId && !user.isBlocked)) {
+          } else if (updatedUsers.some(user => user._id === userId &&!user.isBlocked)) {
             toast.success('User unblocked successfully');
           }
         } else {
@@ -50,15 +50,12 @@ function AdminUser() {
         toast.error('Failed to update user status');
       }
     };
-      
-    
-  
-    const TABLE_HEAD = ["Name", "Email", "isBlocked", ""];
 
+    const TABLE_HEAD = ["Name", "Email", "isBlocked", "Actions"];
     const offset = currentPage * pageSize;
     const pageCount = Math.ceil(users.length / pageSize);
-    const currentPageData = users.slice(offset, offset + pageSize);
-  
+    const currentUsers = users.slice(offset, offset + pageSize);
+
     const handlePageChange = ({ selected }) => {
       setCurrentPage(selected);
     };
@@ -68,15 +65,14 @@ function AdminUser() {
         <div className="border">
           <AdminNav />
         </div>
-        <div className="w-screen h-screen m-1 border">
-          <Card className="h-full w-full overflow-scroll ">
-            <table className="w-full min-w-max table-auto text-left">
+        <div className="w-screen h-screen">
+            <table className="w-full min-w-max table-auto text-left m-8 ml-7">
               <thead>
                 <tr>
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                      className="border border-blue-gray-100 bg-blue-gray-50 p-4 text-white"
                     >
                       <Typography
                         variant="small"
@@ -90,57 +86,48 @@ function AdminUser() {
                 </tr>
               </thead>
               <tbody>
-                {currentPageData.map((user, index) => {
-                  const isLast =
-                    index === currentPageData.length - 1 &&
-                    currentPage === pageCount - 1;
-                  const classes = isLast
-                    ? "p-4"
-                    : "p-4 border-b border-blue-gray-50";
-
-                  return (
-                    <tr key={user._id} className={classes}>
-                      <td>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {user.username}
-                        </Typography>
-                      </td>
-                      <td>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {user.email}
-                        </Typography>
-                      </td>
-                      <td>
-                        <Typography
-                          variant="small"
-                          color="blue-gray"
-                          className="font-normal"
-                        >
-                          {user.isBlocked ? 'Blocked' : 'Unblocked'}
-                        </Typography>
-                      </td>
-                      <td>
-                        <button
-                          as="a"
-                          onClick={() => blockUser(user._id)}
-                          variant="small"
-                          color="blue-gray"
-                          className="font-medium"
-                        >
-                          O
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                {currentUsers.map((user) => (
+                  <tr key={user._id} className={`p-4 ${user.isBlocked? "" : "border-b border-blue-gray-50"}`}>
+                    <td className="border">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal text-white"
+                      >
+                        {user.username}
+                      </Typography>
+                    </td>
+                    <td className="border">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal text-white"
+                      >
+                        {user.email}
+                      </Typography>
+                    </td>
+                    <td className="border">
+                      <Typography
+                        variant="small"
+                        color="blue-gray"
+                        className="font-normal text-white"
+                      >
+                        {user.isBlocked? 'Blocked'  : 'Unblocked'}
+                      </Typography>
+                    </td>
+                    <td>
+                      <button
+                        as="a"
+                        onClick={() => blockUser(user._id)}
+                        variant="small"
+                        color="blue-gray"
+                        className="font-medium text-white"  
+                      >
+                        CLICK
+                      </button>
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
             <br />
@@ -155,10 +142,9 @@ function AdminUser() {
               disabledClassName={"pagination__link--disabled"}
               activeClassName={"pagination__link--active bg-blue-gray-200 text-blue-600"}
             />
-          </Card>
         </div>
       </div>
     );
 }
 
-export default AdminUser; 
+export default AdminUser;

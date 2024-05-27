@@ -8,7 +8,7 @@ import ClientSubscription from "../../Components/Clients/ClientSubscription";
 import { UserEndpoints } from "../../Services/endpoints/user";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 
-
+    
 function ClientHome() {
 
   const [posts, setPosts] = useState([]);
@@ -19,12 +19,15 @@ function ClientHome() {
   const fetchPost = async () => {
     try {
       const response = await axios.get(UserEndpoints.homePage);
-      console.log(response.data.post);
+      console.log(response.data);
       setPosts(response.data.post);
+
     } catch (error) {
       console.log(error.message);
     }
   };
+
+  console.log(posts,"[[[[[[[[[[[[[[[[[[[[[[");
 
   const handleSearch =  async () => {
     try {
@@ -63,17 +66,17 @@ function ClientHome() {
                  value={searchQuery}
                  onChange={(e) => setSearchQuery(e.target.value)}
                  placeholder="Search by painter name"
-                className="w-full border h-10 px-4 py-2  border-gray-300 rounded-lg focus:outline-none focus:border-indigo-800 bg-[#350e5267] text-white"
+                className="w-full h-10 px-4 py-2  border-gray-300 rounded-lg focus:outline-none focus:border-indigo-800 bg-[#50187b67] text-white"
                />
-             <button onClick={handleSearch} className="border ml-4 px-4 py-2 bg-[#4b216b]  text-white rounded-lg hover:bg-[#7a45a3]  focus:outline-none"><UserCircleIcon className="h-4 w-3"/></button>
+             <button onClick={handleSearch} className="ml-4 px-4 py-2 bg-[#50187b67]  text-white rounded-lg hover:bg-[#7a45a3]  focus:outline-none"><UserCircleIcon className="h-6 w-3"/></button>
             </div>
 
             <div className="flex flex-col w-[80%] h-[100%] rounded-xl ">
               {Array.isArray(posts.reverse()) && posts.length > 0 ? (
                 posts.map((post) => {
                   return (
-                    <div className="block rounded-xl bg-[#350e5267]  m-5 h-100 ">
-                      <ClientPosts key={post._id} post={post} />
+                    <div className="block rounded-xl bg-[#50187b67]  m-5 h-100 ">
+                      <ClientPosts key={post._id} post={post}  />
                     </div>
                   );
                 })

@@ -8,7 +8,6 @@ import { AdminEndpoints } from "../../Services/endpoints/admin";
 
 function AdminPainter() {
     const [painter, setpainter] = useState([]);
-
    
     const fetchUser = async () => {
       try {
@@ -23,38 +22,35 @@ function AdminPainter() {
     useEffect(() => {
         fetchUser();
       }, []);
-  
 
-      const blockUser = async (painterId) => {
-        try {
-          console.log(painterId,"]]]]]]]]]]]]]]]]]]]]]]]]]");
-          const response = await axios.patch(AdminEndpoints.blockpainter(painterId));
-          if (response.data.success) {
-            const updatedPainter = painter?.map(user => {
-              if (user._id === painterId) {
-                return { ...user, isBlocked: !user.isBlocked };
-              }
-              return user;
-            });
-            setpainter(updatedPainter);
-            
-            if (updatedPainter.some(user => user._id === painterId && user.isBlocked)) {
-              toast.success('User blocked successfully');
-            } else {
-              toast.success('User unblocked successfully');
+    const blockUser = async (painterId) => {
+      try {
+        console.log(painterId,"]]]]]]]]]]]]]]]]]]]]]]]]]");
+        const response = await axios.patch(AdminEndpoints.blockpainter(painterId));
+        if (response.data.success) {
+          const updatedPainter = painter?.map(user => {
+            if (user._id === painterId) {
+              return {...user, isBlocked:!user.isBlocked };
             }
+            return user;
+          });
+          setpainter(updatedPainter);
+          
+          if (updatedPainter.some(user => user._id === painterId && user.isBlocked)) {
+            toast.success('User blocked successfully');
           } else {
-            toast.error('Failed to update user status');
+            toast.success('User unblocked successfully');
           }
-        } catch (error) {
-          console.error('Error:', error);
+        } else {
           toast.error('Failed to update user status');
         }
-      };
-      
-    
-  
-    const TABLE_HEAD = ["Name", "Email", "isBlocked", ""];
+      } catch (error) {
+        console.error('Error:', error);
+        toast.error('Failed to update user status');
+      }
+    };
+
+    const TABLE_HEAD = ["Name", "Email", "isBlocked", "Actions"];
 
     return (
       <div className="flex">
@@ -63,66 +59,69 @@ function AdminPainter() {
         </div>
         <div className="w-screen h-screen m-1 border">
           <Card className="h-full w-full overflow-scroll ">
-            <table className="w-full min-w-max table-auto text-left">
-              <thead>
-                <tr>
-                  {TABLE_HEAD?.map((head) => (
-                    <th
-                      key={head}
-                      className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
-                    >
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal leading-none opacity-70"
+            {/* Center the table */}
+            <div className="flex justify-center">
+              <table className="w-full min-w-max table-auto text-left">
+                <thead>
+                  <tr>
+                    {TABLE_HEAD?.map((head) => (
+                      <th
+                        key={head}
+                        className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
                       >
-                        {head}
-                      </Typography>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {painter?.map((user) => (
-                  <tr key={user._id} className="p-4 border-b border-blue-gray-50">
-                    <td>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {user.username}
-                      </Typography>
-                    </td>
-                    <td>
-                      <Typography variant="small" color="blue-gray" className="font-normal">
-                        {user.email}
-                      </Typography>
-                    </td>
-                    <td>
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {user.isBlocked ? 'Blocked' : 'Unblocked'}
-                      </Typography>
-                    </td>
-                    <td>
-                      <button
-                        as="a"
-                        onClick={() => blockUser(user._id)}
-                        variant="small"
-                        color="blue-gray"
-                        className="font-medium"
-                      >
-                        O
-                      </button>
-                    </td>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal leading-none opacity-70"
+                        >
+                          {head}
+                        </Typography>
+                      </th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {painter?.map((user) => (
+                    <tr key={user._id} className="p-4 border-b border-blue-gray-50">
+                      <td>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {user.username}
+                        </Typography>
+                      </td>
+                      <td>
+                        <Typography variant="small" color="blue-gray" className="font-normal">
+                          {user.email}
+                        </Typography>
+                      </td>
+                      <td>
+                        <Typography
+                          variant="small"
+                          color="blue-gray"
+                          className="font-normal"
+                        >
+                          {user.isBlocked? 'Blocked' : 'Unblocked'}
+                        </Typography>
+                      </td>
+                      <td>
+                        <button
+                          as="a"
+                          onClick={() => blockUser(user._id)}
+                          variant="small"
+                          color="blue-gray"
+                          className="font-medium"
+                        >
+                          O
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </Card>
         </div>
       </div>

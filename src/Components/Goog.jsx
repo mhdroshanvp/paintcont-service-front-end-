@@ -20,11 +20,7 @@ function GoogleAuthSignup() {
                 onSuccess={credentialResponse => {
                     console.log(credentialResponse);
                     const decoded = jwtDecode(credentialResponse.credential);
-                    console.log(decoded)
-                    
-                    
-                    
-                   
+                    console.log(decoded)                   
                 }}
                 onError={() => {
                     console.log('Login Failed');

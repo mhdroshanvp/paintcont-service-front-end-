@@ -1,4 +1,6 @@
 import { propTypesRatedIcon } from "@material-tailwind/react/types/components/rating";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; // Import the CSS
 import { Axios } from "axios";
 import React, { useState } from "react";
 import axios from "../../Services/axiosService";
@@ -10,7 +12,7 @@ import { PainterEndpoints } from "../../Services/endpoints/painter";
 function PainterSignup() {
 
   
-  const navigate=useNavigate()
+  const navigate = useNavigate()
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -20,27 +22,53 @@ function PainterSignup() {
     Bpassword: "",
   });
 
-  const formsubmit = async (e) => {
-    
-    setBody({
-      username,
-      email,
-      password,
-    });
-    e.preventDefault();
 
+
+  const formsubmit = async (e) => {
+    e.preventDefault();
+  
+    // Validate and prepare the form data
+    let validatedUsername = username.trim().replace(/ /g, "").toLowerCase();
+    let validatedEmail = email.trim();
+    let validatedPassword = password.trim();
+  
+    // Check if any field is filled with spaces only
+    if (!validatedUsername ||!validatedEmail ||!validatedPassword) {
+      toast.error("Fields cannot be empty");
+      return;
+    }
+  
+    // Check if password is exactly 8 characters long
+    if (validatedPassword.length!== 8) {
+      toast.error("Password must be exactly 8 characters long.");
+      return;
+    }
+  
+    // Set the validated data
+    setBody({
+      username: validatedUsername,
+      email: validatedEmail,
+      password: validatedPassword,
+    });
+  
     try {
       console.log(body);
-      console.log("username", username, "email", email, "password", password);
-      const response = await axios.post(PainterEndpoints.Signup, {username,email,password});
+      console.log("username", validatedUsername, "email", validatedEmail, "password", validatedPassword);
+      const response = await axios.post(PainterEndpoints.Signup, body);
+  
       if (response.data.success) {
-        navigate('/painter/otp', { state: { userEmail: email } });
+        navigate('/painter/otp', { state: { userEmail: validatedEmail } });
         console.log("ok😌👍");
       }
     } catch (error) {
       console.log("error while sending otp req");
+      toast.error(error.response?.data?.message || "An unexpected error occurred.");
     }
   };
+  
+
+
+
   return (
     <>
       <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
@@ -107,10 +135,24 @@ function PainterSignup() {
                   already have an account?{" "}
                 </span>
                 <a
-                  href="/painter/login"
+                onClick={() => navigate("/painter/login")}
+                className="cursor-pointer" 
                 >
                   {" "}
                   Sign-In
+                </a>
+              </div>
+
+              <div className="flex w-full justify-center space-x-2">
+                <span className="text-white opacity-10 text-sm">
+                  Join as a User
+                </span>
+                <a
+                onClick={() => navigate("/user/login")}
+
+                className="cursor-pointer" >
+                  {" "}
+                  User Login
                 </a>
               </div>
             </div>
@@ -121,6 +163,7 @@ function PainterSignup() {
           </form>
         </div>
       </div>
+      <ToastContainer />
     </>
   );
 }

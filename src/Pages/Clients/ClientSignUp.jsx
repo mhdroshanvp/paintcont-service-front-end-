@@ -3,7 +3,7 @@ import axios from "../../Services/axiosService";
 import { useNavigate } from "react-router-dom";
 import toast, { Toaster } from "react-hot-toast";
 import { UserEndpoints } from "../../Services/endpoints/user";
-import GoogleAuthSignup from "../../Components/Goog";
+// import GoogleAuthSignup from "../../Components/Goog";  
 
 function ClientSignUp() {
   const navigate = useNavigate();
@@ -14,6 +14,17 @@ function ClientSignUp() {
 
   const formsubmit = async (e) => {
     e.preventDefault();
+    
+    if (!username.trim() ||!email.trim() ||!password.trim()) {
+      toast.error("Fields cannot be filled with spaces only.");
+      return;
+    }
+
+    if (password.length!== 8) {
+      toast.error("Password must be exactly 8 characters long.");
+      return;
+    }
+  
     try {
       console.log(username, "===usernmae", email, "maill", password, "passsss");
       const response = await axios.post(UserEndpoints.SignUp, {
@@ -21,7 +32,7 @@ function ClientSignUp() {
         email,
         password,
       });
-
+  
       if (response.data.success) {
         navigate("/user/otp", {
           state: {
@@ -34,6 +45,7 @@ function ClientSignUp() {
       toast.error(error.response.data.message);
     }
   };
+  
 
   return (
     <>
@@ -56,7 +68,7 @@ function ClientSignUp() {
                 htmlFor="username"
                 className={`absolute top-0 left-0 p-2 text-white transition-all duration-500 ${username ? "text-sm -translate-y-4" : "text-base"}`}
               >
-                Usernanme
+                Username
               </label>
             </div>
 
@@ -94,7 +106,7 @@ function ClientSignUp() {
               </label>
               <div className="flex w-full justify-center p-2 space-x-2">
                 <span className="text-white opacity-10 text-sm">Already have an account?</span>
-                <a href="/user/login" className="text-sm text-white opacity-10"> Sign-in</a>
+                <button onClick={() => navigate("/user/login")} className="text-sm text-white opacity-10 border-0 bg-transparent">Sign-in</button>
               </div>
             </div>
 
@@ -104,10 +116,10 @@ function ClientSignUp() {
             >
               Sign-Up
             </button>
-            <GoogleAuthSignup />
+            {/* <GoogleAuthSignup /> */}
             <div className="flex w-full justify-center p-2 space-x-2">
               <span className="text-white opacity-10 text-sm">Interested in joining our team?</span>
-              <a href="/painter/signup" className="text-sm text-white opacity-10"> Click Here</a>
+              <button onClick={() => navigate("/painter/signup")} className="text-sm text-white opacity-10 border-0 bg-transparent">Click Here</button>
             </div>
           </form>
         </div>

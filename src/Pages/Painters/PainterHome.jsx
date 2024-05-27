@@ -1,63 +1,22 @@
 import React, { useEffect, useState } from "react";
-import ClientCard from "../../Components/Clients/ClientCard";
-import ClientHash from "../../Components/Clients/ClientHash";
-import ClientPosts from "../../Components/Clients/ClientPosts";
 import axios from "../../Services/axiosService";
-import ClientSubscription from "../../Components/Clients/ClientSubscription";
 import { PainterEndpoints } from "../../Services/endpoints/painter";
 import PainterNavbar from "../../Components/Painters/PainterNavbar";
 
 function ClientHome() {
-
-  const [posts, setPosts] = useState([]);
-
-  const fetchPost = async () => {
-    try {
-      const response = await axios.get(PainterEndpoints.Home);
-      console.log(response.data.post);
-      setPosts(response.data.post);
-    } catch (error) {
-      console.log(error.message);
-    }
-  };
-
-  useEffect(() => {
-    fetchPost();
-  }, []);
- 
-
   return (
     <>
-    
       <div className="w-full h-screen block">
-       
-         <div className="w-full h-[60px] ">
-         <PainterNavbar />
-         </div>
+        
+        <div className="w-full h-[60px] ">
+          <PainterNavbar />
+        </div>
 
-          <div className="flex mt-2 h-[90%] w-full ">
-
-          <div className="w-[30%] block">
-              <div className="w-full  md:block ">
-                <ClientCard />
-              </div>
-              <ClientHash />
-              <ClientSubscription />
+        <div className="flex justify-center items-center mt-[30px]">
+          <div className="w-[1000px] h-[470px] bg-white mx-auto rounded-[60px] flex justify-between items-center">
+            <img src="https://www.360ss.com/360/uploads/f35efdb2aa6e9a42668a3259b86fc8de.gif" className="w-[626px] rounded-[60px]" alt="GIF Description" />
+            <button className="mr-80 rounded-[20px] bg-blue-500 text-white py-2 px-4 font-semibold transition-all duration-300 transform hover:-translate-y-1 hover:scale-110 hover:bg-blue-700">heheheheh</button>
           </div>
-
-          <div style={{msOverflowStyle:'none ', scrollbarWidth: "none"}} className="overflow-y-scroll  w-[70%] flex flex-col justify-center items-center">
-            <div className="flex flex-col w-[95%] h-[100%] rounded-xl">
-            {Array.isArray(posts.reverse()) && posts.length > 0 ? (
-              posts.map((post) =>{
-               return <div className="block rounded-xl bg-[#411c5e]  m-5 h-[450px] "> <ClientPosts key={post.id} post={post}/></div>
-              })
-            ) : (
-              <p>No posts available</p>
-            )}
-            </div>
-          </div>
-
-
         </div>
       </div>
     </>
