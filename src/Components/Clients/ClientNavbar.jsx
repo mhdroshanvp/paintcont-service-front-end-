@@ -20,18 +20,18 @@ function ClientNavbar() {
 
         <div className="flex md:flex flex-wrap gap-4 sm:gap-14 md:mr-4 sm:mr-4">
   {/* Convert text into links */}
-  <Link to="/user/home" className="text-white">
-    Home
-  </Link>
-  <Link to="/user/painter" className="text-white">
-    Painter
-  </Link>
-  <Link to="/user/chat" className="text-white">
-    Chat
-  </Link>
-  <Link to="/user/designs" className="text-white">
-    Designs
-  </Link>
+    <Link to="/user/home" className="text-white">
+      Home
+    </Link>
+    <Link to="/user/painter" className="text-white">
+      About Us
+    </Link>
+    <Link to="/user/chat" className="text-white">
+      Chat
+    </Link>
+    <Link to="/user/designs" className="text-white">
+      Contact Us
+    </Link>
 </div>
 
         <div className="flex items-center w-full sm:w-auto gap-10">

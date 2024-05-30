@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import ClientNavbar from '../../../Components/Clients/ClientNavbar'
+import ClientNavbar from '../../../Components/Painters/PainterNavbar'
 import './messages.css'
 import Conversations from '../../../Components/Common/Conversations/Conversations'
 import Message from '../../../Components/Common/Message/Message'
@@ -7,22 +7,28 @@ import ChatOnline from '../../../Components/Common/Chatonline/ChatOnline'
 import { useSelector } from 'react-redux'
 import axios from '../../../Services/axiosService'
 import { useParams } from 'react-router-dom'
-
+import { jwtDecode } from 'jwt-decode'
 import { socket } from '../../../socket/socket'
 
-function Messages() {
+function MessagesPainter() {
 
   const [conversations,setConversations] = useState([])
-  const user = useSelector((state)=>state.user)
   const [messageHistory,setMessageHistory] = useState([])
   const [currentConv,setCurrentConv] = useState({})
   const [newMessage,setNewMessage] = useState('')
 
-  const userId = user.currentUser._id
-
+  const token = localStorage.getItem('Painter_token');
+  const decode = jwtDecode(token);
+ const chatBoxTop = useRef(null)
+  const userId = decode.username
+  const user = decode
   const {id} = useParams()
+  
+  
+  console.log(conversations,"conversation");
+  console.log(decode,"========");
 
-  // const socket  = useRef()
+
 
   useEffect(()=>{
     socket.on("connection")
@@ -34,8 +40,21 @@ function Messages() {
   },[])
   console.log(conversations,"conversation");
 
+  socket.on("sendToUser",(data)=>{
 
+    if(data.conversationId===conversations[0]?._id){
 
+      console.log(data,"--------------------;;;;;;-")
+      setMessageHistory([...messageHistory,data])
+    }
+  })
+
+  // useEffect(()=>{
+
+  //   // chatBoxTo
+
+  // },[chatBoxTop])
+  
 
   useEffect(()=>{
     const getConversation = async () => {
@@ -85,14 +104,18 @@ function Messages() {
     }
   },[])
 
-  socket.on("sendToUser",(data)=>{
-    console.log(data,"--------------------;;;;;;-")
-    setMessageHistory([...messageHistory,data])
-  })
-
-
+  useEffect(() => {
+    if (chatBoxTop.current) {
+      chatBoxTop.current.scrollTo({
+        top: chatBoxTop.current.scrollHeight,
+        behavior: 'smooth',
+      });
+    }
+  }, [messageHistory]);
+  console.log(conversations,"=====================================");
   const chatSubmit = async () => {
     try {
+   
       const obj ={conversationId:conversations[0]._id,sender:userId,text:newMessage}
       socket.emit("sendData",obj)
       const response = await axios.post('/message/',obj)
@@ -101,7 +124,6 @@ function Messages() {
       console.log(error);
     }
   }
-  
 
 
   return (
@@ -118,7 +140,7 @@ function Messages() {
               <div >
                 {conversations.map((c)=>(
                   <div onClick={()=>{setCurrentConv(c),fetchMsgh(c._id)}} >
-                    <Conversations  painterName={c.painterName.username} indConv={c} conversation={c} me={user} />
+                    <Conversations  painterName={c.userName.username} indConv={c} conversation={c} me={user} />
                   </div>
                 ))}
               </div>
@@ -127,7 +149,7 @@ function Messages() {
         </div>
         <div className="chatBox">
           <div className="chatBoxWrapper">
-                <div className="chatBoxTop">
+                <div className="chatBoxTop" ref={chatBoxTop}> 
                     <div>
                       {messageHistory.map((msg)=>{
                         if(userId == msg.sender){
@@ -150,11 +172,11 @@ function Messages() {
                     Send
                   </button>
                 </div>
-            {/* ) : (
-              <span className="noConversationText">
+            {/* ) : ( */}
+              {/* <span className="noConversationText">
                 Open a conversation to start a chat.
-              </span>
-            )} */}
+              </span> */}
+            {/* )} */}
           </div>
         </div>
         <div className="chatOnline">
@@ -169,4 +191,4 @@ function Messages() {
  )
 }
 
-export default Messages
+export default MessagesPainter

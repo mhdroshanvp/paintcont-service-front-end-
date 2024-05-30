@@ -1,28 +1,15 @@
-import { propTypesRatedIcon } from "@material-tailwind/react/types/components/rating";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css'; // Import the CSS
-import { Axios } from "axios";
-import React, { useState } from "react";
 import axios from "../../Services/axiosService";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { PainterEndpoints } from "../../Services/endpoints/painter";
 
-
-
 function PainterSignup() {
-
-  
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [body, setBody] = useState({
-    Busername: "",
-    Bemail: "",
-    Bpassword: "",
-  });
-
-
 
   const formsubmit = async (e) => {
     e.preventDefault();
@@ -39,35 +26,30 @@ function PainterSignup() {
     }
   
     // Check if password is exactly 8 characters long
-    if (validatedPassword.length!== 8) {
+    if (validatedPassword.length <= 8) {
       toast.error("Password must be exactly 8 characters long.");
       return;
     }
   
-    // Set the validated data
-    setBody({
+    const body = {
       username: validatedUsername,
       email: validatedEmail,
       password: validatedPassword,
-    });
+    };
   
     try {
-      console.log(body);
-      console.log("username", validatedUsername, "email", validatedEmail, "password", validatedPassword);
+      console.log("Sending body:", body);
       const response = await axios.post(PainterEndpoints.Signup, body);
   
       if (response.data.success) {
         navigate('/painter/otp', { state: { userEmail: validatedEmail } });
         console.log("ok😌👍");
       }
-    } catch (error) {
+    }catch (error) {
       console.log("error while sending otp req");
       toast.error(error.response?.data?.message || "An unexpected error occurred.");
     }
   };
-  
-
-
 
   return (
     <>
@@ -156,10 +138,7 @@ function PainterSignup() {
                 </a>
               </div>
             </div>
-            {/* <a href="#" className="border 1px text-center inline-block w-full px-6 py-4 text-white text-uppercase font-bold text-lg transition-all duration-500 hover:bg-[#FF6B00] hover:text-black hover:shadow-lg rounded-lg">
-                 Submit
-               </a> */}
-            <button className="border 1px text-center inline-block w-full px-6 py-4 text-white text-uppercase font-bold text-lg transition-all duration-500 hover:bg-[#FF6B00] hover:text-black hover:shadow-lg rounded-lg" onClick={(e) => formsubmit(e)}>submit</button>
+            <button className="border 1px text-center inline-block w-full px-6 py-4 text-white text-uppercase font-bold text-lg transition-all duration-500 hover:bg-[#FF6B00] hover:text-black hover:shadow-lg rounded-lg" onClick={formsubmit}>submit</button>
           </form>
         </div>
       </div>

@@ -28,6 +28,8 @@ import UserProtectedRoute from "./Components/userProtectedRoute";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Message from "./Pages/Common/Messages/Messages";
+import MessagesPainter from "./Pages/Common/Messages/MessagesPainter";
+import PainterSlotAdd from "./Pages/Painters/PainterSlotAdd";
 
 
 function App() {
@@ -66,6 +68,8 @@ function App() {
                     <Route path="painter/otp" element={<PainterOtp />} />
                     <Route path="painter/reset" element={<PainterResetPass />} />
                     <Route path="painter/profile" element={<PainterProtectedRoute allowedRole="painter"><PainterProfile /></PainterProtectedRoute>} />
+                    <Route path="painter/chat" element={<PainterProtectedRoute allowedRole="painter"> <MessagesPainter /> </PainterProtectedRoute>} />
+                    <Route path="painter/slot" element={<PainterProtectedRoute allowedRole="painter"> <PainterSlotAdd /> </PainterProtectedRoute>} />
                 
                 
                 </Routes>

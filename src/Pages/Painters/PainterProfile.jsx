@@ -7,6 +7,8 @@ import uploadImageToFirebase from "../../Services/firebaseconfig/imageUploader";
 import axios from "../../Services/axiosService";
 import {jwtDecode} from "jwt-decode";
 import { PainterEndpoints } from "../../Services/endpoints/painter";
+import ClientPost from "../../Components/Clients/ClientPosts";
+import PainterNavbar from "../../Components/Painters/PainterNavbar";
 
 function PainterProfile() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -15,11 +17,23 @@ function PainterProfile() {
   const [previewAvatar, setPreviewAvatar] = useState(null);
   const [description, setDescription] = useState("");
   const [painter, setPainter] = useState(null);
+  const [age, setAge] = useState('');
+  const [experienceYears, setExperienceYears] = useState(''); 
+  const [location, setLocation] = useState(''); 
+  const [phone, setPhone] = useState(''); 
+  const [specialised, setSpecialised] = useState(''); 
+  const [aboutMe, setAboutMe] = useState(''); 
+  const [posts, setPosts] = useState([]);
 
   const descriptionRef = useRef(null);
-  const token = localStorage.getItem("Painter_token");
-  const decode = jwtDecode(token);
+  const token = localStorage.getItem("Painter_token")
+
+  console.log(token,"------");
+
+  const decode = jwtDecode(token.toString());
   const id = decode.username;
+
+  console.log(id);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -27,6 +41,13 @@ function PainterProfile() {
         const response = await axios.get(PainterEndpoints.painterProfile(id));
         if (response.data) {
           setPainter(response.data.painter);
+          setPosts(response.data.posts);
+          setAge(response.data.painter.age);
+          setExperienceYears(response.data.painter.experienceYears);
+          setLocation(response.data.painter.location);
+          setPhone(response.data.painter.phone);
+          setSpecialised(response.data.painter.specialised.join(','));
+          setAboutMe(response.data.painter.aboutMe);
         }
       } catch (error) {
         console.log("Error fetching user profile:", error);
@@ -111,15 +132,13 @@ function PainterProfile() {
   const handleDetailsSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
-
     const details = {
-      age: formData.get("age"),
-      experienceYears: formData.get("experienceYears"),
-      location: formData.get("location"),
-      phone: formData.get("phone"),
-      specialised: formData.get("specialised").split(","),
-      aboutMe: formData.get("aboutMe"),
+      age,
+      experienceYears,
+      location,
+      phone,
+      specialised: specialised.split(","),
+      aboutMe,
     };
 
     try {
@@ -132,10 +151,24 @@ function PainterProfile() {
     }
   };
 
+  useEffect(()=>{
+    console.log(posts,"5555555555555555555555555555555555555");
+  },[posts])
+
+  const handleDelete = (id) => {
+    try {
+      const temp = [...posts]
+      delete temp[id],
+      setPosts(temp)
+    } catch (error) {
+      
+    }
+  }
+
   return (
     <>
       <div className="w-full fixed z-20">
-        <ClientNavbar />
+        <PainterNavbar />
       </div>
 
       <div className="linear-gradient(to right, #200a31, #1f3752)">
@@ -150,27 +183,10 @@ function PainterProfile() {
                     alt="Profile"
                   />
                   <h1 className="text-xl font-bold">{painter?.username || "Painter Name"}</h1>
-
                   <p className="text-gray-700">
                     {` ${painter?.experienceYears || "0"} years of experience`}
                   </p>
-
                   <p>{painter?.phone}</p>
-
-                  <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                    <a
-                      href="#"
-                      className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded"
-                    >
-                      Follow
-                    </a>
-                    <a
-                      href="#"
-                      className="bg-gray-300 hover:bg-gray-400 text-gray-700 py-2 px-4 rounded"
-                    >
-                      Message
-                    </a>
-                  </div>
                 </div>
                 <hr className="my-6 border-t border-gray-300" />
                 <div className="flex flex-col">
@@ -190,17 +206,16 @@ function PainterProfile() {
                 {!modalIsOpen && !detailsModalIsOpen && (
                   <div className="relative inline-block m-2">
                     <button
-                      className="border-transparent relative z-10 py-2 px-3 text-white font-bold text-lg rounded-[30px] cursor-pointer focus:outline-none bg-gradient-to-r from-blue-900 to-indigo-700"
+                      className="ml-4 border-transparent relative z-10 py-2 px-3 text-white font-bold text-lg rounded-[30px] cursor-pointer focus:outline-none bg-gradient-to-r from-purple-900 to-teal-500"
                       onClick={openModal}
                     >
                       Add Post
                     </button>
-
                     <button
                       className="ml-4 border-transparent relative z-10 py-2 px-3 text-white font-bold text-lg rounded-[30px] cursor-pointer focus:outline-none bg-gradient-to-r from-lime-900 to-teal-500"
                       onClick={openDetailsModal}
                     >
-                      Add Details
+                      Details
                     </button>
                   </div>
                 )}
@@ -248,9 +263,9 @@ function PainterProfile() {
                       </button>
                       <button
                         onClick={closeModal}
-                        className="bg-red-800 text-white py-2 px-6 rounded-lg"
+                        className="bg-red-600 text-white py-2 px-6 rounded-lg"
                       >
-                        Close Modal
+                        Cancel
                       </button>
                     </div>
                   </div>
@@ -260,105 +275,94 @@ function PainterProfile() {
                 <Modal
                   isOpen={detailsModalIsOpen}
                   onRequestClose={closeDetailsModal}
-                  contentLabel="Add Details Modal"
+                  contentLabel="Add/Edit Details Modal"
                   className="absolute inset-0 flex items-center justify-center"
                   overlayClassName="fixed inset-0 bg-gray-700 bg-opacity-75"
                   closeTimeoutMS={200}
                 >
-                  <div className="bg-white rounded-lg w-[400px] max-h-[90vh] overflow-y-auto p-6">
-                    <h2 className="text-2xl font-bold mb-4">Add Details</h2>
+                  <div className="bg-white rounded-lg p-8 max-w-lg w-full">
+                    <h2 className="text-2xl font-bold mb-4">
+                      {detailsModalIsOpen ? "Edit Details" : "Add Details"}
+                    </h2>
                     <form onSubmit={handleDetailsSubmit}>
-                      <div className="mb-4">
-                        <label className="block text-gray-700">Age</label>
-                        <input
-                          type="number"
-                          name="age"
-                          className="w-full p-2 border rounded"
-                        />
-                      </div>
-                      <div className="mb-4">
-                        <label className="block text-gray-700">Experience Years</label>
-                        <input
-                          type="number"
-                          name="experienceYears"
-                          className="w-full p-2 border rounded"
-                        />
-                      </div>
-                      <div className="mb-4">
-                        <label className="block text-gray-700">Location</label>
-                        <input
-                          type="text"
-                          name="location"
-                          className="w-full p-2 border rounded"
-                        />
-                      </div>
-                      <div className="mb-4">
-                        <label className="block text-gray-700">Phone</label>
-                        <input
-                          type="text"
-                          name="phone"
-                          className="w-full p-2 border rounded"
-                        />
-                      </div>
-                      <div className="mb-4">
-                        <label className="block text-gray-700">Specialised</label>
-                        <input
-                          type="text"
-                          name="specialised"
-                          className="w-full p-2 border rounded"
-                          placeholder="Comma separated values"
-                        />
-                      </div>
-                      <div className="mb-4">
-                        <label className="block text-gray-700">About Me</label>
-                        <textarea
-                          name="aboutMe"
-                          className="w-full p-2 border rounded"
-                        ></textarea>
-                      </div>
+                      <label htmlFor="age">Age</label>
+                      <input
+                        className="border py-2 px-4 mb-4 w-full"
+                        type="number"
+                        id="age"
+                        value={age}
+                        onChange={(e) => setAge(e.target.value)}
+                      />
+                      <label htmlFor="experienceYears">Experience Years</label>
+                      <input
+                        className="border py-2 px-4 mb-4 w-full"
+                        type="number"
+                        id="experienceYears"
+                        value={experienceYears}
+                        onChange={(e) => setExperienceYears(e.target.value)}
+                      />
+                      <label htmlFor="location">Location</label>
+                      <input
+                        className="border py-2 px-4 mb-4 w-full"
+                        type="text"
+                        id="location"
+                        value={location}
+                        onChange={(e) => setLocation(e.target.value)}
+                      />
+                      <label htmlFor="phone">Phone</label>
+                      <input
+                        className="border py-2 px-4 mb-4 w-full"
+                        type="text"
+                        id="phone"
+                        value={phone}
+                        onChange={(e) => setPhone(e.target.value)}
+                      />
+                      <label htmlFor="specialised">Specialised (comma separated)</label>
+                      <input
+                        className="border py-2 px-4 mb-4 w-full"
+                        type="text"
+                        id="specialised"
+                        value={specialised}
+                        onChange={(e) => setSpecialised(e.target.value)}
+                      />
+                      <label htmlFor="aboutMe">About Me</label>
+                      <textarea
+                        className="border py-2 px-4 mb-4 w-full"
+                        id="aboutMe"
+                        value={aboutMe}
+                        onChange={(e) => setAboutMe(e.target.value)}
+                      />
                       <div className="flex justify-between">
                         <button
                           type="submit"
-                          className="bg-blue-500 text-white py-2 px-4 rounded"
+                          className="bg-slate-600 text-white py-2 px-6 rounded-lg mr-4"
                         >
                           Save
                         </button>
                         <button
+                          type="button"
                           onClick={closeDetailsModal}
-                          className="bg-red-500 text-white py-2 px-4 rounded"
+                          className="bg-red-600 text-white py-2 px-6 rounded-lg"
                         >
-                          Close
+                          Cancel
                         </button>
                       </div>
                     </form>
                   </div>
                 </Modal>
 
-                <h2 className="text-xl mt-6 mb-4">{painter?.aboutMe}</h2>
-
-                <h2 className="text-xl font-bold mt-6 mb-4">My Works</h2>
-                <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 gap-4 mt-2">
-                  {painter?.posts?.length > 0 ? (
-                    painter.posts.map((post, index) => (
-                      <div key={index} className="relative">
-                        <img
-                          src={post.imageUrl}
-                          className="w-full h-full rounded-md object-cover"
-                          alt="Post"
-                        />
-                        <p>{post.description}</p>
-                      </div>
-                    ))
-                  ) : (
-                    <p>No works posted yet.</p>
-                  )}
-                </div>
+                {/* Render Posts */}
+                {/* {posts.map((post,index) => (
+                  <div className="block rounded-xl bg-[#50187b67] m-5 h-100" key={post._id}>
+                    <ClientPost onDelete={handleDelete} painterId={id} edit={true} id={index} post={post} indPostId={post._id}/>
+                  </div>
+                ))} */}
               </div>
             </div>
           </div>
         </div>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </>
   );
 }

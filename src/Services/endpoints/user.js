@@ -8,4 +8,7 @@ export const UserEndpoints = {
     SignUp:'/user/signup',
     report:'/user/report',
     search:'/user/search',
+    changePassword:"/user/profile/change-password",
+    updateUserProfile:"/user/profile/updateUserProfile",
+    like:'/user/update-like'
 }   

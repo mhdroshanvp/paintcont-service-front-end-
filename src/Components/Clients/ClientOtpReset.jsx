@@ -7,21 +7,20 @@ import { UserEndpoints } from '../../Services/endpoints/user';
 import { useDispatch } from "react-redux";
 import { signInSuccess } from "../../Redux/user/userSlice";
 
-function ClientOtp() {
+function ClientOtp({userEmail}) {
   const [otp, setOTP] = useState('');
   const [otpFocus, setOTPFocus] = useState(false);
 
   const navigate = useNavigate();
-  const location = useLocation();
-  const { userEmail } = location.state;
+
+const dispatch = useDispatch();
+  
+
+
   const [otpError, setOtpError] = useState('');
 
   const [resendDisabled, setResendDisabled] = useState(false);
   const [timer, setTimer] = useState(30);
- 
-  const dispatch = useDispatch();
-  
-
 
   const otpSubmit = async (e) => {
     e.preventDefault();
@@ -36,9 +35,9 @@ function ClientOtp() {
         return;
       }
       const response = await axios.post(UserEndpoints.OTP, { otp, email: userEmail });
+      localStorage.setItem("token", response.data.token);
+      dispatch(signInSuccess(response.data.user));
       if (response.data.success) {
-        localStorage.setItem("token", response.data.token);
-        dispatch(signInSuccess(response.data.user));
         navigate('/user/home');
       } else {
         toast.error('Invalid OTP. Please try again.');

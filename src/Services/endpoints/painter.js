@@ -1,3 +1,4 @@
+
 export const PainterEndpoints = {
     Home:"/painter/getAllPost",
     Login:"/painter/login",
@@ -6,5 +7,7 @@ export const PainterEndpoints = {
     Profile:"/painter/create-post",
     Signup:"/painter/signup",
     painterProfile:(painterId)=>`/painter/profile/${painterId}`,
-    updateDetails: (painterId) => `/painter/update-profile/${painterId}`
+    updateDetails: (painterId) => `/painter/update-profile/${painterId}`,
+    // createSlote:(painterId)=>`/painter/create-slot/${painterId}`,
+    // deletePost:(postId)=>`/painter/delete-post/${postId}`
 }
