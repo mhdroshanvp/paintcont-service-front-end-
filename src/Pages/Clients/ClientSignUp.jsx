@@ -52,7 +52,7 @@ function ClientSignUp() {
       <Toaster />
       {/* Add Toaster component for displaying toast notifications */}
       <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
+        <div className="sm:w-[400px] w-[90%] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
           <h2 className="text-white text-center mb-8 font-serif text-4xl">User Sign-Up</h2>
           <form>
             <div className="relative mb-6">
@@ -105,8 +105,8 @@ function ClientSignUp() {
                 Password
               </label>
               <div className="flex w-full justify-center p-2 space-x-2">
-                <span className="text-white opacity-10 text-sm">Already have an account?</span>
-                <button onClick={() => navigate("/user/login")} className="text-sm text-white opacity-10 border-0 bg-transparent">Sign-in</button>
+                <span className="text-slate-400 text-sm mt-2">Already have an account?</span>
+                <button onClick={() => navigate("/user/login")} className="text-sm text-slate-400 mt-2 border-0 bg-transparent">Sign-in</button>
               </div>
             </div>
 
@@ -117,9 +117,9 @@ function ClientSignUp() {
               Sign-Up
             </button>
             {/* <GoogleAuthSignup /> */}
-            <div className="flex w-full justify-center p-2 space-x-2">
-              <span className="text-white opacity-10 text-sm">Interested in joining our team?</span>
-              <button onClick={() => navigate("/painter/signup")} className="text-sm text-white opacity-10 border-0 bg-transparent">Click Here</button>
+            <div className="flex flex-col sm:flex-row items-center  sm:items-start  w-full justify-center mt-3 space-x-2">
+              <span className="text-gray-400 text-sm ">Interested in joining our team?</span>
+              <button onClick={() => navigate("/painter/signup")} className="text-sm text-gray-400  border-0 bg-transparent">Click Here</button>
             </div>
           </form>
         </div>

@@ -14,6 +14,7 @@ import uploadImageToFirebase from "../../Services/firebaseconfig/imageUploader";
 import { PainterEndpoints } from "../../Services/endpoints/painter";
 
 function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete}) {
+  console.log(post)
   const [liked, setLiked] = useState(post?.liked);
   const [countLike, setCountLike] = useState(post?.likes?.length);
   const [showReportButton, setShowReportButton] = useState(false);
@@ -31,8 +32,10 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete}
 
 
   let token = localStorage.getItem('token');
-  const decode = jwtDecode(token);
-  const userId = decode?.username;
+  if(token){
+    const decode = jwtDecode(token);
+   var userId = decode?.username;
+  }
   const postId = post._id;
 
   const descriptionRef = useRef(null);
@@ -244,7 +247,7 @@ console.log(report);
         </div>
 
         <div className="flex justify-center items-center">
-          <div className=" h-300 rounded-[20px] flex flex-col justify-center w-[600px]">
+          <div className=" h-300 rounded-[20px] flex flex-col items-center  justify-center w-[600px]">
             {
               edit?
               <>
@@ -265,7 +268,7 @@ console.log(report);
               :
               <></>
             }
-            <img className="size-52 bg-center w-[600px] h-[300px] rounded-[20px]" src={postImg} alt="Placeholder" />
+            <img className="size-52 bg-center sm:w-full w-[90%] h-[300px] rounded-[20px]" src={postImg} alt="Placeholder" />
           </div>
         </div>
         

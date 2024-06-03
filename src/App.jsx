@@ -30,6 +30,7 @@ import "react-toastify/dist/ReactToastify.css";
 import Message from "./Pages/Common/Messages/Messages";
 import MessagesPainter from "./Pages/Common/Messages/MessagesPainter";
 import PainterSlotAdd from "./Pages/Painters/PainterSlotAdd";
+import AdminPostHandle from "./Pages/Admin/AdminPostHandle";
 
 
 function App() {
@@ -47,6 +48,7 @@ function App() {
                     <Route path="admin/login" element={<AdminLogin />} />
                     <Route path="admin/user" element={<AdmnProtectedRoute allowedRole="admin"><AdminUser /></AdmnProtectedRoute>} />
                     <Route path="admin/painter" element={<AdmnProtectedRoute allowedRole="admin"><AdminPainter /></AdmnProtectedRoute>} />
+                    <Route path="admin/posts" element={<AdmnProtectedRoute allowedRole="admin"><AdminPostHandle /></AdmnProtectedRoute>} />
 
                     {/* Client/user-side */}
                     <Route path="user/home" element={<UserProtectedRoute allowedRole="user"><ClientHome /></UserProtectedRoute>} />

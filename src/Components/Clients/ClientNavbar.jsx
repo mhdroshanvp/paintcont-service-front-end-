@@ -1,59 +1,70 @@
-import React from "react";
+import React, { useState } from "react";
 import { BellIcon, Cog6ToothIcon } from "@heroicons/react/24/solid";
-import { RiUserLine, RiLogoutCircleLine } from "react-icons/ri"; // Importing profile and logout icons
-import {Navbar,Typography,IconButton,Button,Input,} from "@material-tailwind/react";
+import { RiUserLine, RiLogoutCircleLine } from "react-icons/ri";
+import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+import { Typography } from "@material-tailwind/react";
 
-function ClientNavbar() {
+function ClientNavbar({setSmState,smState}) {
+  const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-
+  const [view,setView] = useState(false);
   const handleLogout = () => {
     localStorage.removeItem("token");
     navigate("/user/login");
   };
 
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+    if(!isOpen) setSmState(false)
+  };
   return (
-    <div variant="gradient" color="blue-gray"className="w-full mx-auto from-blue-gray-900 to-blue-gray-800 px-4 py-3 h-[60px] z-50 bg-[#572c77]">
-      <div className="flex flex-wrap items-center justify-between gap-y-4 text-white">
-        <Typography as="a"href="/user/home"variant="h6"className="mr-4 ml-2 cursor-pointer py-1.5">Paintcont</Typography>
+    <nav className="w-full flex flex-col bg-[#572c77] py-3 h-[60px] z-50">
 
-        <div className="flex md:flex flex-wrap gap-4 sm:gap-14 md:mr-4 sm:mr-4">
-  {/* Convert text into links */}
-    <Link to="/user/home" className="text-white">
-      Home
-    </Link>
-    <Link to="/user/painter" className="text-white">
-      About Us
-    </Link>
-    <Link to="/user/chat" className="text-white">
-      Chat
-    </Link>
-    <Link to="/user/designs" className="text-white">
-      Contact Us
-    </Link>
-</div>
+      <div className="flex   sm:mt-1 item-center mt-4   justify-between w-full  text-white ">
+            <Typography as="a" href="/user/home" variant="h6" className=" sm:absolute -mt-2 w-2/6 sm:mt-1 left-0">
+              Paintcont
+            </Typography>
+         
+       
+            <div className="flex h-100  items-center justify-end     w-2/6  absolute right-0 ">
+              <div className="w-3/6  flex  md:items-center md:gap-3  md:mt-0 justify-end me-3">
+                
+                  <Link to="/user/profile" className="text-white me-2">
+                    <RiUserLine className="text-lg " />
+                  </Link>
+                  <button onClick={handleLogout} className="text-white ms-1 ">
+                    <RiLogoutCircleLine className="text-lg" />
+                  </button>
+                </div>
 
-        <div className="flex items-center w-full sm:w-auto gap-10">
-          {/* <Button
-            color="white"
-            className=" ml-2 p-1 bg-transparent border border-white rounded hover:bg-white hover:text-blue-gray-900 transition duration-300 h-6 text-xm"
-          >
-            Search
-          </Button> */}
-
-          {/* Adding profile and logout icons */}
-          <div className="flex items-center gap-3">
-            <Link to="/user/profile" className="text-white">
-              <RiUserLine className="text-lg" />
-            </Link>
-            <button onClick={handleLogout} className="text-white">
-              <RiLogoutCircleLine className="text-lg" />
-            </button>
-          </div>
-        </div>
+              <div className="flex  w-2/6     items-center -mt-2 md:hidden">
+                <button onClick={()=>{toggleMenu()}} className="text-white">
+                  {isOpen ? <XMarkIcon className="w-6 h-6" /> : <Bars3Icon className="w-6 h-6" />}
+                </button>
+              </div>
+            </div>
+           
       </div>
-    </div>
+
+      <div className={`md:w-full md:flex  md:items-center flex flex-col justify-center md:absolute    ${isOpen ? "block" : "hidden"}`}>
+            <div className="flex overflow-hidden w-full md:w-3/6   items-center gap-4 mt-4 md:mt-0">
+              <Link to="/user/home" className="text-white md:mr-4">
+                Home
+              </Link>
+              <Link to="/user/painter" className="text-white md:mr-4">
+                About Us
+              </Link>
+              <Link to="/user/chat" className="text-white md:mr-4">
+                Chat
+              </Link>
+              <Link to="/user/designs" className="text-white md:mr-4">
+                Contact Us
+              </Link>
+            </div>
+      </div>
+    </nav>
   );
 }
 

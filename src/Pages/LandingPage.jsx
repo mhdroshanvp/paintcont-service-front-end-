@@ -3,8 +3,8 @@ import borcelleImage from "../assets/PAINTCONT-removebg-preview.png";
 
 function LandingPage() {
   return (
-    <div className="flex flex-col items-center justify-center h-screen">
-      <div className="text-center border text-white p-8 lg:p-16 xl:p-32">
+    <div className="flex sm:flex-col  sm:items-center sm:justify-center sm:h-screen h-screen justify-center items-center">
+      <div className="flex flex-col justify-center items-center  text-center border text-white sm:p-8 sm:lg:p-16 xl:p-40 sm:h-[700px] h-[700px] sm:mb-0 mb-14">
 
         <div className="flex justify-center">
           <img

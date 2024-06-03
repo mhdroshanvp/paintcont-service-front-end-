@@ -15,7 +15,7 @@ function ClientHome() {
   const [totalPages, setTotalPages] = useState(1);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-
+ const [smState,setSmState] = useState(true)
   const observer = useRef();
 
   const lastPostElementRef = useRef(null);
@@ -61,18 +61,20 @@ function ClientHome() {
     <>
       <div className="w-full h-screen block">
         <div className="w-full h-[60px]">
-          <ClientNavbar />
+          <ClientNavbar setSmState={setSmState} smState={smState} />
         </div>
-        <div className="flex mt-2 h-[90%] w-full ">
-          <div className="w-[30%] block ">
-            <div className="w-full  md:block ">
+        <div className="block md:flex mt-2 sm:h-[90%] w-full ">
+          <div className="w-full sm:h-[130px]    md:w-[30%]">
+             <div className="hidden sm:block ">
               <ClientCard />
             </div>
             <ClientHash />
-            <ClientSubscription />
+            {/* <ClientSubscription /> */}
           </div>
-          <div style={{ msOverflowStyle: "none ", scrollbarWidth: "none" }} className="overflow-y-scroll  w-[70%] flex flex-col justify-center items-center">
-            <div className=" w-[75%] mt-16 flex items-center">
+          <div style={{ msOverflowStyle: "none ", scrollbarWidth: "none" }} className="overflow-y-scroll w-full md:w-[70%] flex flex-col justify-center items-center">
+
+            {/* searchBar */}
+            <div className=" w-full m-1 md:w-[75%] sm:mt-16 flex items-center">
               <input
                 type="text"
                 value={searchQuery}
@@ -84,19 +86,20 @@ function ClientHome() {
                 <UserCircleIcon className="h-6 w-3" />
               </button>
             </div>
+
             {loading && <Spinner />}
-            <div className="flex flex-col w-[80%] h-[100%] rounded-xl ">
+            <div className="flex flex-col w-full   md:w-[80%] h-[100%] rounded-xl ">
               {Array.isArray(posts) && posts.length > 0 ? (
                 posts.map((post, index) => {
                   if (posts.length === index + 1) {
                     return (
-                      <div ref={lastPostElementRef} className="block rounded-xl bg-[#50187b67]  m-5 h-100" key={post._id}>
+                      <div ref={lastPostElementRef} className="block rounded-xl bg-[#50187b67] m-1 md:m-5 h-100" key={post._id}>
                         <ClientPosts post={post} />
-                      </div>
+                      </div >
                     );
                   } else {
                     return (
-                      <div className="block rounded-xl bg-[#50187b67]  m-5 h-100" key={post._id}>
+                      <div className="block rounded-xl bg-[#50187b67]  m-2 md:m-5 h-100" key={post._id}>
                         <ClientPosts post={post} postFetching={fetchPost} />
                       </div>
                     );

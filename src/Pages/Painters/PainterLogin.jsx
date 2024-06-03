@@ -87,7 +87,7 @@ function PainterLogin() {
   return (
     <>
       <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
           <h2 className="text-white text-center mb-8 font-serif text-4xl">Painter Login</h2>
           <form onSubmit={handleSubmit}>
             <div className="relative mb-6">
@@ -120,21 +120,24 @@ function PainterLogin() {
                 Password
               </label>
             </div>
-            <div className="flex w-full justify-end">
-                <a onClick={forgetPass} target="_blank" className="text-sm text-white opacity-10">forget password</a>
-              </div>
+            <div className="flex justify-end mb-4">
+                <a onClick={forgetPass} target="_blank" className="text-sm text-slate-500">forget password</a>
+            </div>
             <button type="submit" className="border 1px text-center inline-block w-full px-6 py-4 text-white text-uppercase font-bold text-lg transition-all duration-500 hover:bg-[#FF6B00] hover:text-black hover:shadow-lg rounded-lg">
               Submit
             </button>
           </form>
           <div className="flex w-full justify-center p-2 space-x-2">
-            <span className="text-white opacity-10 text-sm">Don't have an account?</span>
+            <span className="text-slate-400 text-sm">Don't have an account?</span>
 
-            <Link to={'/painter/signup'} className="text-sm text-white opacity-10">
+            <Link to={'/painter/signup'} className="text-sm text-slate-400">
               Sign-up
           </Link>
 
           </div>
+            <Link to={'/user/login'} className="flex justify-center text-sm text-slate-400">
+              Login as a User
+          </Link>
         </div>
       </div>
     </>

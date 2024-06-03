@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ClientNavbar from "../../Components/Clients/ClientNavbar";
 import axios from "../../Services/axiosService";
-import {jwtDecode} from "jwt-decode"; // Ensure correct import
+import {jwtDecode} from "jwt-decode";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "react-modal";
 import img from "../../assets/user-removebg.png";
@@ -9,7 +9,7 @@ import ClientPost from "../../Components/Clients/ClientPosts";
 
 function ClientPainterProfile() {
   const navigate = useNavigate();
-  const { id } = useParams();
+  const {id} = useParams();
   const token = localStorage.getItem('token');
   const decode = jwtDecode(token);
   const userId = decode.username;
@@ -20,7 +20,7 @@ function ClientPainterProfile() {
   const [followers, setFollowers] = useState([]);
   const [showChatModal, setShowChatModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [editData, setEditData] = useState({
+  const [editData,setEditData] = useState({
     username: '',
     email: '',
     description: '',
@@ -29,8 +29,8 @@ function ClientPainterProfile() {
     experience: ''
   });
   const [posts, setPosts] = useState([]);
-  const [slot,setSlot] = useState([])
-
+  const [slot, setSlot] = useState([]);
+  const [bookSlot, setBookSlot] = useState({});
 
   const followPainter = async () => {
     try {
@@ -38,7 +38,6 @@ function ClientPainterProfile() {
       const response = await axios.post("/user/followPainter", data);
 
       if (response.data.success) {
-
         setFollow(response.data.follow);
         setCountFollow(response.data.followerCount);
         setPosts(response.data.posts);
@@ -51,11 +50,11 @@ function ClientPainterProfile() {
   const fetchPainter = async () => {
     try {
       const response = await axios.get(`/user/painter/profile/${id}`);
-      setSlot(response.data.slot)
+      setSlot(response.data.slot);
       setPainter(response.data.painter);
       setFollow(response.data.painter.followers.includes(userId));
       setCountFollow(response.data.painter.followers.length);
-      setPosts(response.data.posts); // Ensure posts are set here
+      setPosts(response.data.posts);
     } catch (error) {
       console.log(error);
     }
@@ -115,6 +114,13 @@ function ClientPainterProfile() {
 
   const closeModal = () => {
     setShowChatModal(false);
+  };
+
+  const handleSlot = (start, end, date) => {
+    const data = { start, end, date };
+    setBookSlot(data);
+
+    console.log(data, "-------------------------");
   };
 
   return (
@@ -178,12 +184,20 @@ function ClientPainterProfile() {
                 <div className="flex flex-col bg-white h-[35rem] border rounded-2xl mb-6">
                   <p className="m-3 uppercase font-semibold">Available slots:</p>
                   <div className="flex flex-col sm:flex-row items-center justify-center m-5">
-                    {slot.map((slt)=>(  <div className="flex flex-col items-center justify-center">
-                      <div className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 ">
-                        <p>{slt.start} to {slt.end}</p>
-                      </div>
-                    </div>))}
-
+                    {slot.map((slt, index) => {
+                      const date = slt?.date ? slt.date.toString().split("T")[0] : "No date available";
+                      return (
+                        <div key={index} className="flex flex-col items-center justify-center">
+                          <p>{date}</p>
+                          <div
+                            className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 hover:bg-gray-500 hover:cursor-pointer"
+                            onClick={() => handleSlot(slt.start, slt.end, date)}
+                          >
+                            <p>{slt.start} to {slt.end}</p>
+                          </div>
+                        </div>
+                      );
+                    })}
                   </div>
                   <div className="flex flex-row items-center justify-center m-5">
                     <div onClick={() => navigate(`/user/chat/${id}`)} className="bg-amber-500 rounded-lg p-3 m-2">
@@ -191,24 +205,19 @@ function ClientPainterProfile() {
                     </div>
                   </div>
                 </div>
-                <p className="text-black font-bold">Painter posts : </p>
-
+                <p className="text-black font-bold">Painter posts:</p>
               </div>
-                <div className="max-auto rounded-2xl min-h-[30rem]">
-                  {posts.map((post) => (
-                    <div className="block rounded-xl bg-[#50187b67] m-5 h-100" key={post._id}>
-                      <ClientPost post={post} />
-                    </div>
-                  ))}
-                </div>
+              <div className="max-auto rounded-2xl min-h-[30rem]">
+                {posts.map((post) => (
+                  <div className="block rounded-xl bg-[#50187b67] m-5 h-100" key={post._id}>
+                    <ClientPost post={post} />
+                  </div>
+                ))}
+              </div>
             </div>
-            
           </div>
-          
         </div>
-        
       </div>
-      
       <Modal isOpen={showChatModal} onRequestClose={closeModal} className="fixed inset-0 flex items-center justify-center bg-gray-800 mt-8 bg-opacity-75">
         <div className="bg-white rounded-lg w-[350px] p-3 h-[500px]">
           <div className="flex justify-between items-center mb-2">

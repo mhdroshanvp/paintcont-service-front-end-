@@ -15,7 +15,7 @@ function ClientMail4Forget({setisopen}) {
             const response = await axios.post(UserEndpoints.mailForOtp, { email });
     
             if(response.data.success){
-                setisopen({ userEmail: email })
+                setisopen({ userEmail: email }) 
                
             } else {
                 setErrorMessage(response.data.message);
@@ -28,8 +28,8 @@ function ClientMail4Forget({setisopen}) {
 
     return (
         <>
-            <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
-                <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
+            <div className="flex  justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
+                <div className="absolute  top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
                     <div className="relative mb-6">
                         <input
                             type="email"
@@ -44,14 +44,14 @@ function ClientMail4Forget({setisopen}) {
                                 email ? 'text-sm -translate-y-4' : 'text-base'
                             }`}
                         >
-                            Email (for sending OTP)
+                            write a mail for otp
                         </label>
                         <br />
                         <button 
                             onClick={MailForSendOTP} 
                             className="border text-center inline-block w-full px-6 py-4 text-white text-uppercase font-bold text-lg transition-all duration-500 hover:bg-[#FF6B00] hover:text-black hover:shadow-lg rounded-lg"
                         >
-                            Send OTP
+                        Send OTP
                         </button>
                         {errorMessage && <p className="text-red-500 mt-2">{errorMessage}</p>}
                     </div>

@@ -82,7 +82,7 @@ const dispatch = useDispatch();
     <>
       <ToastContainer />
       <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
           <form onSubmit={otpSubmit}>
             <div className="relative mb-6">
               <input
@@ -94,7 +94,7 @@ const dispatch = useDispatch();
                 onFocus={() => setOTPFocus(true)}
                 onBlur={() => setOTPFocus(false)}
               />
-              <h1 className="text-white">Otp sent to {userEmail}</h1>
+              <h1 className="text-slate-400 mt-1">check this mail : {userEmail}</h1>
               <label
                 htmlFor="otp"
                 className={`absolute top-0 left-0 p-2 text-white transition-all duration-500 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-4 ${otpFocus || otp ? 'text-xs' : 'text-sm'}`}
@@ -110,11 +110,11 @@ const dispatch = useDispatch();
             </button>
 
 
-            <div className="flex w-full justify-end p-2 space-x-2">
+            <div className="flex w-full justify-end p-1 space-x-2">
               {timer > 0 ? (
-                <span className="text-white opacity-10 text-sm">Resend OTP in {timer} seconds</span>
+                <span className="text-slate-400 text-sm mt-2hn">Resend OTP in {timer} seconds</span>
               ) : (
-                <button onClick={resendOTP} className="text-sm text-white opacity-10">
+                <button onClick={resendOTP} className="text-sm text-slate-400 mt-2">  
                   Resend OTP
                 </button>
               )}

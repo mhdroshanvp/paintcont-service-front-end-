@@ -83,7 +83,7 @@ function ClientOtp() {
     <>
       <ToastContainer />
       <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2  w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
           <form onSubmit={otpSubmit}>
             <div className="relative mb-6">
               <input

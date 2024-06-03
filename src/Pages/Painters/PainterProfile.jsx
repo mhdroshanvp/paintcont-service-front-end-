@@ -28,12 +28,12 @@ function PainterProfile() {
   const descriptionRef = useRef(null);
   const token = localStorage.getItem("Painter_token")
 
-  console.log(token,"------");
 
-  const decode = jwtDecode(token.toString());
-  const id = decode.username;
+  if(token){
+    const decode = jwtDecode(token.toString());
+    var id = decode.username;
+  }
 
-  console.log(id);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -56,6 +56,7 @@ function PainterProfile() {
     };
     fetchUser();
   }, [id]);
+
 
   const openModal = () => {
     setModalIsOpen(true);
@@ -87,11 +88,12 @@ function PainterProfile() {
           painterId: id,
         };
 
-        await axios.post(PainterEndpoints.Profile, { data }); // Correct request format
+        await axios.post(PainterEndpoints.Profile, { data });
         
         setDescription("");
         closeModal();
         toast.success("Post created successfully");
+        
       } catch (error) {
         console.error("Error uploading image:", error);
         toast.error("Error uploading image");
@@ -151,9 +153,6 @@ function PainterProfile() {
     }
   };
 
-  useEffect(()=>{
-    console.log(posts,"5555555555555555555555555555555555555");
-  },[posts])
 
   const handleDelete = (id) => {
     try {
@@ -352,11 +351,14 @@ function PainterProfile() {
                 </Modal>
 
                 {/* Render Posts */}
-                {/* {posts.map((post,index) => (
+                {posts.map((post,index) => (
+
                   <div className="block rounded-xl bg-[#50187b67] m-5 h-100" key={post._id}>
-                    <ClientPost onDelete={handleDelete} painterId={id} edit={true} id={index} post={post} indPostId={post._id}/>
+                    <ClientPost onDelete={handleDelete} painterId={id} edit={true} id={index} post={post} indPostId={post._id} />
                   </div>
-                ))} */}
+                
+                ))}
+                
               </div>
             </div>
           </div>

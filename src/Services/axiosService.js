@@ -1,4 +1,4 @@
-// import axios from "axios";
+import axios from "axios";
 
 // const instance = axios.create({
 //   baseURL: "http://localhost:7777/",
@@ -18,11 +18,10 @@
 
 // export default instance;
 
-import axios from "axios";
-
 const instance = axios.create({
   baseURL: "http://localhost:7777/",
-  timeout: 15000,
+  // baseURL: "http://10.4.2.23:7777/",
+  // timeout: 15000,
 });
 
 instance.interceptors.request.use(

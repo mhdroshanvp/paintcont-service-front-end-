@@ -54,9 +54,10 @@ function PainterSignup() {
   return (
     <>
       <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
+        <div className="sm:w-[400px] w-[90%] absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
+          <h5 className="text-white flex justify-center font-serif text-2xl">Painter</h5>
           <h2 className="text-white text-center mb-8 font-serif text-4xl">
-            Painter Sign-Up
+            Sign-Up
           </h2>
           <form>
             <div className="relative mb-6">
@@ -112,33 +113,24 @@ function PainterSignup() {
               >
                 Password
               </label>
-              <div className="flex w-full justify-center p-2 space-x-2">
-                <span className="text-white opacity-10 text-sm">
-                  already have an account?{" "}
-                </span>
+              <div className="flex w-full justify-center mt-3 text-sm">
                 <a
                 onClick={() => navigate("/painter/login")}
-                className="cursor-pointer" 
+                className="cursor-pointer text-slate-400" 
                 >
-                  {" "}
-                  Sign-In
-                </a>
-              </div>
-
-              <div className="flex w-full justify-center space-x-2">
-                <span className="text-white opacity-10 text-sm">
-                  Join as a User
-                </span>
-                <a
-                onClick={() => navigate("/user/login")}
-
-                className="cursor-pointer" >
-                  {" "}
-                  User Login
+                  already have an account? Sign-in
                 </a>
               </div>
             </div>
             <button className="border 1px text-center inline-block w-full px-6 py-4 text-white text-uppercase font-bold text-lg transition-all duration-500 hover:bg-[#FF6B00] hover:text-black hover:shadow-lg rounded-lg" onClick={formsubmit}>submit</button>
+            <div className="flex w-full justify-center text-sm mt-2h">
+                <a
+                onClick={() => navigate("/user/login")}
+
+                className="cursor-pointer text-slate-400 text-sm" >
+                  Join as a User Click here
+                </a>
+              </div>
           </form>
         </div>
       </div>

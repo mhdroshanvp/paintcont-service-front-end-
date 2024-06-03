@@ -64,9 +64,9 @@ function ClientLogin() {
     <>
       <Toaster />
       <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
-        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
+        <div className=" absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px]    p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
           <h2 className="text-white text-center mb-8 font-serif text-4xl">
-            User Login
+              User Login
           </h2>
           <form onSubmit={handleLogin}>
             <div className="relative mb-6">
@@ -106,7 +106,7 @@ function ClientLogin() {
                 <button
                   type="button"
                   onClick={() => navigate("/user/mail4reset")}
-                  className="text-sm text-white opacity-10"
+                  className="text-sm text-slate-400 mt-2 "
                 >
                   forget password
                 </button>
@@ -122,14 +122,14 @@ function ClientLogin() {
               <button
                 type="button"
                 onClick={() => navigate('/painter/signup')}
-                className="text-white opacity-10 text-sm"
+                className="text-slate-500 text-sm"
               >
                 Don't have an account?
               </button>
               <button
                 type="button"
                 onClick={() => navigate('/user/signup')}
-                className="text-sm text-white opacity-10"
+                className="text-sm text-slate-500"
               >
                 Sign-up
               </button>
