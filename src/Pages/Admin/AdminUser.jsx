@@ -65,19 +65,19 @@ function AdminUser() {
         <div className="border">
           <AdminNav />
         </div>
-        <div className="w-screen h-screen">
-            <table className="w-full min-w-max table-auto text-left m-8 ml-7">
+        <div className="w-full h-screen p-4 ">
+            <table className="w-3/4 mx-auto table-auto text-left border-collapse">
               <thead>
                 <tr>
                   {TABLE_HEAD.map((head) => (
                     <th
                       key={head}
-                      className="border border-blue-gray-100 bg-blue-gray-50 p-4 text-white"
+                      className="border border-blue-gray-100 bg-blue-gray-50 p-4 text-blue-gray-700"
                     >
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal leading-none opacity-70"
+                        className="font-normal leading-none"
                       >
                         {head}
                       </Typography>
@@ -87,41 +87,38 @@ function AdminUser() {
               </thead>
               <tbody>
                 {currentUsers.map((user) => (
-                  <tr key={user._id} className={`p-4 ${user.isBlocked? "" : "border-b border-blue-gray-50"}`}>
-                    <td className="border">
+                  <tr key={user._id} className={`p-4 ${user.isBlocked ? "" : "border-b border-blue-gray-50"}`}>
+                    <td className="border p-4">
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal text-white"
+                        className="font-normal"
                       >
                         {user.username}
                       </Typography>
                     </td>
-                    <td className="border">
+                    <td className="border p-4">
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal text-white"
+                        className="font-normal"
                       >
                         {user.email}
                       </Typography>
                     </td>
-                    <td className="border">
+                    <td className="border p-4">
                       <Typography
                         variant="small"
                         color="blue-gray"
-                        className="font-normal text-white"
+                        className="font-normal"
                       >
-                        {user.isBlocked? 'Blocked'  : 'Unblocked'}
+                        {user.isBlocked ? 'Blocked' : 'Unblocked'}
                       </Typography>
                     </td>
-                    <td>
+                    <td className="p-4">
                       <button
-                        as="a"
                         onClick={() => blockUser(user._id)}
-                        variant="small"
-                        color="blue-gray"
-                        className="font-medium text-white"  
+                        className="text-blue-500 hover:text-blue-700 font-medium"
                       >
                         CLICK
                       </button>
@@ -136,7 +133,7 @@ function AdminUser() {
               nextLabel={"Next"}
               pageCount={pageCount}
               onPageChange={handlePageChange}
-              containerClassName={"pagination flex justify-center"}
+              containerClassName={"pagination flex justify-center mt-4"}
               previousLinkClassName={"pagination__link border border-blue-gray-200 rounded-full p-2 mr-2"}
               nextLinkClassName={"pagination__link border border-blue-gray-200 rounded-full p-2 ml-2"}
               disabledClassName={"pagination__link--disabled"}

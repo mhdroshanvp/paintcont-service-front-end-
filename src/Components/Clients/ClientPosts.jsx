@@ -13,7 +13,7 @@ import userImg from "../../assets/user-removebg.png";
 import uploadImageToFirebase from "../../Services/firebaseconfig/imageUploader";
 import { PainterEndpoints } from "../../Services/endpoints/painter";
 
-function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete}) {
+function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,showcase}) {
   console.log(post)
   const [liked, setLiked] = useState(post?.liked);
   const [countLike, setCountLike] = useState(post?.likes?.length);
@@ -208,7 +208,7 @@ console.log(report);
       <div className={`${edit ? 'py-3' : ''} rounded-[10px] block`}>
 
       {
-        !edit &&
+        !edit && !showcase &&
         <div className="flex relative bg-[#ffffff2b] m-2 w-[98%] h-7 rounded-[10px] items-center">
           <Link to={`/user/painter/profile/${post?.painterId?._id}`} className="ml-4 flex items-center">
             <FaUser size={13} color="white" className='cursor-pointer' />
@@ -274,7 +274,7 @@ console.log(report);
         
 
         {
-        !edit &&
+        !edit && !showcase &&
 
         <div className="flex items-center justify-between p-2 rounded-[10px]">
           <div className="flex items-center space-x-5">

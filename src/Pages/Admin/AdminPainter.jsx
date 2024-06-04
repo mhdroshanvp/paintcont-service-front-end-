@@ -7,13 +7,12 @@ import 'react-toastify/dist/ReactToastify.css';
 import { AdminEndpoints } from "../../Services/endpoints/admin";
 
 function AdminPainter() {
-    const [painter, setpainter] = useState([]);
+    const [painter, setPainter] = useState([]);
    
     const fetchUser = async () => {
       try {
         const response = await axios.get('/admin/painter');
-        console.log(response,";;;;;;;;;;;");
-        setpainter(response.data.painter);
+        setPainter(response.data.painter);
       } catch (error) {
         console.log(error);
       }
@@ -25,16 +24,15 @@ function AdminPainter() {
 
     const blockUser = async (painterId) => {
       try {
-        console.log(painterId,"]]]]]]]]]]]]]]]]]]]]]]]]]");
         const response = await axios.patch(AdminEndpoints.blockpainter(painterId));
         if (response.data.success) {
-          const updatedPainter = painter?.map(user => {
+          const updatedPainter = painter.map(user => {
             if (user._id === painterId) {
-              return {...user, isBlocked:!user.isBlocked };
+              return {...user, isBlocked: !user.isBlocked};
             }
             return user;
           });
-          setpainter(updatedPainter);
+          setPainter(updatedPainter);
           
           if (updatedPainter.some(user => user._id === painterId && user.isBlocked)) {
             toast.success('User blocked successfully');
@@ -57,22 +55,22 @@ function AdminPainter() {
         <div className="border">
           <AdminNav />
         </div>
-        <div className="w-screen h-screen m-1 border">
-          <Card className="h-full w-full overflow-scroll ">
+        <div className="w-full h-screen p-4 ">
+          <Card className="h-full w-full overflow-scroll bg-[#200a31]">
             {/* Center the table */}
             <div className="flex justify-center">
-              <table className="w-full min-w-max table-auto text-left">
+              <table className="w-3/4 mx-auto table-auto text-left border-collapse">
                 <thead>
                   <tr>
-                    {TABLE_HEAD?.map((head) => (
+                    {TABLE_HEAD.map((head) => (
                       <th
                         key={head}
-                        className="border-b border-blue-gray-100 bg-blue-gray-50 p-4"
+                        className="border border-blue-gray-100 bg-blue-gray-50 p-4 text-blue-gray-700"
                       >
                         <Typography
                           variant="small"
                           color="blue-gray"
-                          className="font-normal leading-none opacity-70"
+                          className="font-normal leading-none"
                         >
                           {head}
                         </Typography>
@@ -81,9 +79,9 @@ function AdminPainter() {
                   </tr>
                 </thead>
                 <tbody>
-                  {painter?.map((user) => (
-                    <tr key={user._id} className="p-4 border-b border-blue-gray-50">
-                      <td>
+                  {painter.map((user) => (
+                    <tr key={user._id} className={`p-4 ${user.isBlocked ? "" : "border-b border-blue-gray-50"}`}>
+                      <td className="border p-4">
                         <Typography
                           variant="small"
                           color="blue-gray"
@@ -92,29 +90,30 @@ function AdminPainter() {
                           {user.username}
                         </Typography>
                       </td>
-                      <td>
-                        <Typography variant="small" color="blue-gray" className="font-normal">
-                          {user.email}
-                        </Typography>
-                      </td>
-                      <td>
+                      <td className="border p-4">
                         <Typography
                           variant="small"
                           color="blue-gray"
                           className="font-normal"
                         >
-                          {user.isBlocked? 'Blocked' : 'Unblocked'}
+                          {user.email}
                         </Typography>
                       </td>
-                      <td>
-                        <button
-                          as="a"
-                          onClick={() => blockUser(user._id)}
+                      <td className="border p-4">
+                        <Typography
                           variant="small"
                           color="blue-gray"
-                          className="font-medium"
+                          className="font-normal"
                         >
-                          O
+                          {user.isBlocked ? 'Blocked' : 'Unblocked'}
+                        </Typography>
+                      </td>
+                      <td className="p-4">
+                        <button
+                          onClick={() => blockUser(user._id)}
+                          className="text-blue-500 hover:text-blue-700 font-medium"
+                        >
+                          CLICK
                         </button>
                       </td>
                     </tr>

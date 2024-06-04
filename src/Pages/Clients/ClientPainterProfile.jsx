@@ -132,7 +132,7 @@ function ClientPainterProfile() {
         <div className="container mx-auto py-8">
           <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div className="col-span-4 sm:col-span-3">
-              <div className="bg-white shadow rounded-lg p-6 fixed mt-6">
+              <div className="bg-white shadow rounded-lg p-6  mt-6">
                 <div className="flex flex-col items-center">
                   {painter ? (
                     <>
@@ -167,8 +167,9 @@ function ClientPainterProfile() {
                 </div>
               </div>
             </div>
+
             <div className="col-span-4 sm:col-span-9">
-              <div className="bg-white shadow rounded-lg p-6 mt-7 h-[800px]">
+              <div className="bg-white shadow h-[6000px] rounded-lg p-6 mt-7">
                 <h2 className="text-xl font-bold mt-6 mb-4">About Me</h2>
                 <p className="text-gray-700">
                   {painter?.description}
@@ -181,7 +182,7 @@ function ClientPainterProfile() {
                     </div>
                   </div>
                 )}
-                <div className="flex flex-col bg-white h-[35rem] border rounded-2xl mb-6">
+                <div className="flex flex-col bg-white h-[400px] border rounded-2xl mb-6">
                   <p className="m-3 uppercase font-semibold">Available slots:</p>
                   <div className="flex flex-col sm:flex-row items-center justify-center m-5">
                     {slot.map((slt, index) => {
@@ -200,20 +201,28 @@ function ClientPainterProfile() {
                     })}
                   </div>
                   <div className="flex flex-row items-center justify-center m-5">
-                    <div onClick={() => navigate(`/user/chat/${id}`)} className="bg-amber-500 rounded-lg p-3 m-2">
+                    <div className="bg-amber-500 hover:bg-amber-600 rounded-lg p-3 m-2">
                       <p>Book The Slot</p>
+                    </div>
+                    <div onClick={() => navigate(`/user/chat/${id}`)} className="bg-blue-500 hover:bg-blue-600 rounded-lg p-3 m-2">
+                      <p>Message Painter</p>
                     </div>
                   </div>
                 </div>
-                <p className="text-black font-bold">Painter posts:</p>
-              </div>
-              <div className="max-auto rounded-2xl min-h-[30rem]">
-                {posts.map((post) => (
-                  <div className="block rounded-xl bg-[#50187b67] m-5 h-100" key={post._id}>
-                    <ClientPost post={post} />
+
+                <div className="flex flex-col bg-purple-950  h-[5000px] border rounded-2xl mb-6">
+                  <p className="text-white  font-bold mt-3 ml-3">Painter posts:</p>
+                   <div className="max-auto rounded-2xl min-h-[30rem]">
+                      {posts.map((post) => (
+                         <div className="block rounded-xl bg-[#50187b67] m-5 h-100" key={post._id}>
+                            <ClientPost post={post} />
+                          </div>
+                      ))}
                   </div>
-                ))}
+                </div>
+                
               </div>
+
             </div>
           </div>
         </div>
