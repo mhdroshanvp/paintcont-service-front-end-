@@ -18,9 +18,9 @@ function GoogleAuthSignup() {
            
             <GoogleLogin  
                 onSuccess={credentialResponse => {
-                    console.log(credentialResponse);
+                    // console.log(credentialResponse);
                     const decoded = jwtDecode(credentialResponse.credential);
-                    console.log(decoded)                   
+                    // console.log(decoded)                   
                 }}
                 onError={() => {
                     console.log('Login Failed');

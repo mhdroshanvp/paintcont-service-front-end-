@@ -1,36 +1,44 @@
 import React, { useState, useEffect } from "react";
-import ClientNavbar from "../../Components/Clients/ClientNavbar";
 import axios from "../../Services/axiosService";
-import {jwtDecode} from "jwt-decode";
+import { jwtDecode } from "jwt-decode";
 import { useNavigate, useParams } from "react-router-dom";
 import Modal from "react-modal";
-import img from "../../assets/user-removebg.png";
+import toast, { Toaster } from "react-hot-toast";
+import ClientNavbar from "../../Components/Clients/ClientNavbar";
 import ClientPost from "../../Components/Clients/ClientPosts";
+import img from "../../assets/user-removebg.png";
+import { UserEndpoints } from "../../Services/endpoints/user";
+import { socket } from "../../socket/socket";
+import { io } from "socket.io-client";
 
 function ClientPainterProfile() {
-  const navigate = useNavigate();
-  const {id} = useParams();
-  const token = localStorage.getItem('token');
-  const decode = jwtDecode(token);
-  const userId = decode.username;
+    const navigate = useNavigate();
+    const { id } = useParams();
+    const token = localStorage.getItem('token');
+    const decode = jwtDecode(token);
+    const userId = decode.username;
 
-  const [painter, setPainter] = useState(null);
-  const [follow, setFollow] = useState(false);
-  const [countFollow, setCountFollow] = useState(0);
-  const [followers, setFollowers] = useState([]);
-  const [showChatModal, setShowChatModal] = useState(false);
-  const [showEditModal, setShowEditModal] = useState(false);
-  const [editData,setEditData] = useState({
-    username: '',
-    email: '',
-    description: '',
-    specialised: [],
-    aboutMe: '',
-    experience: ''
-  });
-  const [posts, setPosts] = useState([]);
-  const [slot, setSlot] = useState([]);
-  const [bookSlot, setBookSlot] = useState({});
+    const [painter, setPainter] = useState(null);
+    const [follow, setFollow] = useState(false);
+    const [countFollow, setCountFollow] = useState(0);
+    const [followers, setFollowers] = useState([]);
+    const [showChatModal, setShowChatModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [editData, setEditData] = useState({
+        username: '',
+        email: '',
+        description: '',
+        specialised: [],
+        aboutMe: '',
+        experience: ''
+    });
+    const [posts, setPosts] = useState([]);
+    const [slot, setSlot] = useState([]);
+    const [bookSlot, setBookSlot] = useState({});
+
+
+
+
 
   const followPainter = async () => {
     try {
@@ -47,6 +55,9 @@ function ClientPainterProfile() {
     }
   };
 
+
+
+
   const fetchPainter = async () => {
     try {
       const response = await axios.get(`/user/painter/profile/${id}`);
@@ -60,9 +71,29 @@ function ClientPainterProfile() {
     }
   };
 
+
+
   useEffect(() => {
     fetchPainter();
-  }, [id, userId]);
+
+    socket.on("slotBooked", (data) => {
+        if (data.painterId === id) {
+            setSlot((prevSlots) =>
+                prevSlots.map((s) =>
+                    s._id === data.slotId ? { ...s, status: "booked" } : s
+                )
+            );
+            toast.success("A slot has been booked!");
+        }
+    });
+
+    return () => {
+        socket.off("slotBooked");
+    };
+}, [id, userId]);
+
+
+
 
   const openModal = async () => {
     setShowChatModal(true);
@@ -116,15 +147,31 @@ function ClientPainterProfile() {
     setShowChatModal(false);
   };
 
-  const handleSlot = (start, end, date) => {
-    const data = { start, end, date };
+  const handleSlot = (start, end, date,id) => {
+    const data = { start, end, date,slotId:id };
     setBookSlot(data);
-
-    console.log(data, "-------------------------");
+    // console.log(data, "-------------------------");
   };
+
+  const handleSlotBooking = async () => {
+    try {
+        if (Object.keys(bookSlot).length > 0) {
+            const data = { userId, bookSlot, painterId: id };
+            const response = await axios.post(UserEndpoints.booked, data);
+            if (response.data) {
+                socket.emit("slotBooked", { ...bookSlot, painterId: id });
+                toast.success("Slot Booked");
+            }
+        }
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 
   return (
     <>
+    <Toaster />
       <div className="w-full fixed z-20">
         <ClientNavbar />
       </div>
@@ -184,25 +231,38 @@ function ClientPainterProfile() {
                 )}
                 <div className="flex flex-col bg-white h-[400px] border rounded-2xl mb-6">
                   <p className="m-3 uppercase font-semibold">Available slots:</p>
+
+
+
                   <div className="flex flex-col sm:flex-row items-center justify-center m-5">
-                    {slot.map((slt, index) => {
-                      const date = slt?.date ? slt.date.toString().split("T")[0] : "No date available";
-                      return (
-                        <div key={index} className="flex flex-col items-center justify-center">
-                          <p>{date}</p>
-                          <div
-                            className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 hover:bg-gray-500 hover:cursor-pointer"
-                            onClick={() => handleSlot(slt.start, slt.end, date)}
-                          >
-                            <p>{slt.start} to {slt.end}</p>
-                          </div>
-                        </div>
-                      );
-                    })}
+                        
+                        {slot.map((slt, index) => {
+                          const date = slt?.date ? slt.date.toString().split("T")[0] : "No date available";
+                          return (
+                            <div key={index} className="flex flex-col items-center justify-center">
+                              <p>{date}</p>
+                              {slt.status === "booked" ? (
+                                <div className="bg-red-500 text-center p-3 px-6 m-2 max-w-52 min-w-52">
+                                  <p>Booked</p>
+                                </div>
+                              ) : (
+                                <div 
+                                  className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 hover:bg-gray-500 hover:cursor-pointer"
+                                  onClick={() => handleSlot(slt.start, slt.end, date, slt._id)}
+                                >
+                                  <p>{slt.start} to {slt.end}</p>
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })}
+
                   </div>
+              
+                  
                   <div className="flex flex-row items-center justify-center m-5">
                     <div className="bg-amber-500 hover:bg-amber-600 rounded-lg p-3 m-2">
-                      <p>Book The Slot</p>
+                      <p onClick={handleSlotBooking}>Book The Slot</p>
                     </div>
                     <div onClick={() => navigate(`/user/chat/${id}`)} className="bg-blue-500 hover:bg-blue-600 rounded-lg p-3 m-2">
                       <p>Message Painter</p>
@@ -219,7 +279,7 @@ function ClientPainterProfile() {
                           </div>
                       ))}
                   </div>
-                </div>
+                </div>  
                 
               </div>
 

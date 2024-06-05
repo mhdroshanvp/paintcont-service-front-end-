@@ -20,13 +20,13 @@ function ClientSignUp() {
       return;
     }
 
-    if (password.length<= 8) {
-      toast.error("Password must be exactly 8 characters long.");
+    if (password.length <= 9) {
+      toast.error("Password must be atleast 8 characters long.");
       return;
     }
   
     try {
-      console.log(username, "===usernmae", email, "maill", password, "passsss");
+      // console.log(username, "===usernmae", email, "maill", password, "passsss");
       const response = await axios.post(UserEndpoints.SignUp, {
         username,
         email,

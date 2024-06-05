@@ -21,7 +21,7 @@ function ClientHome() {
   const lastPostElementRef = useRef(null);
 
   const fetchPost = async (page) => {
-    console.log("inside the function ");
+    // console.log("inside the function ");
     setLoading(true);
     try {
       const response = await axios.get(`${UserEndpoints.homePage}?page=${page}&limit=2`);
@@ -99,7 +99,7 @@ function ClientHome() {
                     );
                   } else {
                     return (
-                      <div className="block rounded-xl bg-[#50187b67]  m-2 md:m-5 h-100" key={post._id}>
+                      <div className="hover:bg-[#50187b46] block rounded-xl bg-[#50187b67]  m-2 md:m-5 h-100" key={post._id}>
                         <ClientPosts post={post} postFetching={fetchPost} />
                       </div>
                     );

@@ -148,7 +148,7 @@ function ClientProfile() {
 
     try {
       const response = await axios.put(UserEndpoints.updateUserProfile,  );
-      console.log(response,"response");
+      // console.log(response,"response");
       setUser(response.data.user);
       toast.success("User details updated successfully!");
       setEditDetailsModalIsOpen(false); // Close the modal

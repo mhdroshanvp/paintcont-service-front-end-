@@ -22,7 +22,7 @@ function ClientNavbar({setSmState,smState}) {
   return (
     <nav className="w-full flex flex-col bg-[#572c77] py-3 h-[60px] z-50">
 
-      <div className="flex   sm:mt-1 item-center mt-4   justify-between w-full  text-white ">
+      <div className="flex sm:mt-0 item-center mt-4  justify-between w-full  text-white ">
             <Typography as="a" href="/user/home" variant="h6" className=" sm:absolute -mt-2 w-2/6 sm:mt-1 left-0">
               Paintcont
             </Typography>
@@ -30,7 +30,6 @@ function ClientNavbar({setSmState,smState}) {
        
             <div className="flex h-100  items-center justify-end     w-2/6  absolute right-0 ">
               <div className="w-3/6  flex  md:items-center md:gap-3  md:mt-0 justify-end me-3">
-                
                   <Link to="/user/profile" className="text-white me-2">
                     <RiUserLine className="text-lg " />
                   </Link>

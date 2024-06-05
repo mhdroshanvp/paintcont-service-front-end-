@@ -38,12 +38,12 @@ function PainterSignup() {
     };
   
     try {
-      console.log("Sending body:", body);
+      // console.log("Sending body:", body);
       const response = await axios.post(PainterEndpoints.Signup, body);
   
       if (response.data.success) {
         navigate('/painter/otp', { state: { userEmail: validatedEmail } });
-        console.log("ok😌👍");
+        // console.log("ok😌👍");
       }
     }catch (error) {
       console.log("error while sending otp req");

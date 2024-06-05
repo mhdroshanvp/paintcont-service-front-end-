@@ -29,7 +29,7 @@ function PainterOtp() {
       const response = await axios.post(PainterEndpoints.Otp, { otp, email:userEmail });
 
       if (response.data.success) {
-        console.log("inside the response data success");
+        // console.log("inside the response data success");
         navigate('/painter/home');
       }
 
@@ -40,7 +40,7 @@ function PainterOtp() {
 
   const resendOTP = async (e) => {
 
-    console.log(userEmail,"------------------------------------------------------------------------------");
+    // console.log(userEmail,"------------------------------------------------------------------------------");
 
     e.preventDefault();
     try {

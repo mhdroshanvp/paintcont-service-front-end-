@@ -14,7 +14,7 @@ import uploadImageToFirebase from "../../Services/firebaseconfig/imageUploader";
 import { PainterEndpoints } from "../../Services/endpoints/painter";
 
 function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,showcase}) {
-  console.log(post)
+  // console.log(post)
   const [liked, setLiked] = useState(post?.liked);
   const [countLike, setCountLike] = useState(post?.likes?.length);
   const [showReportButton, setShowReportButton] = useState(false);
@@ -151,6 +151,7 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
   };
 
   const handleAvatarChange = (files) => {
+
     if (files && files.length > 0) {
       const selectedFile = files[0];
       const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
@@ -202,7 +203,7 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
     }
   };
   
-console.log(report);
+// console.log(report);
   return (
     <>
       <div className={`${edit ? 'py-3' : ''} rounded-[10px] block`}>
@@ -216,10 +217,10 @@ console.log(report);
           </Link>
           { !report?.includes(userId) && (
           <div className="relative ml-auto mr-3">
-            <BiDotsVerticalRounded color="white" onClick={toggleReportButton} className="cursor-pointer" />
+            <BiDotsVerticalRounded color="white" onClick={toggleReportButton} className="cursor-pointer " />
             {showReportButton && (
               <div className="absolute bg-gray-900 p-2 rounded-md bottom-7 right-0">
-                <button className="text-white" onClick={handleReport}>Report</button>
+                <button className="text-white hover:text-red-700" onClick={handleReport}>Report</button>
               </div>
             )}
 
@@ -246,8 +247,9 @@ console.log(report);
           }
         </div>
 
-        <div className="flex justify-center items-center">
-          <div className=" h-300 rounded-[20px] flex flex-col items-center  justify-center w-[600px]">
+        <div className="flex justify-center items-center ">
+          <div className=" h-300 rounded-[20px] flex flex-col items-center    justify-center w-[600px]">
+          {/* md:hover:scale-125 hover:scale-110 */}
             {
               edit?
               <>
@@ -262,8 +264,7 @@ console.log(report);
                         <></>
                     :
                     <></>
-}
-
+          }
               </>
               :
               <></>
@@ -278,11 +279,11 @@ console.log(report);
 
         <div className="flex items-center justify-between p-2 rounded-[10px]">
           <div className="flex items-center space-x-5">
-            <div className="cursor-pointer ml-3" onClick={toggleLike}>
+            <div className="cursor-pointer ml-3 hover:scale-125" onClick={toggleLike}>
               {liked ? (<AiFillHeart color="red" />) : (<AiOutlineHeart color="white" />)}
             </div>
             <div className="text-white">{countLike}</div>
-            <div className="cursor-pointer">
+            <div className="cursor-pointer hover:scale-125 text-md">
               <BsChat color="white" onClick={openModal} />
             </div>
           </div>
@@ -292,31 +293,45 @@ console.log(report);
       {
         !edit &&
       
-      <Modal isOpen={showChatModal} onRequestClose={closeModal} className="fixed inset-0 flex items-center justify-center bg-gray-800 mt-8 bg-opacity-75">
-        <div className="bg-white rounded-lg w-[500px] p-4 h-[500px]">
+      <Modal isOpen={showChatModal} onRequestClose={closeModal} className="fixed inset-0 flex items-center justify-center  bg-purple-950 bg-opacity-75 ">
+         {/* from-purple-900 via-purple-900 to-indigo-800  */}
+        <div className=" bg-[#50187bc4] rounded-lg w-[700px] p-5 h-[56 0px]">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold">Comments</h2>
-            <button onClick={closeModal} className="text-gray-500 hover:text-gray-700">&times;</button>
+            <h2 className="text-xl font-bold text-white">Comments</h2>
+            <button onClick={closeModal} className="text-white hover:text-red-600 font-bold">&times;</button>
           </div>
-          <div className="h-96 border">
+          <div className="h-[420px] p-4 border border-purple-800 rounded-[16px]">
             <div className="overflow-auto h-full">
               {comments.map(comment => (
                 <div key={comment._id} className="flex items-start mb-4">
                   <img src={userImg} alt="Avatar" className="w-10 h-10 rounded-full mr-3" />
                   <div>
-                    <p>{comment?.userName}</p>
-                    <div className="bg-gray-100 rounded-lg p-2">
-                      <p className="text-sm text-gray-700">{comment.text}</p>
+                    <p className="text-white text-xs p-1">{comment?.userName}</p>
+                    <div className="bg-purple-800  rounded-lg p-2">
+                      <p className="text-sm text-white">{comment.text}</p>
                     </div>
                   </div>
                 </div>
               ))}
             </div>
           </div>
-          <div className="flex">
-            <input value={newComment} onChange={(e) => setNewComment(e.target.value)} placeholder="Add a comment" className="border rounded-lg w-full h-8 mt-3" type="text" />
-            <button onClick={submitComment} className="border bg-blue-600 w-12 h-8 mt-3">Send</button>
+
+          <div className="flex p-1">
+            <input 
+              value={newComment} 
+              onChange={(e) => setNewComment(e.target.value)} 
+              placeholder="Add a comment" 
+              className="bg-purple-800 focus:outline-none rounded-[6px] h-[38px] w-full mt-3 pl-4 text-white" 
+              type="text" 
+            />
+            <button onClick={submitComment} className="bg-purple-800 w-16 h-9 ml-2 mt-3 flex items-center justify-center rounded-[6px]">
+              <svg className="w-6 h-6 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7"></path>
+              </svg>
+            </button>
           </div>
+
+
         </div>
       </Modal>
       }

@@ -46,7 +46,7 @@ function ClientLogin() {
 
     try {
       const response = await axios.post(UserEndpoints.login, { username: cleanedUsername, password });
-      console.log(response.data);
+      // console.log(response.data);
       if (response.data.success) {
         localStorage.setItem("token", response.data.token);
         dispatch(signInSuccess(response.data.user));

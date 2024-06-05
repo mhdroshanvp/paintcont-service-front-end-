@@ -42,7 +42,7 @@ function Messages() {
       try {
         const res = await axios.get(`conversation/${userId}`)
         setConversations(res.data)
-        console.log(res,"🕺💃🕺🪩🕺💃")
+        // console.log(res,"🕺💃🕺🪩🕺💃")
       }catch (error) {
         console.log("its an error");
         console.log(error);
@@ -54,7 +54,7 @@ function Messages() {
     
         const data = {userId,painterId:id}
         const response = await axios.post("/user/painter/profile/indMsg",data)
-        console.log(response,"response");
+        // console.log(response,"response");
         
         if(response.data.success){
           setMessageHistory(response.data.messageHistory)
@@ -64,9 +64,9 @@ function Messages() {
 
       const fetchMsgh = async (id) => {
     
-       console.log("--ee----");
+      //  console.log("--ee----");
         const response = await axios.get(`/message/${id}`)
-        console.log(response,"response");
+        // console.log(response,"response");
         
        
           setMessageHistory(response.data)
@@ -86,7 +86,7 @@ function Messages() {
   },[])
 
   socket.on("sendToUser",(data)=>{
-    console.log(data,"--------------------;;;;;;-")
+    // console.log(data,"--------------------;;;;;;-")
     setMessageHistory([...messageHistory,data])
   })
 
@@ -96,7 +96,7 @@ function Messages() {
       const obj ={conversationId:conversations[0]._id,sender:userId,text:newMessage}
       socket.emit("sendData",obj)
       const response = await axios.post('/message/',obj)
-      console.log(response,"heeeeeeeeeeeeeyyyyyyyyy");
+      // console.log(response,"heeeeeeeeeeeeeyyyyyyyyy");
     } catch (error) {
       console.log(error);
     }

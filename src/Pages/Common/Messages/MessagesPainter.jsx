@@ -25,8 +25,8 @@ function MessagesPainter() {
   const {id} = useParams()
   
   
-  console.log(conversations,"conversation");
-  console.log(decode,"========");
+  // console.log(conversations,"conversation");
+  // console.log(decode,"========");
 
 
 
@@ -34,17 +34,17 @@ function MessagesPainter() {
     socket.on("connection")
 
     socket.on("welcome",(data)=>{
-      console.log(data,"-------d------------")
+      // console.log(data,"-------d------------")
     })
 
   },[])
-  console.log(conversations,"conversation");
+  // console.log(conversations,"conversation");
 
   socket.on("sendToUser",(data)=>{
 
     if(data.conversationId===conversations[0]?._id){
 
-      console.log(data,"--------------------;;;;;;-")
+      // console.log(data,"--------------------;;;;;;-")
       setMessageHistory([...messageHistory,data])
     }
   })
@@ -61,7 +61,7 @@ function MessagesPainter() {
       try {
         const res = await axios.get(`conversation/${userId}`)
         setConversations(res.data)
-        console.log(res,"🕺💃🕺🪩🕺💃")
+        // console.log(res,"🕺💃🕺🪩🕺💃")
       }catch (error) {
         console.log("its an error");
         console.log(error);
@@ -73,7 +73,7 @@ function MessagesPainter() {
     
         const data = {userId,painterId:id}
         const response = await axios.post("/user/painter/profile/indMsg",data)
-        console.log(response,"response");
+        // console.log(response,"response");
         
         if(response.data.success){
           setMessageHistory(response.data.messageHistory)
@@ -83,9 +83,9 @@ function MessagesPainter() {
 
       const fetchMsgh = async (id) => {
     
-       console.log("--ee----");
+      //  console.log("--ee----");
         const response = await axios.get(`/message/${id}`)
-        console.log(response,"response");
+        // console.log(response,"response");
         
        
           setMessageHistory(response.data)
@@ -112,14 +112,14 @@ function MessagesPainter() {
       });
     }
   }, [messageHistory]);
-  console.log(conversations,"=====================================");
+  // console.log(conversations,"=====================================");
   const chatSubmit = async () => {
     try {
    
       const obj ={conversationId:conversations[0]._id,sender:userId,text:newMessage}
       socket.emit("sendData",obj)
       const response = await axios.post('/message/',obj)
-      console.log(response,"heeeeeeeeeeeeeyyyyyyyyy");
+      // console.log(response,"heeeeeeeeeeeeeyyyyyyyyy");
     } catch (error) {
       console.log(error);
     }

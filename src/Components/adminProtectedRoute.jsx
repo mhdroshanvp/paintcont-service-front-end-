@@ -7,7 +7,7 @@ const AdmnProtectedRoute = ({ children, allowedRole }) => {
   const navigate = useNavigate();
   const token = localStorage.getItem('admin_token');
 
-  console.log(token);
+  // console.log(token);
 
   useEffect(() => {
     try {

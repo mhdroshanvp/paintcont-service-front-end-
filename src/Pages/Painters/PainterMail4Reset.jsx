@@ -13,10 +13,10 @@ function PainterMail4Reset() {
     try {
       const response = await axios.post(PainterEndpoints.MailForReset, { email });
 
-      console.log(response,"response data");
+      // console.log(response,"response data");
 
       if(response.data.success){
-        console.log("inside the response data in painterMail4Reset");
+        // console.log("inside the response data in painterMail4Reset");
         navigate('/painter/otp',{state: { userEmail: email }})
       }
     } catch (error) {   

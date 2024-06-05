@@ -10,5 +10,6 @@ export const UserEndpoints = {
     search:'/user/search',
     changePassword:"/user/profile/change-password",
     updateUserProfile:"/user/profile/updateUserProfile",
-    like:'/user/update-like'
+    like:'/user/update-like',
+    booked:'/user/painter/slot-booking'
 }   
