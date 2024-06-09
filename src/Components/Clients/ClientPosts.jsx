@@ -211,9 +211,9 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
       {
         !edit && !showcase &&
         <div className="flex relative bg-[#ffffff2b] m-2 w-[98%] h-7 rounded-[10px] items-center">
-          <Link to={`/user/painter/profile/${post?.painterId?._id}`} className="ml-4 flex items-center">
-            <FaUser size={13} color="white" className='cursor-pointer' />
-            <h1 className="ml-2 text-white">{post?.painterId?.username}</h1>
+            <FaUser size={13} color="white" className='cursor-pointer ml-6' />
+          <Link to={`/user/painter/profile/${post?.painterId?._id}`} className=" flex items-center">
+            <h1 className=" text-white">{post?.painterId?.username}</h1>
           </Link>
           { !report?.includes(userId) && (
           <div className="relative ml-auto mr-3">
@@ -243,7 +243,7 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
               <button onClick={handleDeletePost} className="border ms-1 p-1 rounded-[10px]">Delete Post</button>
             </>
             :
-          <h1>{description}</h1>
+          <h1 >{description}</h1>
           }
         </div>
 

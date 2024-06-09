@@ -31,6 +31,7 @@ import Message from "./Pages/Common/Messages/Messages";
 import MessagesPainter from "./Pages/Common/Messages/MessagesPainter";
 import PainterSlotAdd from "./Pages/Painters/PainterSlotAdd";
 import AdminPostHandle from "./Pages/Admin/AdminPostHandle";
+import ClientAboutPage from "./Pages/Clients/ClientAboutPage";
 
 
 function App() {
@@ -52,6 +53,7 @@ function App() {
 
                     {/* Client/user-side */}
                     <Route path="user/home" element={<UserProtectedRoute allowedRole="user"><ClientHome /></UserProtectedRoute>} />
+                    <Route path="user/about" element={<UserProtectedRoute allowedRole="user"><ClientAboutPage /></UserProtectedRoute>} />
                     <Route path="user/login" element={<ClientLogin />} />
                     <Route path="user/signup" element={<ClientSignUp />} />
                     <Route path="user/mail4reset" element={<ClientMail4Reset />} />

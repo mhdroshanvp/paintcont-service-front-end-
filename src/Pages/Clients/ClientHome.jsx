@@ -8,6 +8,7 @@ import ClientSubscription from "../../Components/Clients/ClientSubscription";
 import { UserEndpoints } from "../../Services/endpoints/user";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import Spinner from "../../Components/Extra-designs/spinner"
+import StickyHome from "../../Components/Common/StickyHome";
 
 function ClientHome() {
   const [posts, setPosts] = useState([]);
@@ -72,9 +73,9 @@ function ClientHome() {
             {/* <ClientSubscription /> */}
           </div>
           <div style={{ msOverflowStyle: "none ", scrollbarWidth: "none" }} className="overflow-y-scroll w-full md:w-[70%] flex flex-col justify-center items-center">
-
+            
             {/* searchBar */}
-            <div className=" w-full m-1 md:w-[75%] sm:mt-16 flex items-center">
+            <div className=" w-full m-1 md:w-[75%] md:mt-28 sm:mt-16 flex items-center">
               <input
                 type="text"
                 value={searchQuery}
@@ -86,6 +87,8 @@ function ClientHome() {
                 <UserCircleIcon className="h-6 w-3" />
               </button>
             </div>
+
+
 
             {loading && <Spinner />}
             <div className="flex flex-col w-full   md:w-[80%] h-[100%] rounded-xl ">
@@ -109,6 +112,11 @@ function ClientHome() {
                 <p> </p>
               )}
             </div>
+            
+            <div className="w-full flex justify-end pe-11 sticky top-[600px]">
+              <StickyHome />
+            </div>
+
             <div>
             </div>
           </div>

@@ -92,6 +92,7 @@ function PainterSlotAdd() {
                     onChange={(event) => handleInputChange(index, event)}
                     className="w-full mt-1 p-2 border rounded"
                     required
+                    disablePast
                   />
                 </label>
                 <label className="block text-gray-700 mb-2">

@@ -71,6 +71,11 @@ function ClientPainterProfile() {
     }
   };
 
+  useEffect(()=>{
+    socket.emit("slotBooked", { ...bookSlot, painterId: id });
+    // fetchPainter()
+  },[])
+
 
 
   useEffect(() => {
@@ -83,6 +88,7 @@ function ClientPainterProfile() {
                     s._id === data.slotId ? { ...s, status: "booked" } : s
                 )
             );
+            fetchPainter()
             toast.success("A slot has been booked!");
         }
     });
@@ -159,7 +165,7 @@ function ClientPainterProfile() {
             const data = { userId, bookSlot, painterId: id };
             const response = await axios.post(UserEndpoints.booked, data);
             if (response.data) {
-                socket.emit("slotBooked", { ...bookSlot, painterId: id });
+                
                 toast.success("Slot Booked");
             }
         }
@@ -190,11 +196,13 @@ function ClientPainterProfile() {
                       />
                       <h1 className="text-xl font-bold">{painter.username}</h1>
                       <p className="text-gray-700">{painter.email}</p>
+
                       <div className="mt-6 flex flex-wrap gap-4 justify-center">
                         <button onClick={followPainter} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
                           {follow ? "Unfollow" : "Follow"}
                         </button>
                       </div>
+                      
                       <p onClick={openModal} className="mt-4 text-gray-700 cursor-pointer">Followers: {countFollow}</p>
                     </>
                   ) : (

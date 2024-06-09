@@ -20,7 +20,7 @@ function ClientSignUp() {
       return;
     }
 
-    if (password.length <= 9) {
+    if (password.length < 8) {
       toast.error("Password must be atleast 8 characters long.");
       return;
     }

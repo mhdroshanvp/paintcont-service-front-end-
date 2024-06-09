@@ -52,7 +52,7 @@ function ClientNavbar({setSmState,smState}) {
               <Link to="/user/home" className="text-white md:mr-4">
                 Home
               </Link>
-              <Link to="/user/painter" className="text-white md:mr-4">
+              <Link to="/user/about" className="text-white md:mr-4">
                 About Us
               </Link>
               <Link to="/user/chat" className="text-white md:mr-4">
