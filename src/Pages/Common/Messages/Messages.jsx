@@ -15,14 +15,12 @@ function Messages() {
   const [conversations,setConversations] = useState([])
   const user = useSelector((state)=>state.user)
   const [messageHistory,setMessageHistory] = useState([])
-  const [currentConv,setCurrentConv] = useState({})
+  const [currentConv,setCurrentConv] = useState(null)
   const [newMessage,setNewMessage] = useState('')
 
   const userId = user.currentUser._id
 
   const {id} = useParams()
-
-  // const socket  = useRef()
 
   useEffect(()=>{
     socket.on("connection")
@@ -32,17 +30,23 @@ function Messages() {
     })
 
   },[])
-  console.log(conversations,"conversation");
-
 
 
 
   useEffect(()=>{
     const getConversation = async () => {
       try {
-        const res = await axios.get(`conversation/${userId}`)
-        setConversations(res.data)
-        // console.log(res,"🕺💃🕺🪩🕺💃")
+        if(id){ 
+        
+          const res = await axios.post(`conversation`,{senderId:userId, receiverId:id})
+           socket.emit("joinNewUser",res.data)
+          setConversations(res.data)
+          }else{
+          const res = await axios.get(`conversation/${userId}`)
+          socket.emit("joinNewUser",res.data)
+          setConversations(res.data)
+        }
+        console.log(res.data,"🕺💃🕺🪩🕺💃")
       }catch (error) {
         console.log("its an error");
         console.log(error);
@@ -50,11 +54,11 @@ function Messages() {
     }
     getConversation()
   },[userId])
-    const fetchMsg = async (id) => {
+
+  const fetchMsg = async (id) => {
     
         const data = {userId,painterId:id}
         const response = await axios.post("/user/painter/profile/indMsg",data)
-        // console.log(response,"response");
         
         if(response.data.success){
           setMessageHistory(response.data.messageHistory)
@@ -64,13 +68,8 @@ function Messages() {
 
       const fetchMsgh = async (id) => {
     
-      //  console.log("--ee----");
-        const response = await axios.get(`/message/${id}`)
-        // console.log(response,"response");
-        
-       
+          const response = await axios.get(`/message/${id}`)      
           setMessageHistory(response.data)
-        
 
       }
 
@@ -93,7 +92,8 @@ function Messages() {
 
   const chatSubmit = async () => {
     try {
-      const obj ={conversationId:conversations[0]._id,sender:userId,text:newMessage}
+   
+      const obj ={conversationId:currentConv?._id,sender:userId,text:newMessage}
       socket.emit("sendData",obj)
       const response = await axios.post('/message/',obj)
       // console.log(response,"heeeeeeeeeeeeeyyyyyyyyy");
@@ -129,6 +129,12 @@ function Messages() {
           <div className="chatBoxWrapper">
                 <div className="chatBoxTop">
                     <div>
+                      {!messageHistory.length&&
+                      
+                      <div className='flex justify-center h-screen items-center'>
+                        no items
+                      </div>
+                      }
                       {messageHistory.map((msg)=>{
                         if(userId == msg.sender){
                           return <Message own={true} msgData={msg.text}/>
@@ -139,7 +145,7 @@ function Messages() {
 
                     </div>
                 </div>
-                <div className="chatBoxBottom">
+               {currentConv&&<div className="chatBoxBottom">
                   <textarea
                     className="chatMessageInput"
                     placeholder="write something..."
@@ -149,7 +155,7 @@ function Messages() {
                   <button className="chatSubmitButton " onClick={chatSubmit}>
                     Send
                   </button>
-                </div>
+                </div>}
             {/* ) : (
               <span className="noConversationText">
                 Open a conversation to start a chat.

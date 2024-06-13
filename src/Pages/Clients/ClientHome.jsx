@@ -18,6 +18,7 @@ function ClientHome() {
   const [searchQuery, setSearchQuery] = useState('');
  const [smState,setSmState] = useState(true)
   const observer = useRef();
+  const devRef = useRef()
 
   const lastPostElementRef = useRef(null);
 
@@ -72,7 +73,7 @@ function ClientHome() {
             <ClientHash />
             {/* <ClientSubscription /> */}
           </div>
-          <div style={{ msOverflowStyle: "none ", scrollbarWidth: "none" }} className="overflow-y-scroll w-full md:w-[70%] flex flex-col justify-center items-center">
+          <div style={{ msOverflowStyle: "none ", scrollbarWidth: "none" }} ref={devRef} className="overflow-y-scroll w-full md:w-[70%] flex flex-col justify-center items-center">
             
             {/* searchBar */}
             <div className=" w-full m-1 md:w-[75%] md:mt-28 sm:mt-16 flex items-center">
@@ -91,30 +92,38 @@ function ClientHome() {
 
 
             {loading && <Spinner />}
-            <div className="flex flex-col w-full   md:w-[80%] h-[100%] rounded-xl ">
-              {Array.isArray(posts) && posts.length > 0 ? (
-                posts.map((post, index) => {
-                  if (posts.length === index + 1) {
-                    return (
-                      <div ref={lastPostElementRef} className="block rounded-xl bg-[#50187b67] m-1 md:m-5 h-100" key={post._id}>
-                        <ClientPosts post={post} />
-                      </div >
-                    );
-                  } else {
-                    return (
-                      <div className="hover:bg-[#50187b46] block rounded-xl bg-[#50187b67]  m-2 md:m-5 h-100" key={post._id}>
-                        <ClientPosts post={post} postFetching={fetchPost} />
-                      </div>
-                    );
-                  }
-                })
-              ) : (
-                <p> </p>
-              )}
-            </div>
+            
+                <div className="flex flex-col w-full md:w-[80%] h-[100%] rounded-xl ">
+                    {Array.isArray(posts) && posts.length > 0 ? (
+                      posts.map((post, index) => {
+                        if (posts.length === index + 1) {
+                          return (
+                            <div ref={lastPostElementRef} className="block rounded-xl bg-[#50187b67] m-1 md:m-5 h-100" key={post._id}>
+                              <ClientPosts post={post} />
+                            </div>
+                          );
+                        } else {
+                          return (
+                            <div className="hover:bg-[#50187b46] block rounded-xl bg-[#50187b67] m-2 md:m-5 h-100" key={post._id}>
+                              <ClientPosts post={post} postFetching={fetchPost} />
+                            </div>
+                          );
+                        }
+                      })
+                    ) : (
+                      <p> </p>
+                    )}
+                </div>
+
             
             <div className="w-full flex justify-end pe-11 sticky top-[600px]">
-              <StickyHome />
+              <StickyHome scrollToTop={()=>{
+                devRef.current.scrollTo({
+                  top: 0,
+                  behavior: 'smooth'
+                });
+
+              }}/>
             </div>
 
             <div>

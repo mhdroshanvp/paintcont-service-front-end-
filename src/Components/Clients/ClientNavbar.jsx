@@ -28,7 +28,7 @@ function ClientNavbar({setSmState,smState}) {
             </Typography>
          
        
-            <div className="flex h-100  items-center justify-end     w-2/6  absolute right-0 ">
+            <div className="flex h-100  items-center justify-end     w-2/6  absolute z-50 right-0 ">
               <div className="w-3/6  flex  md:items-center md:gap-3  md:mt-0 justify-end me-3">
                   <Link to="/user/profile" className="text-white me-2">
                     <RiUserLine className="text-lg " />

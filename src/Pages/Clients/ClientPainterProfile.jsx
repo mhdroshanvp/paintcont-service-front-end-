@@ -10,6 +10,7 @@ import img from "../../assets/user-removebg.png";
 import { UserEndpoints } from "../../Services/endpoints/user";
 import { socket } from "../../socket/socket";
 import { io } from "socket.io-client";
+import { loadStripe } from "@stripe/stripe-js";
 
 function ClientPainterProfile() {
     const navigate = useNavigate();
@@ -36,6 +37,9 @@ function ClientPainterProfile() {
     const [slot, setSlot] = useState([]);
     const [bookSlot, setBookSlot] = useState({});
 
+
+
+    // console.log(slot,"-----------000000000000"); 
 
 
 
@@ -159,13 +163,14 @@ function ClientPainterProfile() {
     // console.log(data, "-------------------------");
   };
 
-  const handleSlotBooking = async () => {
+  
+const handleSlotBooking = async () => {
     try {
+      // console.log("gds")
         if (Object.keys(bookSlot).length > 0) {
             const data = { userId, bookSlot, painterId: id };
             const response = await axios.post(UserEndpoints.booked, data);
             if (response.data) {
-                
                 toast.success("Slot Booked");
             }
         }
@@ -173,6 +178,48 @@ function ClientPainterProfile() {
         console.log(error);
     }
 };
+
+//////////////////////////////////////////////////////////////////////////////////////////
+
+const makePayment = async () => {
+  try {
+    const stripe = await loadStripe(import.meta.env.VITE_STRIPE_KEY);
+
+    const data = {slot,userId}
+
+    console.log(data,"-------------------------------");
+
+    const response = await axios.post('/stripe/create-checkout-session', data);
+
+    const session = response.data;
+
+    console.log(session);
+
+    if(session.save == true){
+      handleSlotBooking()
+    }
+    
+
+    const result = await stripe.redirectToCheckout({
+      sessionId: session.id,
+    });
+
+    if(result){
+      const response = await axios.post('/stripe/create-checkout-session', data);
+      console.log(response)
+    }
+
+    if (result.error) {
+      console.log(result.error);
+    }
+
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+
+//////////////////////////////////////////////////////////////////////////////////////////
 
 
   return (
@@ -265,12 +312,11 @@ function ClientPainterProfile() {
                           );
                         })}
 
-                  </div>
-              
+                  </div>              
                   
                   <div className="flex flex-row items-center justify-center m-5">
                     <div className="bg-amber-500 hover:bg-amber-600 rounded-lg p-3 m-2">
-                      <p onClick={handleSlotBooking}>Book The Slot</p>
+                      <p onClick={makePayment}>Book The Slot</p>
                     </div>
                     <div onClick={() => navigate(`/user/chat/${id}`)} className="bg-blue-500 hover:bg-blue-600 rounded-lg p-3 m-2">
                       <p>Message Painter</p>
