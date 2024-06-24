@@ -14,16 +14,8 @@ function ClientHome() {
           <PainterNavbar />
         </div>
 
-        {/* <div className="flex justify-center items-center mt-[30px] bg-black">
-          <div className="w-[1000px] h-[470px] bg-white  rounded-[60px] flex justify-center items-center ">
-            <div className="ml-28">
-              <img src={painterGIf} className="rounded-[60px]" alt="GIF Description" />
-            </div>
-          </div>
-        </div> */}
-
-<div className="flex justify-center items-center mt-[70px] ">
-  <div className="w-[1000px] h-[400px] bg-gradient-to-r from-[#2f1046] to-[#25195e] rounded-[60px] flex items-center p-10">
+<div className="flex justify-center items-center mt-[120px] ">
+  <div className="w-[1300px] h-[450px] bg-gradient-to-r from-[#2f1046] to-[#25195e] rounded-[60px] flex items-center p-10">
     <div className="ml-5 flex-shrink-0 transition-opacity duration-300 hover:opacity-65">
       <img src={painterGIf} className="h-[300px] rounded-[60px]" alt="GIF Description" />
     </div>

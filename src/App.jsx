@@ -32,6 +32,9 @@ import MessagesPainter from "./Pages/Common/Messages/MessagesPainter";
 import PainterSlotAdd from "./Pages/Painters/PainterSlotAdd";
 import AdminPostHandle from "./Pages/Admin/AdminPostHandle";
 import ClientAboutPage from "./Pages/Clients/ClientAboutPage";
+import ClientSuccessPage from "./Pages/Clients/ClientSuccessPage";
+import ClientContact from "./Pages/Clients/ClientContact";
+import AdminDashboard from "./Pages/Admin/AdminDashboard";
 
 
 function App() {
@@ -50,10 +53,12 @@ function App() {
                     <Route path="admin/user" element={<AdmnProtectedRoute allowedRole="admin"><AdminUser /></AdmnProtectedRoute>} />
                     <Route path="admin/painter" element={<AdmnProtectedRoute allowedRole="admin"><AdminPainter /></AdmnProtectedRoute>} />
                     <Route path="admin/posts" element={<AdmnProtectedRoute allowedRole="admin"><AdminPostHandle /></AdmnProtectedRoute>} />
+                    <Route path="admin/dashboard" element={<AdmnProtectedRoute allowedRole="admin"><AdminDashboard /></AdmnProtectedRoute>} />
 
                     {/* Client/user-side */}
                     <Route path="user/home" element={<UserProtectedRoute allowedRole="user"><ClientHome /></UserProtectedRoute>} />
                     <Route path="user/about" element={<UserProtectedRoute allowedRole="user"><ClientAboutPage /></UserProtectedRoute>} />
+                    <Route path="user/contact" element={<UserProtectedRoute allowedRole="user"><ClientContact /></UserProtectedRoute>} />
                     <Route path="user/login" element={<ClientLogin />} />
                     <Route path="user/signup" element={<ClientSignUp />} />
                     <Route path="user/mail4reset" element={<ClientMail4Reset />} />
@@ -63,6 +68,7 @@ function App() {
                     <Route path="user/painter/profile/:id" element={<UserProtectedRoute allowedRole="user"><ClientPainterProfile /></UserProtectedRoute>} />
                     <Route path="user/chat/:id" element={<UserProtectedRoute allowedRole="user"> <Message /> </UserProtectedRoute>} />
                     <Route path="user/chat/" element={<UserProtectedRoute allowedRole="user"> <Message /> </UserProtectedRoute>} />
+                    <Route path="user/payment-success" element={<UserProtectedRoute allowedRole="user"> <ClientSuccessPage /> </UserProtectedRoute>} />
 
                     {/* Painter-side */}
                     <Route path="painter/home" element={<PainterProtectedRoute allowedRole="painter"><PainterHome /></PainterProtectedRoute>} />

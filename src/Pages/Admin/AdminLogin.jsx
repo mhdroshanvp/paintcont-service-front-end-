@@ -22,7 +22,7 @@ function AdminLogin() {
     const token = localStorage.getItem("admin_token")
 
     if(token){
-      navigate('/admin/user')
+      navigate('/admin/dashboard')
     }
   },[])
 
@@ -46,7 +46,7 @@ function AdminLogin() {
         localStorage.setItem("admin_token", data.token);
         dispatch(signInSuccess(data.user));
         toast.success('Login successful!');
-        navigate("/admin/user");
+        navigate("/admin/dashboard");
       }
     } catch (error) {
       toast.error('wrong credential. Please try again later.');

@@ -164,10 +164,10 @@ function Messages() {
           </div>
         </div>
         <div className="chatOnline">
-          <div className="chatOnlineWrapper">
+          {/* <div className="chatOnlineWrapper">
             Online
             <ChatOnline />
-          </div>
+          </div> */}
         </div>
       </div>
 

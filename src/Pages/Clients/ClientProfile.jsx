@@ -22,6 +22,9 @@ function ClientProfile() {
 
   const token = localStorage.getItem('token');
   const decode = jwtDecode(token);
+  const userID = decode?.username
+
+  // console.log(userID,"---------------0000000000000000----------------");
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -54,28 +57,31 @@ function ClientProfile() {
   const handleAddressSubmit = async (e) => {
     e.preventDefault();
 
-    if (!address.houseNo && !address.location && !address.pin) {
-      return toast.error("Address cannot be empty");
-    }
-    if (!address.houseNo || isNaN(address.houseNo)) {
-      return toast.error("Please enter a valid house number.");
-    }
-    if (!address.location) {
-      return toast.error("Location cannot be empty.");
-    }
-    if (!address.pin || !/^(\d{6})$/.test(address.pin)) { // Assuming pin code is 6 digits
-      return toast.error("Invalid pin code. Please enter a 6-digit pin code.");
-    }
-    if (!phone) {
-      return toast.error("Number cannot be empty.");
-    }
+    // if (!address.houseNo && !address.location && !address.pin) {
+    //   return toast.error("Address cannot be empty");
+    // }
+    // if (!address.houseNo || isNaN(address.houseNo)) {
+    //   return toast.error("Please enter a valid house number.");
+    // }
+    // if (!address.location) {
+    //   return toast.error("Location cannot be empty.");
+    // }
+    // if (!address.pin || !/^(\d{6})$/.test(address.pin)) {
+    //   return toast.error("Invalid pin code. Please enter a 6-digit pin code.");
+    // }
+    // if (!phone) {
+    //   return toast.error("Number cannot be empty.");
+    // }
 
     try {
       const data = {
         phoneNo: phone,
         address: { ...address },
-        userId: user?._id
+        userId: userID
       };
+
+      console.log(data,"-----------------");
+
       const response = await axios.patch('/user/add-address', data);
       toast.success("Address updated successfully!");
       setPhone("");
@@ -114,7 +120,7 @@ function ClientProfile() {
     }
     try {
       const data = {
-        userId: user?._id,
+        userId: userID,
         newPassword: newPassword
       };
       await axios.patch(UserEndpoints.changePassword, data);
@@ -133,9 +139,8 @@ function ClientProfile() {
   const handleEditDetSumbit = async (e) => {
     e.preventDefault();
 
-    console.log("in the function ");
-
-
+    
+    
     // Prepare data to send
     const data = {
       name,
@@ -143,11 +148,12 @@ function ClientProfile() {
       houseNo,
       location,
       pin,
-      userId: user?._id,
-    };
-
+      userId: userID,
+      };
+      
+      console.log("in the function ");
     try {
-      const response = await axios.put(UserEndpoints.updateUserProfile,  );
+      const response = await axios.put(UserEndpoints.updateUserProfile, data );
       // console.log(response,"response");
       setUser(response.data.user);
       toast.success("User details updated successfully!");

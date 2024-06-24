@@ -11,6 +11,7 @@ import { UserEndpoints } from "../../Services/endpoints/user";
 import { socket } from "../../socket/socket";
 import { io } from "socket.io-client";
 import { loadStripe } from "@stripe/stripe-js";
+import { FaLock } from "react-icons/fa";
 
 function ClientPainterProfile() {
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ function ClientPainterProfile() {
     const [followers, setFollowers] = useState([]);
     const [showChatModal, setShowChatModal] = useState(false);
     const [showEditModal, setShowEditModal] = useState(false);
+    const [outline,setOutline] = useState(false)
     const [editData, setEditData] = useState({
         username: '',
         email: '',
@@ -36,6 +38,7 @@ function ClientPainterProfile() {
     const [posts, setPosts] = useState([]);
     const [slot, setSlot] = useState([]);
     const [bookSlot, setBookSlot] = useState({});
+    const [booked,setBooked] = useState(false)
 
 
 
@@ -47,15 +50,26 @@ function ClientPainterProfile() {
   const followPainter = async () => {
     try {
       const data = { painterId: id, userId };
+      console.log('click received',data)
       const response = await axios.post("/user/followPainter", data);
-
+      console.log(response,'responce')
       if (response.data.success) {
-        setFollow(response.data.follow);
-        setCountFollow(response.data.followerCount);
-        setPosts(response.data.posts);
+        const response2 = await axios.get(`/user/painter/profile/${id}`);
+        console.log(response2.data)
+        const resultFollow=await response2?.data.painter.followers.includes(userId)
+        const tempLength = response2?.data.painter.followers.length
+        const tempPost = await response?.data?.posts
+        console.log(resultFollow)
+        setFollow(resultFollow);
+        setCountFollow(tempLength);
+        // setPosts(tempPost);
+        
+      }
+      else{
+
       }
     } catch (error) {
-      console.log(error);
+       
     }
   };
 
@@ -64,7 +78,9 @@ function ClientPainterProfile() {
 
   const fetchPainter = async () => {
     try {
+      console.log('clicked follow')
       const response = await axios.get(`/user/painter/profile/${id}`);
+      console.log(response,'responseresponse')
       setSlot(response.data.slot);
       setPainter(response.data.painter);
       setFollow(response.data.painter.followers.includes(userId));
@@ -80,6 +96,17 @@ function ClientPainterProfile() {
     // fetchPainter()
   },[])
 
+  const checkBooking = async () => {
+    try {
+      const response = await axios
+    } catch (error) {
+      
+    }
+  }
+
+  useEffect(()=>{
+    
+  },[slot])
 
 
   useEffect(() => {
@@ -93,14 +120,13 @@ function ClientPainterProfile() {
                 )
             );
             fetchPainter()
-            toast.success("A slot has been booked!");
         }
     });
 
     return () => {
         socket.off("slotBooked");
     };
-}, [id, userId]);
+  }, [id, userId]);
 
 
 
@@ -160,6 +186,7 @@ function ClientPainterProfile() {
   const handleSlot = (start, end, date,id) => {
     const data = { start, end, date,slotId:id };
     setBookSlot(data);
+    setOutline(id)
     // console.log(data, "-------------------------");
   };
 
@@ -171,6 +198,7 @@ const handleSlotBooking = async () => {
             const data = { userId, bookSlot, painterId: id };
             const response = await axios.post(UserEndpoints.booked, data);
             if (response.data) {
+                setBooked(true)
                 toast.success("Slot Booked");
             }
         }
@@ -206,6 +234,7 @@ const makePayment = async () => {
 
     if(result){
       const response = await axios.post('/stripe/create-checkout-session', data);
+
       console.log(response)
     }
 
@@ -219,21 +248,28 @@ const makePayment = async () => {
 };
 
 
+const handleLockedMessage = () => {
+  if (!booked) {
+    toast.error("Book the slot for unlocking the message");
+  }
+};
+
+
 //////////////////////////////////////////////////////////////////////////////////////////
 
 
   return (
-    <>
+    <div>
     <Toaster />
-      <div className="w-full fixed z-20">
+      <div className="  w-full fixed z-20">
         <ClientNavbar />
       </div>
-      <div className="linear-gradient(to right, #200a31, #1f3752)">
+      <div className="  linear-gradient(to right, #200a31, #1f3752)">
         <div className="container mx-auto py-8">
-          <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
-            <div className="col-span-4 sm:col-span-3">
-              <div className="bg-white shadow rounded-lg p-6  mt-6">
-                <div className="flex flex-col items-center">
+        <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
+        <div className="flex border-red-500 m-1 p-1 col-span-4 sm:col-span-3">
+              <div className="bg-white   border-red-500 w-full shadow rounded-lg p-6  mt-6">
+                <div className="flex-col items-center">
                   {painter ? (
                     <>
                       <img
@@ -245,7 +281,7 @@ const makePayment = async () => {
                       <p className="text-gray-700">{painter.email}</p>
 
                       <div className="mt-6 flex flex-wrap gap-4 justify-center">
-                        <button onClick={followPainter} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
+                        <button onClick={()=>{followPainter()}} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
                           {follow ? "Unfollow" : "Follow"}
                         </button>
                       </div>
@@ -284,6 +320,9 @@ const makePayment = async () => {
                     </div>
                   </div>
                 )}
+
+
+
                 <div className="flex flex-col bg-white h-[400px] border rounded-2xl mb-6">
                   <p className="m-3 uppercase font-semibold">Available slots:</p>
 
@@ -293,16 +332,22 @@ const makePayment = async () => {
                         
                         {slot.map((slt, index) => {
                           const date = slt?.date ? slt.date.toString().split("T")[0] : "No date available";
+
+                          // if(slt.status === "booked"){
+
+                          //   setBooked(true)
+                          // }
+                          
                           return (
                             <div key={index} className="flex flex-col items-center justify-center">
                               <p>{date}</p>
                               {slt.status === "booked" ? (
-                                <div className="bg-red-500 text-center p-3 px-6 m-2 max-w-52 min-w-52">
+                                <div className="border bg-red-500  text-center p-3 px-6 m-2 max-w-52 min-w-52">
                                   <p>Booked</p>
                                 </div>
                               ) : (
                                 <div 
-                                  className="bg-gray-400 text-center p-3 px-6 m-2 max-w-52 min-w-52 hover:bg-gray-500 hover:cursor-pointer"
+                                  className={`${outline=== slt._id ? 'border-red-500' : ''} bg-gray-400  focus:outline-none  border-4 focus:outline-green-600  text-center p-3 px-6 m-2 max-w-52 min-w-52   hover:cursor-pointer`}
                                   onClick={() => handleSlot(slt.start, slt.end, date, slt._id)}
                                 >
                                   <p>{slt.start} to {slt.end}</p>
@@ -314,15 +359,36 @@ const makePayment = async () => {
 
                   </div>              
                   
-                  <div className="flex flex-row items-center justify-center m-5">
+                  {
+                    slot.length ?<div className="flex   flex-row items-center justify-center m-5">
                     <div className="bg-amber-500 hover:bg-amber-600 rounded-lg p-3 m-2">
                       <p onClick={makePayment}>Book The Slot</p>
                     </div>
-                    <div onClick={() => navigate(`/user/chat/${id}`)} className="bg-blue-500 hover:bg-blue-600 rounded-lg p-3 m-2">
-                      <p>Message Painter</p>
+
+                      {!slot.filter((i)=>i.status === "booked").length ? (
+                              <div
+                              onClick={handleLockedMessage} 
+                               className="bg-slate-500 hover:bg-slate-600 rounded-lg p-3 m-2 flex items-center">
+                                <p>Message Painter</p>
+                                <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                </svg>
+                              </div>
+                      ) : (
+                              <div onClick={() => navigate(`/user/chat/${id}`)} className="bg-blue-500 hover:bg-blue-600 rounded-lg p-3 m-2">
+                                <p>Message Painter</p>
+                              </div>
+                      )}
+
+                  </div>:(
+                    <div className="flex justify-center items-center h-full">
+                      <p>There is no slots available</p>
                     </div>
-                  </div>
+                  )
+                  }
                 </div>
+
+                
 
                 <div className="flex flex-col bg-purple-950  h-[5000px] border rounded-2xl mb-6">
                   <p className="text-white  font-bold mt-3 ml-3">Painter posts:</p>
@@ -365,7 +431,7 @@ const makePayment = async () => {
           </div>
         </div>
       </Modal>
-    </>
+    </div>
   );
 }
 

@@ -23,7 +23,6 @@ function ClientHome() {
   const lastPostElementRef = useRef(null);
 
   const fetchPost = async (page) => {
-    // console.log("inside the function ");
     setLoading(true);
     try {
       const response = await axios.get(`${UserEndpoints.homePage}?page=${page}&limit=2`);
@@ -70,8 +69,9 @@ function ClientHome() {
              <div className="hidden sm:block ">
               <ClientCard />
             </div>
-            <ClientHash />
-            {/* <ClientSubscription /> */}
+            <div className="hidden xl:block md:block lg:block">
+              <ClientHash />
+            </div>
           </div>
           <div style={{ msOverflowStyle: "none ", scrollbarWidth: "none" }} ref={devRef} className="overflow-y-scroll w-full md:w-[70%] flex flex-col justify-center items-center">
             

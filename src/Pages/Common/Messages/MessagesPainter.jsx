@@ -9,6 +9,7 @@ import axios from '../../../Services/axiosService'
 import { useParams } from 'react-router-dom'
 import {jwtDecode} from "jwt-decode"
 import { socket } from '../../../socket/socket'
+import PainterNavbar from '../../../Components/Painters/PainterNavbar'
 
 function Messages() {
 
@@ -105,7 +106,7 @@ function Messages() {
   return (
      <>
     <div>
-      <ClientNavbar />
+      <PainterNavbar />
     </div>
       
     <div className="messenger">
@@ -155,12 +156,6 @@ function Messages() {
                   </button>
                 </div>}
            
-          </div>
-        </div>
-        <div className="chatOnline">
-          <div className="chatOnlineWrapper">
-            Online
-            <ChatOnline />
           </div>
         </div>
       </div>

@@ -5,6 +5,8 @@ import axios from '../../Services/axiosService';
 import { PainterEndpoints } from '../../Services/endpoints/painter';
 import { jwtDecode } from 'jwt-decode';
 import moment from 'moment/moment';
+import toast, { Toaster } from "react-hot-toast";
+
 
 function PainterSlotAdd() {
   const [slots, setSlots] = useState([{ date: '', startTime: '', endTime: '', amount: '' }]);
@@ -66,6 +68,7 @@ function PainterSlotAdd() {
         // console.log(slots,"slots");   
      
       await axios.post(`/painter/create-slot/${painterId}`,{slots});
+      toast.success("Slots created successfully")
       console.log('Slots submitted successfully:', {slots});
       // Optionally, you can reset the form or show a success message here
     } catch (error) {
@@ -75,6 +78,7 @@ function PainterSlotAdd() {
 
   return (
     <>
+    <Toaster />
       <div>
         <PainterNavbar />
       </div>
@@ -98,28 +102,6 @@ function PainterSlotAdd() {
                         />
                       </label>
                       <label className="block text-gray-700 mb-2">
-                        Start Time:
-                        <input
-                          type="time"
-                          name="startTime"
-                          value={slot.startTime}
-                          onChange={(event) => handleInputChange(index, event)}
-                          className="w-full mt-1 p-2 border rounded"
-                          required
-                        />
-                      </label>
-                      <label className="block text-gray-700 mb-2">
-                        End Time:
-                        <input
-                          type="time"
-                          name="endTime"
-                          value={slot.endTime}
-                          onChange={(event) => handleInputChange(index, event)}
-                          className="w-full mt-1 p-2 border rounded"
-                          required
-                        />
-                      </label>
-                      <label className="block text-gray-700 mb-2">
                         Amount:
                         <input
                           type="number"
@@ -131,13 +113,13 @@ function PainterSlotAdd() {
                         />
                       </label>
                       <div className="flex justify-between">
-                        <button
+                        {/* <button
                           type="button"
                           onClick={() => handleEditSlot(index)}
                           className="bg-yellow-500 text-white px-4 py-2 rounded mt-2"
                         >
                           Edit Slot
-                        </button>
+                        </button> */}
                         {slots.length > 1 && (
                           <button
                             type="button"
@@ -153,13 +135,13 @@ function PainterSlotAdd() {
 
             <div ref={slotsEndRef}></div>
           </div>
-          <button
+          {/* <button
             type="button"
             onClick={handleAddSlot}
             className="bg-green-500 text-white px-4 py-2 rounded mt-4"
           >
             Add Another Slot
-          </button>
+          </button> */}
           <button
             type="submit"
             className="bg-blue-500 text-white px-4 py-2 rounded mt-4 ml-4"

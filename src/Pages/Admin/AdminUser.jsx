@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import AdminNav from "../../Components/Admin/AdminNav";
-import { Card, Typography } from "@material-tailwind/react";
+import { Typography } from "@material-tailwind/react";
 import ReactPaginate from "react-paginate";
 import axios from "../../Services/axiosService";
 import { toast } from 'react-toastify';
@@ -31,7 +31,7 @@ function AdminUser() {
         if (response.data.success) {
           const updatedUsers = users.map(user => {
             if (user._id === userId) {
-              return {...user, isBlocked:!user.isBlocked};
+              return { ...user, isBlocked: !user.isBlocked };
             }
             return user;
           });
@@ -39,7 +39,7 @@ function AdminUser() {
           
           if (updatedUsers.some(user => user._id === userId && user.isBlocked)) {
             toast.success('User blocked successfully');
-          } else if (updatedUsers.some(user => user._id === userId &&!user.isBlocked)) {
+          } else if (updatedUsers.some(user => user._id === userId && !user.isBlocked)) {
             toast.success('User unblocked successfully');
           }
         } else {
@@ -65,80 +65,81 @@ function AdminUser() {
         <div className="border">
           <AdminNav />
         </div>
-        <div className="w-full h-screen p-4 ">
-            <table className="w-3/4 mx-auto table-auto text-left border-collapse">
-              <thead>
-                <tr>
-                  {TABLE_HEAD.map((head) => (
-                    <th
-                      key={head}
-                      className="border border-blue-gray-100 bg-blue-gray-50 p-4 text-blue-gray-700"
+        <div className="w-full h-screen p-4 mt-24">
+          
+          <table className="w-3/4 mx-auto table-auto text-left border-collapse shadow-lg">
+            <thead>
+              <tr>
+                {TABLE_HEAD.map((head) => (
+                  <th
+                    key={head}
+                    className="border border-blue-gray-100 bg-blue-gray-50 p-4 text-white"
+                  >
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-semibold leading-none"
                     >
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal leading-none"
-                      >
-                        {head}
-                      </Typography>
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {currentUsers.map((user) => (
-                  <tr key={user._id} className={`p-4 ${user.isBlocked ? "" : "border-b border-blue-gray-50"}`}>
-                    <td className="border p-4">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {user.username}
-                      </Typography>
-                    </td>
-                    <td className="border p-4">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {user.email}
-                      </Typography>
-                    </td>
-                    <td className="border p-4">
-                      <Typography
-                        variant="small"
-                        color="blue-gray"
-                        className="font-normal"
-                      >
-                        {user.isBlocked ? 'Blocked' : 'Unblocked'}
-                      </Typography>
-                    </td>
-                    <td className="p-4">
-                      <button
-                        onClick={() => blockUser(user._id)}
-                        className="text-blue-500 hover:text-blue-700 font-medium"
-                      >
-                        CLICK
-                      </button>
-                    </td>
-                  </tr>
+                      {head}
+                    </Typography>
+                  </th>
                 ))}
-              </tbody>
-            </table>
-            <br />
-            <ReactPaginate
-              previousLabel={"Previous"}
-              nextLabel={"Next"}
-              pageCount={pageCount}
-              onPageChange={handlePageChange}
-              containerClassName={"pagination flex justify-center mt-4"}
-              previousLinkClassName={"pagination__link border border-blue-gray-200 rounded-full p-2 mr-2"}
-              nextLinkClassName={"pagination__link border border-blue-gray-200 rounded-full p-2 ml-2"}
-              disabledClassName={"pagination__link--disabled"}
-              activeClassName={"pagination__link--active bg-blue-gray-200 text-blue-600"}
-            />
+              </tr>
+            </thead>
+            <tbody>
+              {currentUsers.map((user, index) => (
+                <tr key={user._id} className={`p-4 ${index % 2 === 0 ? "bg-gray-100" : "bg-white"} hover:bg-gray-200`}>
+                  <td className="border p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {user.username}
+                    </Typography>
+                  </td>
+                  <td className="border p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {user.email}
+                    </Typography>
+                  </td>
+                  <td className="border p-4">
+                    <Typography
+                      variant="small"
+                      color="blue-gray"
+                      className="font-normal"
+                    >
+                      {user.isBlocked ? 'Blocked' : 'Unblocked'}
+                    </Typography>
+                  </td>
+                  <td className="p-4">
+                    <button
+                      onClick={() => blockUser(user._id)}
+                      className={`text-white font-medium py-1 px-4 rounded ${user.isBlocked ? "bg-red-500 hover:bg-red-700" : "bg-green-500 hover:bg-green-700"}`}
+                    >
+                      {user.isBlocked ? "Unblock" : "Block"}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <br />
+          <ReactPaginate
+            previousLabel={"Previous"}
+            nextLabel={"Next"}
+            pageCount={pageCount}
+            onPageChange={handlePageChange}
+            containerClassName={"pagination flex justify-center mt-4"}
+            previousLinkClassName={"pagination__link border text-white  p-2 mr-2"}
+            nextLinkClassName={"pagination__link border text-white  p-2 ml-2"}
+            disabledClassName={"pagination__link--disabled"}
+            activeClassName={"pagination__link--active bg-blue-gray-200 text-blue-600"}
+          />
         </div>
       </div>
     );
