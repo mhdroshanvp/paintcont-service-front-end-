@@ -9,12 +9,13 @@ import {jwtDecode} from "jwt-decode";
 import { PainterEndpoints } from "../../Services/endpoints/painter";
 import ClientPost from "../../Components/Clients/ClientPosts";
 import PainterNavbar from "../../Components/Painters/PainterNavbar";
+import dummyImg from "../../assets/user-removebg.png"
 
 function PainterProfile() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [detailsModalIsOpen, setDetailsModalIsOpen] = useState(false);
   const [selectedAvatar, setSelectedAvatar] = useState(null);
-  const [previewAvatar, setPreviewAvatar] = useState(null);
+  const [previewAvatar, setPreviewAvatar] = useState(dummyImg);
   const [description, setDescription] = useState("");
   const [painter, setPainter] = useState(null);
   const [age, setAge] = useState('');
@@ -24,6 +25,8 @@ function PainterProfile() {
   const [specialised, setSpecialised] = useState(''); 
   const [aboutMe, setAboutMe] = useState(''); 
   const [posts, setPosts] = useState([]);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedSpecialised, setSelectedSpecialised] = useState('');
 
   const descriptionRef = useRef(null);
   const token = localStorage.getItem("Painter_token")
@@ -74,23 +77,26 @@ function PainterProfile() {
     setDetailsModalIsOpen(false);
   };
 
+
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-
+  
     if (selectedAvatar) {
       try {
         const fileUrl = await uploadImageToFirebase(selectedAvatar, "test/");
         if (!fileUrl) return toast.error("Error uploading files");
-
+  
         const data = {
           imageUrl: fileUrl,
           description: descriptionRef.current.value,
           painterId: id,
+          specialised: selectedSpecialised 
         };
-
+  
         await axios.post(PainterEndpoints.Profile, { data });
         
         setDescription("");
+        setSelectedSpecialised('');
         closeModal();
         toast.success("Post created successfully");
         
@@ -102,6 +108,7 @@ function PainterProfile() {
       toast.error("No image selected");
     }
   };
+  
 
   const handleAvatarChange = (files) => {
     if (files && files.length > 0) {
@@ -132,6 +139,7 @@ function PainterProfile() {
   };
 
   const handleDetailsSubmit = async (e) => {
+
     e.preventDefault();
 
     const details = {
@@ -160,9 +168,20 @@ function PainterProfile() {
       delete temp[id],
       setPosts(temp)
     } catch (error) {
-      
+      console.log(error);
     }
   }
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const handleSpecialisedSelection = (speciality) => {
+    setSelectedSpecialised(speciality);
+    setIsOpen(false);
+  };
+  
+
 
   return (
     <>
@@ -174,7 +193,7 @@ function PainterProfile() {
         <div className="container mx-auto py-8">
           <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div className="col-span-4 sm:col-span-3">
-              <div className="bg-white shadow rounded-lg p-6 fixed mt-6">
+              <div className="bg-white shadow rounded-lg p-6  mt-7">
                 <div className="flex flex-col items-center">
                   <img
                     src={painter?.avatarUrl || "/profileIcon.png"}
@@ -200,8 +219,8 @@ function PainterProfile() {
                 </div>
               </div>
             </div>
-            <div className="col-span-4 sm:col-span-9">
-              <div className="bg-white shadow rounded-lg p-6 mt-7">
+            <div className="col-span-4 sm:col-span-9 ">
+              <div className="bg-[#17021e] shadow rounded-lg p-6 mt-7">
                 {!modalIsOpen && !detailsModalIsOpen && (
                   <div className="relative inline-block m-2">
                     <button
@@ -220,113 +239,151 @@ function PainterProfile() {
                 )}
 
                 {/* Add Post Modal */}
-                <Modal
-                  isOpen={modalIsOpen}
-                  onRequestClose={closeModal}
-                  contentLabel="Add Post Modal"
-                  className="absolute inset-0 flex items-center justify-center"
-                  overlayClassName="fixed inset-0 bg-gray-700 bg-opacity-75"
-                  closeTimeoutMS={200}
-                >
-                  <div className="bg-white rounded-lg p-8 max-w-lg w-full">
-                    <h2 className="text-2xl font-bold mb-4">Add Post</h2>
-                    <input
-                      type="file"
-                      className="py-2 px-4 text-white rounded-full mb-4"
-                      accept="image/*"
-                      onChange={(e) => handleAvatarChange(e.target.files)}
-                    />
-                    <div className="w-40 h-40 mb-4">
-                      <img
-                        src={previewAvatar}
-                        alt="Profile Pic"
-                        className="w-full h-full rounded-full object-cover"
-                      />
-                    </div>
-                    <textarea
-                      className="border py-2 px-4 mb-4 w-full"
-                      placeholder="Type post description"
-                      type="text"
-                      name="description"
-                      id="description"
-                      ref={descriptionRef}
-                      value={description}
-                      onChange={(e) => setDescription(e.target.value)}
-                    />
-                    <div className="flex justify-between">
-                      <button
-                        onClick={handlePostSubmit}
-                        className="bg-slate-600 text-white py-2 px-6 rounded-lg mr-4"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={closeModal}
-                        className="bg-red-600 text-white py-2 px-6 rounded-lg"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </Modal>
+
+                {/* Add Post Modal */}
+<Modal
+  isOpen={modalIsOpen}
+  onRequestClose={closeModal}
+  contentLabel="Add Post Modal"
+  className="absolute inset-0 flex items-center justify-center"
+  overlayClassName="fixed inset-0 bg-gray-700 bg-opacity-75"
+  closeTimeoutMS={200}
+>
+  <div className="bg-[#50187b] rounded-lg p-8 max-w-lg w-full">
+    <h2 className="text-2xl font-bold mb-4 text-white">Add Post</h2>
+    {/* File upload */}
+    <input
+      type="file"
+      className="py-2 px-4 text-white bg-purple-800 rounded-full mb-4"
+      accept="image/*"
+      onChange={(e) => handleAvatarChange(e.target.files)}
+    />
+    {/* Preview */}
+    <div className="w-40 h-40 mb-4">
+      <img
+        src={previewAvatar}
+        alt="Profile Pic"
+        className="w-full h-full rounded-full object-cover"
+      />
+    </div>
+    {/* Description */}
+    <textarea
+      className="border py-2 px-4 mb-4 w-full bg-purple-800"
+      placeholder="Type post description"
+      type="text"
+      name="description"
+      id="description"
+      ref={descriptionRef}
+      value={description}
+      onChange={(e) => setDescription(e.target.value)}
+    />
+    {/* Specialised dropdown */}
+
+  <div className="relative inline-block text-left w-full">
+    <div>
+      <button
+        type="button"
+        className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+        id="menu-button"
+        aria-expanded="true"
+        aria-haspopup="true"
+        onClick={toggleDropdown}
+      >
+        {/* Display selected specialized category or "Specialised" */}
+        {selectedSpecialised ? selectedSpecialised : 'SPECIALISED'}
+        <svg className="-mr-1 ml-2 h-5 w-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+          <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
+        </svg>
+      </button>
+    </div>
+    {isOpen && (
+      <div className="origin-top-right absolute right-0 mt-2 w-full rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="menu-button" tabIndex="-1">
+        <div className="py-1" role="none">
+          {painter?.specialised.map((speciality, index) => (
+            <div key={index} className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 cursor-pointer "onClick={() => handleSpecialisedSelection(speciality)} >
+              {speciality}
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+  </div>
+    {/* Save and Cancel buttons */}
+    <div className="flex justify-between pt-5">
+      <button
+        onClick={handlePostSubmit}
+        className="bg-slate-600 text-white py-2 px-6 rounded-lg mr-4"
+      >
+        Save
+      </button>
+      <button
+        onClick={closeModal}
+        className="bg-red-600 text-white py-2 px-6 rounded-lg"
+      >
+        Cancel
+      </button>
+    </div>
+  </div>
+</Modal>
+
 
                 {/* Add Details Modal */}
                 <Modal
                   isOpen={detailsModalIsOpen}
                   onRequestClose={closeDetailsModal}
                   contentLabel="Add/Edit Details Modal"
-                  className="absolute inset-0 flex items-center justify-center"
-                  overlayClassName="fixed inset-0 bg-gray-700 bg-opacity-75"
+                  className="absolute inset-0 flex items-center justify-center "
+                  overlayClassName="fixed inset-0 "
                   closeTimeoutMS={200}
                 >
-                  <div className="bg-white rounded-lg p-8 max-w-lg w-full">
-                    <h2 className="text-2xl font-bold mb-4">
+                  <div className="bg-[#50187b]   rounded-lg p-8 max-w-lg w-full">
+                    <h2 className="text-2xl font-bold mb-4 text-white">
                       {detailsModalIsOpen ? "Edit Details" : "Add Details"}
                     </h2>
                     <form onSubmit={handleDetailsSubmit}>
-                      <label htmlFor="age">Age</label>
+                      <label htmlFor="age" className="text-white">Age</label>
                       <input
-                        className="border py-2 px-4 mb-4 w-full"
+                        className="border py-2 px-4 mb-4 w-full bg-purple-800 text-white"
                         type="number"
                         id="age"
                         value={age}
                         onChange={(e) => setAge(e.target.value)}
                       />
-                      <label htmlFor="experienceYears">Experience Years</label>
+                      <label htmlFor="experienceYears" className="text-white">Experience Years</label>
                       <input
-                        className="border py-2 px-4 mb-4 w-full"
+                        className="border py-2 px-4 mb-4 w-full bg-purple-800 text-white"
                         type="number"
                         id="experienceYears"
                         value={experienceYears}
                         onChange={(e) => setExperienceYears(e.target.value)}
                       />
-                      <label htmlFor="location">Location</label>
+                      <label htmlFor="location" className="text-white">Location</label>
                       <input
-                        className="border py-2 px-4 mb-4 w-full"
+                        className="border py-2 px-4 mb-4 w-full bg-purple-800 text-white"
                         type="text"
                         id="location"
                         value={location}
                         onChange={(e) => setLocation(e.target.value)}
                       />
-                      <label htmlFor="phone">Phone</label>
+                      <label htmlFor="phone" className="text-white">Phone</label>
                       <input
-                        className="border py-2 px-4 mb-4 w-full"
+                        className="border py-2 px-4 mb-4 w-full bg-purple-800 text-white"
                         type="text"
                         id="phone"
                         value={phone}
                         onChange={(e) => setPhone(e.target.value)}
                       />
-                      <label htmlFor="specialised">Specialised (comma separated)</label>
+                      <label htmlFor="specialised" className="text-white">Specialised (comma separated)</label>
                       <input
-                        className="border py-2 px-4 mb-4 w-full"
+                        className="border py-2 px-4 mb-4 w-full bg-purple-800 text-white"
                         type="text"
                         id="specialised"
                         value={specialised}
                         onChange={(e) => setSpecialised(e.target.value)}
                       />
-                      <label htmlFor="aboutMe">About Me</label>
+                      <label htmlFor="aboutMe" className="text-white">About Me</label>
                       <textarea
-                        className="border py-2 px-4 mb-4 w-full"
+                        className="border py-2 px-4 mb-4 w-full bg-purple-800 text-white"
                         id="aboutMe"
                         value={aboutMe}
                         onChange={(e) => setAboutMe(e.target.value)}

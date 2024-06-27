@@ -14,19 +14,17 @@ function PainterSignup() {
   const formsubmit = async (e) => {
     e.preventDefault();
   
-    // Validate and prepare the form data
+
     let validatedUsername = username.trim().replace(/ /g, "").toLowerCase();
     let validatedEmail = email.trim();
     let validatedPassword = password.trim();
   
-    // Check if any field is filled with spaces only
     if (!validatedUsername ||!validatedEmail ||!validatedPassword) {
       toast.error("Fields cannot be empty");
       return;
     }
   
-    // Check if password is exactly 8 characters long
-    if (validatedPassword.length <= 8) {
+    if (validatedPassword.length < 8) {
       toast.error("Password must be exactly 8 characters long.");
       return;
     }

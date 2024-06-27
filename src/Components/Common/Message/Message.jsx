@@ -1,6 +1,6 @@
 import React from 'react'
 import './message.css'
-import pics from '../../../assets/borcelle-removebg-preview.png'
+import dummy from "../../../assets/user-removebg.png"
 
 function Message({own,msgData}) {
     return (
@@ -8,12 +8,12 @@ function Message({own,msgData}) {
           <div className="messageTop">
             <img
               className="messageImg"
-              src="https://images.pexels.com/photos/3686769/pexels-photo-3686769.jpeg?auto=compress&cs=tinysrgb&dpr=2&w=500"
+              src={dummy}
               alt=""
             />
             <p className="messageText">{msgData}</p>
           </div>
-          <div className="messageBottom">9078</div>
+          {/* <div className="messageBottom">{msgData}</div> */}
         </div>
       );
 }

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import './Conversations.css'
-import img from '../../../assets/user-removebg.png'
+import img from '../../../assets/dummyUser.png'
 import axios from '../../../Services/axiosService'
 
 function Conversations({conversation,me,indConv,painterName}) {
@@ -8,28 +8,8 @@ function Conversations({conversation,me,indConv,painterName}) {
 
   const [user,setUser] = useState(null)
 
-
-
-
-  // useEffect(()=>{
-
-  //   const friendId = conversation.members.find((m) => m !== me.currentUser._id)
-
-  //   // console.log(me,"njan ivide und 🕺🕺🕺🕺🕺");
-
-  //   const getUser =  async () => {
-  //     try {
-  //       const res = await axios.post(`/user?userId=${friendId}`)
-  //       // setUser(res.data)
-  //     }catch (error) {
-  //       console.log(error);
-  //     }
-  //   }
-  //   getUser()
-  // },[me,conversation])
-
   return (
-    <div className='conversation' >
+    <div className='conversation sm:w-[500px] w-[60px]' >
      <img className='conversationImg' src={img} alt="" />
      <span className="conversationName">{painterName}</span>
     </div>

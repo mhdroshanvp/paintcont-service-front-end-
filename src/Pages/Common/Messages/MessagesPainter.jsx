@@ -1,9 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import ClientNavbar from '../../../Components/Clients/ClientNavbar'
 import './messages.css'
 import Conversations from '../../../Components/Common/Conversations/Conversations'
 import Message from '../../../Components/Common/Message/Message'
-import ChatOnline from '../../../Components/Common/Chatonline/ChatOnline'
 import { useSelector } from 'react-redux'
 import axios from '../../../Services/axiosService'
 import { useParams } from 'react-router-dom'
@@ -112,7 +110,7 @@ function Messages() {
     <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-            <input placeholder="Search for friends" className="chatMenuInput" />
+            {/* <input placeholder="Search for friends" className="chatMenuInput" /> */}
             {/* {conversations.map((c) => ( */}
               <div >
                 {conversations.map((c)=>(

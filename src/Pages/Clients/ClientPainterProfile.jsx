@@ -268,8 +268,8 @@ const handleLockedMessage = () => {
         <div className="container mx-auto py-8">
         <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
         <div className="flex border-red-500 m-1 p-1 col-span-4 sm:col-span-3">
-              <div className="bg-white   border-red-500 w-full shadow rounded-lg p-6  mt-6">
-                <div className="flex-col items-center">
+              <div className="bg-white   border-red-500 w-full shadow rounded-lg p-6  mt-5 md:h-[600px]">
+                <div className="flex flex-col items-center">
                   {painter ? (
                     <>
                       <img
@@ -323,7 +323,7 @@ const handleLockedMessage = () => {
 
 
 
-                <div className="flex flex-col bg-white h-[400px] border rounded-2xl mb-6">
+                <div className="flex flex-col bg-white  border rounded-2xl mb-6">
                   <p className="m-3 uppercase font-semibold">Available slots:</p>
 
 
@@ -390,7 +390,7 @@ const handleLockedMessage = () => {
 
                 
 
-                <div className="flex flex-col bg-purple-950  h-[5000px] border rounded-2xl mb-6">
+                <div className="flex flex-col bg-purple-950  border rounded-2xl mb-6">
                   <p className="text-white  font-bold mt-3 ml-3">Painter posts:</p>
                    <div className="max-auto rounded-2xl min-h-[30rem]">
                       {posts.map((post) => (

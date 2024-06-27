@@ -113,7 +113,7 @@ function Messages() {
     <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-            <input placeholder="Search for friends" className="chatMenuInput" />
+            {/* <input placeholder="Search for friends" className="chatMenuInput" /> */}
             {/* {conversations.map((c) => ( */}
               <div >
                 {conversations.map((c)=>(
@@ -163,12 +163,7 @@ function Messages() {
             )} */}
           </div>
         </div>
-        <div className="chatOnline">
-          {/* <div className="chatOnlineWrapper">
-            Online
-            <ChatOnline />
-          </div> */}
-        </div>
+
       </div>
 
     </>

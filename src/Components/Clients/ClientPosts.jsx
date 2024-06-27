@@ -296,8 +296,7 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
         !edit &&
       
       <Modal isOpen={showChatModal} onRequestClose={closeModal} className="fixed inset-0 flex items-center justify-center  bg-purple-950 bg-opacity-75 ">
-         {/* from-purple-900 via-purple-900 to-indigo-800  */}
-        <div className=" bg-[#50187bc4] rounded-lg w-[700px] p-5 h-[56 0px]">
+        <div className=" bg-[#50187bc4] rounded-lg w-[700px] p-5 h-[560px]">
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-xl font-bold text-white">Comments</h2>
             <button onClick={closeModal} className="text-white hover:text-red-600 font-bold">&times;</button>
