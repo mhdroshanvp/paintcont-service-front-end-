@@ -12,17 +12,15 @@ import PainterNavbar from '../../../Components/Painters/PainterNavbar'
 function Messages() {
 
   const [conversations,setConversations] = useState([])
-  const user = useSelector((state)=>state.user)
+  const user = useSelector((state)=>state?.user)
   const [messageHistory,setMessageHistory] = useState([])
   const [currentConv,setCurrentConv] = useState(null)
   const [newMessage,setNewMessage] = useState('')
 
-  const token = localStorage.getItem('Painter_token');
+  const token = localStorage?.getItem('Painter_token');
   const decode = jwtDecode(token);
 
   const userId = decode?.username
-
-  // const {id} = useParams()
 
   useEffect(()=>{
     socket.on("connection")
@@ -40,46 +38,23 @@ function Messages() {
       try {
      
           const res = await axios.get(`conversation/${userId}`)
-          socket.emit("joinNewUser",res.data)
-          setConversations(res.data)
+          socket.emit("joinNewUser",res?.data)
+          setConversations(res?.data)
         
-        console.log(res.data,"🕺💃🕺🪩🕺💃")
       }catch (error) {
-        console.log("its an error");
         console.log(error);
       }
     }
     getConversation()
   },[userId])
 
-  // const fetchMsg = async (id) => {
-    
-  //       const data = {userId,painterId:id}
-  //       const response = await axios.post("/user/painter/profile/indMsg",data)
-        
-  //       if(response.data.success){
-  //         setMessageHistory(response.data.messageHistory)
-  //       }
-
-  //     }
 
       const fetchMsgh = async (id) => {
     
           const response = await axios.get(`/message/${id}`)      
-          setMessageHistory(response.data)
+          setMessageHistory(response?.data)
 
       }
-
-  // useEffect(()=>{
-
-  //   try {
-  //     if(id){
-  //       fetchMsg(id)
-  //     } 
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // },[])
 
   socket.on("sendToUser",(data)=>{
     
@@ -93,7 +68,6 @@ function Messages() {
       const obj ={conversationId:currentConv?._id,sender:userId,text:newMessage}
       socket.emit("sendData",obj)
       const response = await axios.post('/message/',obj)
-      // console.log(response,"heeeeeeeeeeeeeyyyyyyyyy");
     } catch (error) {
       console.log(error);
     }
@@ -110,33 +84,30 @@ function Messages() {
     <div className="messenger">
         <div className="chatMenu">
           <div className="chatMenuWrapper">
-            {/* <input placeholder="Search for friends" className="chatMenuInput" /> */}
-            {/* {conversations.map((c) => ( */}
               <div >
-                {conversations.map((c)=>(
-                  <div onClick={()=>{setCurrentConv(c),fetchMsgh(c._id)}} >
-                    <Conversations  painterName={c.userName.username} indConv={c} conversation={c} me={user} />
+                {conversations?.map((c)=>(
+                  <div onClick={()=>{setCurrentConv(c),fetchMsgh(c?._id)}} >
+                    <Conversations  painterName={c?.userName?.username} indConv={c} conversation={c} me={user} />
                   </div>
                 ))}
               </div>
-            {/* ))} */}
           </div>
         </div>
         <div className="chatBox">
           <div className="chatBoxWrapper">
                 <div className="chatBoxTop">
                     <div>
-                      {!messageHistory.length&&
+                      {!messageHistory?.length&&
                       
                       <div className='flex justify-center h-screen items-center'>
                         no items
                       </div>
                       }
                       {messageHistory.map((msg)=>{
-                        if(userId == msg.sender){
-                          return <Message own={true} msgData={msg.text}/>
+                        if(userId == msg?.sender){
+                          return <Message own={true} msgData={msg?.text}/>
                         }
-                        return <Message  msgData={msg.text}/>
+                        return <Message  msgData={msg?.text}/>
                       })}
                       
 
@@ -146,8 +117,7 @@ function Messages() {
                   <textarea
                     className="chatMessageInput"
                     placeholder="write something..."
-                    onChange={(e) => setNewMessage(e.target.value)}
-                    // value={newMessage}
+                    onChange={(e) => setNewMessage(e?.target?.value)}
                   ></textarea>
                   <button className="chatSubmitButton " onClick={chatSubmit}>
                     Send
