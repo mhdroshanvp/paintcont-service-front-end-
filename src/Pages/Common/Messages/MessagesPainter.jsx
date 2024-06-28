@@ -17,6 +17,9 @@ function Messages() {
   const [currentConv,setCurrentConv] = useState(null)
   const [newMessage,setNewMessage] = useState('')
 
+  const messageInputRef = useRef(null);
+
+
   const token = localStorage?.getItem('Painter_token');
   const decode = jwtDecode(token);
 
@@ -68,6 +71,8 @@ function Messages() {
       const obj ={conversationId:currentConv?._id,sender:userId,text:newMessage}
       socket.emit("sendData",obj)
       const response = await axios.post('/message/',obj)
+      messageInputRef.current.value = '';
+
     } catch (error) {
       console.log(error);
     }
@@ -118,6 +123,7 @@ function Messages() {
                     className="chatMessageInput"
                     placeholder="write something..."
                     onChange={(e) => setNewMessage(e?.target?.value)}
+                    
                   ></textarea>
                   <button className="chatSubmitButton " onClick={chatSubmit}>
                     Send
