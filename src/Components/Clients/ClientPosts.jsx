@@ -62,7 +62,7 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
       if (response.data.success) {
         setComments([...comments, response?.data?.comment]);
         setNewComment("");
-        postFetching(1); // Refresh the posts if needed
+        postFetching(1); 
       }
     } catch (error) {
       console.error(error);
@@ -122,7 +122,8 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
           imageUrl: fileUrl,
           description: descriptionRef?.current?.value,
           painterId: painterId,
-          specialised:''
+          specialised:'',
+          postId:post?._id
         };
 
         await axios.post(PainterEndpoints.Profile, data ); // Correct request format
@@ -140,7 +141,8 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
         imageUrl: postImg,
         description: descriptionRef?.current?.value,
         painterId: painterId,
-        specialised:''
+        specialised:'',
+        postId:post?._id
       };
 
       await axios.post(PainterEndpoints.Profile,  data ); // Correct request format
