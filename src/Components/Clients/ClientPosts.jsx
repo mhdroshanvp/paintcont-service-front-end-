@@ -128,7 +128,7 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
 
         await axios.post(PainterEndpoints.Profile, data ); // Correct request format
         
-        setDescription("");
+        // setDescription("");
         closeModal();
         toast.success("Post created successfully");
       } catch (error) {
