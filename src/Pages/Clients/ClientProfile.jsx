@@ -307,8 +307,8 @@ function ClientProfile() {
                   type="text"
                 />
                 <button type="submit" className="bg-purple-900 text-white px-4 py-2 rounded-md">Submit</button> 
-                <button onClick={toggleEditDetailsModal} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-2">Close</button>
               </form>
+                <button onClick={toggleEditDetailsModal} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-2">Close</button>
             </div>
           </Modal>
         </div>

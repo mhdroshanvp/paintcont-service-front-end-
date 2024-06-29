@@ -4,7 +4,6 @@ import ClientNavbar from '../../Components/Clients/ClientNavbar';
 import painter from "../../assets/roller.gif";
 import toast, { Toaster } from "react-hot-toast";
 
-
 function ClientContact() {
   const [formData, setFormData] = useState({
     name: '',
@@ -26,6 +25,11 @@ function ClientContact() {
       const response = await axios.post('/user/contact', formData);
       if (response.data.success) {
         toast.success('Message sent successfully');
+        setFormData({
+          name: '',
+          mail: '',
+          message: ''
+        });
       } else {
         toast.error('Failed to send message');
       }
@@ -37,16 +41,15 @@ function ClientContact() {
 
   return (
     <>
-    <Toaster />
-
+      <Toaster />
       <div>
         <ClientNavbar />
       </div>
-      <div className='sm:flex sm:justify-center  sm:h-[600px] sm:items-center h-[500px] sm:ml-14 xl:ml-4 mt-10'>
-        <div className='sm:w-[600px] xl:ml-9 sm:h-[600px]  h-[300px] flex justify-center'>
+      <div className='sm:flex sm:justify-center sm:h-[600px] sm:items-center h-[500px] sm:ml-14 xl:ml-4 mt-10'>
+        <div className='sm:w-[600px] xl:ml-9 sm:h-[600px] h-[300px] flex justify-center'>
           <img src={painter} alt="" className='sm:w-[600px] sm:h-[600px] w-[300px] h-[300px] rounded-[30px]' />
         </div>
-        <div className='bg-[#4a206f] ml-[50px] sm:w-[600px] xl:ml-9  sm:h-[600px] sm:ml-10 sm:mt-0 w-[400px] rounded-[30px] h-[420px]'>
+        <div className='bg-[#4a206f] ml-[50px] sm:w-[600px] xl:ml-9 sm:h-[600px] sm:ml-10 sm:mt-0 w-[400px] rounded-[30px] h-[420px]'>
           <form onSubmit={handleSubmit} className='sm:mt-[100px] mt-[30px] pt-3'>
             <div className='flex justify-center mb-3'>
               <input
