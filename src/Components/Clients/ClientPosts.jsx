@@ -145,9 +145,12 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
         postId:post?._id
       };
 
-      await axios.post(PainterEndpoints.Profile,  data ); // Correct request format
+      const response = await axios.post(PainterEndpoints.Profile,  data ); // Correct request format
       
       //setDescription("");
+      if(response.success){
+        toast.success("post edited")
+      }
       closeModal();
       toast.success("Post created successfully");
 
