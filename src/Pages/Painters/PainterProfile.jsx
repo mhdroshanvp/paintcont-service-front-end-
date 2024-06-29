@@ -93,7 +93,7 @@ function PainterProfile() {
           specialised: selectedSpecialised 
         };
   
-        await axios.post(PainterEndpoints.Profile, { data });
+        await axios.post(PainterEndpoints.Profile, data );
         
         setDescription("");
         setSelectedSpecialised('');

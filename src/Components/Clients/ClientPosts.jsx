@@ -112,7 +112,7 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
 
   const handlePostSubmit = async (e) => {
     e.preventDefault();
-
+    console.log('this thread is calling')
     if (selectedAvatar) {
       try {
         const fileUrl = await uploadImageToFirebase(selectedAvatar, "test/");
@@ -140,11 +140,12 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
         imageUrl: postImg,
         description: descriptionRef?.current?.value,
         painterId: painterId,
+        specialised:''
       };
 
-      await axios.post(PainterEndpoints.Profile, { data }); // Correct request format
+      await axios.post(PainterEndpoints.Profile,  data ); // Correct request format
       
-      setDescription("");
+      //setDescription("");
       closeModal();
       toast.success("Post created successfully");
 
