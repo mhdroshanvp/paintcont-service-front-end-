@@ -20,7 +20,7 @@ function ClientNavbar({ setSmState, smState }) {
   };
 
   return (
-    <nav className="w-full bg-[#572c77] py-3 h-[60px] z-50">
+    <nav className="w-full bg-[#572c77] py-3 h-[70px] z-50">
       <div className="flex justify-between items-center w-full text-white px-4">
         <Typography as="a" href="/user/home" variant="h6" className="text-lg">
           Paintcont
@@ -46,7 +46,7 @@ function ClientNavbar({ setSmState, smState }) {
         </div>
       </div>
       <div className={`md:flex flex-col md:flex-row md:items-center md:justify-end ${isOpen ? "block" : "hidden"} md:block w-full text-white bg-[#572c77] md:bg-transparent`}>
-        <div className="flex flex-row  sm:flex-row items-center justify-center w-full">
+        <div className="flex flex-row sm:flex-row items-center justify-center w-full">
           <Link to="/user/home" className="block py-2 px-4 md:py-0 md:px-4">
             Home
           </Link>

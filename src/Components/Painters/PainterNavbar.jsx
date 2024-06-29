@@ -22,7 +22,7 @@ function PainterNavbar({ setSmState, smState }) {
   };
 
   return (
-    <nav className="w-full bg-[#572c77] py-3 h-[60px] z-50">
+    <nav className="w-full bg-[#572c77] py-3 h-[70px] z-50">
       <div className="flex justify-between items-center w-full text-white px-4">
         <Typography as="a" href="/painter/home" variant="h6" className="text-lg">
           Paintcont
