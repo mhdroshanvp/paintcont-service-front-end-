@@ -122,9 +122,10 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
           imageUrl: fileUrl,
           description: descriptionRef?.current?.value,
           painterId: painterId,
+          specialised:''
         };
 
-        await axios.post(PainterEndpoints.Profile, { data }); // Correct request format
+        await axios.post(PainterEndpoints.Profile, data ); // Correct request format
         
         setDescription("");
         closeModal();
