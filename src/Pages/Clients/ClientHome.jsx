@@ -67,7 +67,7 @@ function ClientHome() {
         </div>
         <div className="block md:flex mt-2 sm:h-[90%] w-full">
           <div className="w-full sm:h-[130px] md:w-[30%]">
-            <div className="hidden sm:block">
+            <div className="hidden sm:block mt-4">
               <ClientCard />
             </div>
             <div className="hidden xl:block md:block lg:block">
@@ -75,16 +75,16 @@ function ClientHome() {
             </div>
           </div>
           <div style={{ msOverflowStyle: "none", scrollbarWidth: "none" }} ref={devRef} className="overflow-y-scroll w-full md:w-[70%] flex flex-col justify-center items-center">
-            <div className="w-full m-1 md:w-[75%] md:mt-28 sm:mt-16 flex items-center">
+            <div className="w-full m-1 md:w-[75%] md:mt-32 flex items-center">
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by painter name or #specialised"
+                placeholder="Search by painter name | #hashtags | location"
                 className="w-full h-10 px-4 py-2 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-800 bg-[#50187b67] text-white"
               />
               <button onClick={handleSearch} className="ml-4 px-4 py-2 bg-[#50187b67] text-white rounded-lg hover:bg-[#7a45a3] focus:outline-none">
-                <UserCircleIcon className="h-6 w-3" />
+                <p>Search</p>
               </button>
             </div>
             {loading && <Spinner />}

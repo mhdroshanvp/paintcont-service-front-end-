@@ -35,6 +35,7 @@ import ClientAboutPage from "./Pages/Clients/ClientAboutPage";
 import ClientSuccessPage from "./Pages/Clients/ClientSuccessPage";
 import ClientContact from "./Pages/Clients/ClientContact";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
+import PainterDashboard from "./Pages/Painters/PainterDashboard";
 
 
 function App() {
@@ -46,6 +47,7 @@ function App() {
                     
                     {/* Exxxtra */}
                     <Route path="*" element={<NotFoundPage />} />
+                    <Route path="/error" element={<NotFoundPage />} />
                     <Route path="/" element={<LandingPage />} />
 
                     {/* Admin-side */}
@@ -72,6 +74,7 @@ function App() {
 
                     {/* Painter-side */}
                     <Route path="painter/home" element={<PainterProtectedRoute allowedRole="painter"><PainterHome /></PainterProtectedRoute>} />
+                    <Route path="painter/dashboard" element={<PainterProtectedRoute allowedRole="painter"><PainterDashboard /></PainterProtectedRoute>} />
                     <Route path="painter/login" element={<PainterLogin />} />
                     <Route path="painter/signup" element={<PainterSignup />} />
                     <Route path="painter/mail4reset" element={<PainterMail4Reset />} />

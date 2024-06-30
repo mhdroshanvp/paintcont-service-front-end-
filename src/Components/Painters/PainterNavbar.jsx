@@ -39,9 +39,6 @@ function PainterNavbar({ setSmState, smState }) {
           </button>
         </div>
         <div className="hidden md:flex items-center space-x-4">
-          <Link to="/painter/profile" className="text-white">
-            <RiUserLine className="text-lg" />
-          </Link>
           <button onClick={handleLogout} className="text-white">
             <RiLogoutCircleLine className="text-lg" />
           </button>
@@ -51,6 +48,9 @@ function PainterNavbar({ setSmState, smState }) {
         <div className="flex flex-row  sm:flex-row items-center justify-center w-full">
           <Link to="/painter/home" className="block py-2 px-4 md:py-0 md:px-4">
             Home
+          </Link>
+          <Link to="/painter/dashboard" className="block py-2 px-4 md:py-0 md:px-4">
+            Dashboard
           </Link>
           <Link to="/painter/profile" className="block py-2 px-4 md:py-0 md:px-4">
             Profile

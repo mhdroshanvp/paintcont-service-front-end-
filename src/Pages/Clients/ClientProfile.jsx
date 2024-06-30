@@ -5,6 +5,7 @@ import {jwtDecode} from 'jwt-decode'; // corrected import statement
 import axios from "../../Services/axiosService";
 import { UserEndpoints } from "../../Services/endpoints/user";
 import toast, { Toaster } from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
 function ClientProfile() {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -24,7 +25,7 @@ function ClientProfile() {
   const decode = jwtDecode(token);
   const userID = decode?.username
 
-  // console.log(userID,"---------------0000000000000000----------------");
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -83,9 +84,10 @@ function ClientProfile() {
       console.log(data,"-----------------");
 
       const response = await axios.patch('/user/add-address', data);
+      console.log(response,"============");
       toast.success("Address updated successfully!");
       setPhone("");
-      setUser(response.data.user); // Update user state with the updated address
+      setUser(response.data.user);
       closeModal();
     } catch (error) {
       console.log("Error adding address:", error);
@@ -255,14 +257,15 @@ function ClientProfile() {
                 />
                 {passwordError && <p className="text-red-500 mb-4">{passwordError}</p>}
                 <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded-md">Change Password</button>
-                <button onClick={closePasswordModal} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-2">Close</button>
               </form>
+                <button onClick={closePasswordModal} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-2">Close</button>
             </div>
           </Modal>
 
           <button onClick={toggleEditDetailsModal} className=" text-purple-800 border-purple-700 hover:text-purple-600">Edit Details</button>
           
           <Modal isOpen={editDetailsModalIsOpen} onRequestClose={toggleEditDetailsModal} contentLabel="Edit Details Modal" className="absolute inset-0 flex items-center justify-center" overlayClassName="fixed inset-0 bg-gray-700 bg-opacity-75" closeTimeoutMS={200}>
+            {!address && 
             <div className="bg-white rounded-lg p-8 max-w-lg w-full">
               <h2 className="text-xl mb-4">Edit Details</h2>
               <form onSubmit={handleEditDetSumbit}>
@@ -310,6 +313,58 @@ function ClientProfile() {
               </form>
                 <button onClick={toggleEditDetailsModal} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-2">Close</button>
             </div>
+            }
+            {address && 
+            <div className="bg-white rounded-lg p-8 max-w-lg w-full">
+              <h2 className="text-xl mb-4">Edit Details</h2>
+              <form onSubmit={handleEditDetSumbit}>
+                <input
+                  name="name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  className="border py-2 px-4 mb-4 w-full"
+                  placeholder="Name"
+                  type="text"
+                />
+                <input
+                  name="phone"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
+                  className="border py-2 px-4 mb-4 w-full"
+                  placeholder="Phone"
+                  type="text"
+                />
+                <input
+                  name="houseNo"
+                  value={houseNo}
+                  onChange={(e) => setHouseNo(e.target.value)}
+                  className="border py-2 px-4 mb-4 w-full"
+                  placeholder="House No"
+                  type="text"
+                />
+                <input
+                  name="location"
+                  value={location}
+                  onChange={(e) => setLocation(e.target.value)}
+                  className="border py-2 px-4 mb-4 w-full"
+                  placeholder="Location"
+                  type="text"
+                />
+                <input
+                  name="pin"
+                  value={pin}
+                  onChange={(e) => setPin(e.target.value)}
+                  className="border py-2 px-4 mb-4 w-full"
+                  placeholder="Pin"
+                  type="text"
+                />
+                <button type="submit" className="bg-purple-900 text-white px-4 py-2 rounded-md">Submit</button> 
+              </form>
+                <button onClick={toggleEditDetailsModal} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-2">Close</button>
+            </div>
+            }
+
+
           </Modal>
         </div>
       </div>

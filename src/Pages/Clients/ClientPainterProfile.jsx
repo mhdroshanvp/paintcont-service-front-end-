@@ -78,27 +78,27 @@ function ClientPainterProfile() {
 
   const fetchPainter = async () => {
     try {
-      console.log('clicked follow')
       const response = await axios.get(`/user/painter/profile/${id}`);
-      console.log(response,'responseresponse')
       setSlot(response.data.slot);
       setPainter(response.data.painter);
       setFollow(response.data.painter.followers.includes(userId));
       setCountFollow(response.data.painter.followers.length);
       setPosts(response.data.posts);
     } catch (error) {
+      navigate("/error")
       console.log(error);
     }
   };
 
   useEffect(()=>{
+     fetchPainter()
     socket.emit("slotBooked", { ...bookSlot, painterId: id });
-    // fetchPainter()
+    
   },[])
 
   const checkBooking = async () => {
     try {
-      const response = await axios
+      //const response = await axios
     } catch (error) {
       
     }
@@ -234,7 +234,6 @@ const makePayment = async () => {
 
     if(result){
       const response = await axios.post('/stripe/create-checkout-session', data);
-
       console.log(response)
     }
 
@@ -307,38 +306,33 @@ const handleLockedMessage = () => {
             </div>
 
             <div className="col-span-4 sm:col-span-9">
-              <div className="bg-white shadow h-[6000px] rounded-lg p-6 mt-7">
+              <div className="bg-white shadow rounded-lg p-6 mt-7">
                 <h2 className="text-xl font-bold mt-6 mb-4">About Me</h2>
                 <p className="text-gray-700">
-                  {painter?.description}
+                  {painter?.aboutMe}
                 </p>
-                <h2 className="text-xl font-bold mt-6 mb-4">Experience</h2>
-                {painter?.experience && (
-                  <div className="mb-6">
-                    <div className="flex justify-between flex-wrap gap-2 w-full">
-                      <span className="text-gray-700 font-bold">{painter.experience}</span>
-                    </div>
+                <h2 className="text-xl font-bold mt-6 mb-4">{painter?.experienceYears} years of experience</h2>
+
+
+
+                  <div className="flex justify-center items-center border rounded-2xl m-2 h-6">
+                   <p className="uppercase text-sm text-[11px] font-bold text-red-600 animate-bounce duration-75">make sure select a slot before clicking at the <span className="text-yellow-500">Book The Slot</span></p>
                   </div>
-                )}
 
 
 
                 <div className="flex flex-col bg-white  border rounded-2xl mb-6">
-                  <p className="m-3 uppercase font-semibold">Available slots:</p>
 
+                  <p className="m-3 uppercase font-semibold">Available</p>
 
 
                   <div className="flex flex-col sm:flex-row items-center justify-center m-5">
                         
                         {slot.map((slt, index) => {
                           const date = slt?.date ? slt.date.toString().split("T")[0] : "No date available";
-
-                          // if(slt.status === "booked"){
-
-                          //   setBooked(true)
-                          // }
                           
                           return (
+                            
                             <div key={index} className="flex flex-col items-center justify-center">
                               <p>{date}</p>
                               {slt.status === "booked" ? (
@@ -350,7 +344,7 @@ const handleLockedMessage = () => {
                                   className={`${outline=== slt._id ? 'border-red-500' : ''} bg-gray-400  focus:outline-none  border-4 focus:outline-green-600  text-center p-3 px-6 m-2 max-w-52 min-w-52   hover:cursor-pointer`}
                                   onClick={() => handleSlot(slt.start, slt.end, date, slt._id)}
                                 >
-                                  <p>{slt.start} to {slt.end}</p>
+                                  <p>Available</p>
                                 </div>
                               )}
                             </div>
@@ -360,7 +354,11 @@ const handleLockedMessage = () => {
                   </div>              
                   
                   {
-                    slot.length ?<div className="flex   flex-row items-center justify-center m-5">
+                    
+                    slot.length ?
+                    
+                    
+                    <div className="flex   flex-row items-center justify-center m-5">
                     <div className="bg-amber-500 hover:bg-amber-600 rounded-lg p-3 m-2">
                       <p onClick={makePayment}>Book The Slot</p>
                     </div>
@@ -391,7 +389,7 @@ const handleLockedMessage = () => {
                 
 
                 <div className="flex flex-col bg-purple-950  border rounded-2xl mb-6">
-                  <p className="text-white  font-bold mt-3 ml-3">Painter posts:</p>
+                  <p className="text-white  font-bold mt-4 ml-5">This Painter posts:</p>
                    <div className="max-auto rounded-2xl min-h-[30rem]">
                       {posts.map((post) => (
                          <div className="block rounded-xl bg-[#50187b67] m-5 h-100" key={post._id}>

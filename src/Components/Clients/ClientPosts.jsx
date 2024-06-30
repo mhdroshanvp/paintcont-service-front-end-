@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import axios from "../../Services/axiosService";
 import {jwtDecode} from 'jwt-decode';
 import { UserEndpoints } from "../../Services/endpoints/user";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 import Modal from "react-modal";
 import userImg from "../../assets/user-removebg.png";
 import uploadImageToFirebase from "../../Services/firebaseconfig/imageUploader";
@@ -145,12 +145,11 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
         postId:post?._id
       };
 
-      const response = await axios.post(PainterEndpoints.Profile,  data ); // Correct request format
+      const response = await axios.post(PainterEndpoints.Profile,  data ); 
+
+      console.log(response,"-----------------------------");
       
       //setDescription("");
-      if(response.success){
-        toast.success("post edited")
-      }
       closeModal();
       toast.success("Post created successfully");
 
@@ -215,6 +214,7 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
 // console.log(report);
   return (
     <>
+    <Toaster />
       <div className={`${edit ? 'py-3' : ''} rounded-[10px] block`}>
 
       {

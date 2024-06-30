@@ -1,25 +1,19 @@
 import React, { useState, useRef, useEffect } from 'react';
 import PainterNavbar from '../../Components/Painters/PainterNavbar';
-import Modal from 'react-modal';
 import axios from '../../Services/axiosService';
 import { PainterEndpoints } from '../../Services/endpoints/painter';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import moment from 'moment/moment';
 import toast, { Toaster } from "react-hot-toast";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEdit } from '@fortawesome/free-solid-svg-icons';
+import { Link } from 'react-router-dom';
 
 function PainterSlotAdd() {
-  const [slots, setSlots] = useState([{ date: '', startTime: '', endTime: '', amount: '' }]);
-  const [editedSlot, setEditedSlot] = useState({ date: '', startTime: '', endTime: '', amount: '' });
+  const [slots, setSlots] = useState([{ date: '', amount: '' }]);
   
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [currentSlotIndex, setCurrentSlotIndex] = useState(null);
-  const slotsEndRef = useRef(null);
 
-  const token = localStorage.getItem("Painter_token")
-  const decode = jwtDecode(token)
-  const painterId = decode.username
+  const token = localStorage.getItem("Painter_token");
+  const decode = jwtDecode(token);
+  const painterId = decode.username;
 
   const handleInputChange = (index, event) => {
     const values = [...slots];
@@ -27,48 +21,19 @@ function PainterSlotAdd() {
     setSlots(values);
   };
 
-  const handleAddSlot = () => {
-    setSlots([...slots, { date: '', startTime: '', endTime: '' }]);
-  };
-
-  const handleRemoveSlot = (index) => {
-    const values = [...slots];
-    values.splice(index, 1);
-    setSlots(values);
-  };
-
-  const handleEditSlot = (index) => {
-    setCurrentSlotIndex(index);
-    setEditedSlot(slots[index]);
-    setModalIsOpen(true);
-  };
-
-  const handleModalInputChange = (event) => {
-    setEditedSlot({ ...editedSlot, [event.target.name]: event.target.value });
-  };
-
-  const handleSaveEdit = () => {
-    if (moment(editedSlot.date).isBefore(moment().startOf('day'))) {
-      toast.error("Date cannot be in the past");
-      return;
-    }
-    if (!editedSlot.date || !editedSlot.amount) {
-      toast.error("Date and Amount are required");
-      return;
-    }
-
-
-    const updatedSlots = [...slots];
-    updatedSlots[currentSlotIndex] = editedSlot;
-    setSlots(updatedSlots);
-    setModalIsOpen(false);
-  };
-
   const handleSubmit = async (event) => {
     event.preventDefault();
     for (const slot of slots) {
-      if (!slot.date || !slot.amount) {
+      if (!slot.date && !slot.amount) {
         toast.error("Date and Amount are required for all slots");
+        return;
+      }
+      if(!slot.date){
+        toast.error("Date required for slots");
+        return;
+      }
+      if(!slot.amount){
+        toast.error("amount required for slots");
         return;
       }
       if (moment(slot.date).isBefore(moment().startOf('day'))) {
@@ -79,7 +44,8 @@ function PainterSlotAdd() {
 
     try {
       await axios.post(`/painter/create-slot/${painterId}`, { slots });
-      toast.success("Slots created successfully")
+      toast.success("Slots created successfully");
+      setSlots([{ date: '', startTime: '', endTime: '', amount: '' }]);
       console.log('Slots submitted successfully:', { slots });
     } catch (error) {
       console.error('Error submitting slots:', error);
@@ -119,60 +85,20 @@ function PainterSlotAdd() {
                     className="w-full mt-1 p-2 border rounded bg-purple-800"
                   />
                 </label>
-                <button
-                  type="button"
-                  onClick={() => handleEditSlot(index)}
-                  className="bg-red-500 text-white px-4 py-2 rounded mt-4 ml-4 flex items-center"
-                >
-                  <FontAwesomeIcon icon={faEdit} />
-                </button>
               </div>
             ))}
           </div>
+          <div className='flex justify-between'>
           <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded mt-4">Submit Slots</button>
+          <div  type="submit" className="bg-yellow-500 text-white px-4 py-2 rounded mt-4 w-[125px]">
+             <Link to={"/painter/dashboard"}>
+             Edit Slot's
+             </Link>
+          </div>
+
+          </div>
         </form>
       </div>
-      <Modal
-        isOpen={modalIsOpen}
-        onRequestClose={() => setModalIsOpen(false)}
-        className="absolute inset-0 flex items-center justify-center"
-        overlayClassName="fixed inset-0 bg-gray-700 bg-opacity-75"
-        closeTimeoutMS={200}
-      >
-        <div className="bg-white rounded-lg p-8 max-w-lg w-full">
-          <h2 className="text-xl mb-4">Edit Slot</h2>
-          <label className="block text-gray-700 mb-2">
-            Date:
-            <input
-              type="date"
-              name="date"
-              value={editedSlot.date}
-              onChange={handleModalInputChange}
-              className="w-full mt-1 p-2 border rounded"
-              required
-            />
-          </label>
-          <label className="block text-gray-700 mb-2">
-            Amount:
-            <input
-              type="number"
-              name="amount"
-              value={editedSlot.amount}
-              onChange={handleModalInputChange}
-              className="w-full mt-1 p-2 border rounded"
-              required
-            />
-          </label>
-          <div className="flex justify-end">
-            <button onClick={handleSaveEdit} className="bg-blue-500 text-white px-4 py-2 rounded mt-4">
-              Save
-            </button>
-            <button onClick={() => setModalIsOpen(false)} className="bg-gray-300 text-gray-700 px-4 py-2 rounded mt-4 ml-2">
-              Close
-            </button>
-          </div>
-        </div>
-      </Modal>
     </>
   );
 }

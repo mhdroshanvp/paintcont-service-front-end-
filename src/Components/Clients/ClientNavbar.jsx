@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState,useEffect} from "react";
 import { BellIcon, Cog6ToothIcon } from "@heroicons/react/24/solid";
 import { RiUserLine, RiLogoutCircleLine } from "react-icons/ri";
 import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { Typography } from "@material-tailwind/react";
+import axios from "../../Services/axiosService";
 
 function ClientNavbar({ setSmState, smState }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,6 +19,21 @@ function ClientNavbar({ setSmState, smState }) {
     setIsOpen(!isOpen);
     if (!isOpen) setSmState(false);
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/user/blockornot');
+        if (response) {
+          console.log(response);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+    fetchData();
+    console.log("Component mounted");
+  }, []);
 
   return (
     <nav className="w-full bg-[#572c77] py-3 h-[70px] z-50">

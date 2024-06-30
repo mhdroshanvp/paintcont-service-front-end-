@@ -193,7 +193,7 @@ function PainterProfile() {
         <div className="container mx-auto py-8">
           <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
             <div className="col-span-4 sm:col-span-3">
-              <div className="bg-white shadow rounded-lg p-6  mt-7">
+              <div className="text-white bg-[#50187b67] shadow rounded-lg p-6  mt-7">
                 <div className="flex flex-col items-center">
                   <img
                     src={painter?.avatarUrl || "/profileIcon.png"}
@@ -201,14 +201,14 @@ function PainterProfile() {
                     alt="Profile"
                   />
                   <h1 className="text-xl font-bold">{painter?.username || "Painter Name"}</h1>
-                  <p className="text-gray-700">
+                  <p className="text-white">
                     {` ${painter?.experienceYears || "0"} years of experience`}
                   </p>
                   <p>{painter?.phone}</p>
                 </div>
                 <hr className="my-6 border-t border-gray-300" />
                 <div className="flex flex-col">
-                  <span className="text-gray-700 uppercase font-bold tracking-wider mb-2">
+                  <span className="text-white uppercase font-bold tracking-wider mb-2">
                     Specialised:
                   </span>
                   <ul>

@@ -24,7 +24,7 @@ function ClientHash() {
   return (
     <>
       <div className="sm:ml-10 sm:mt-3 w-[430px] sm:rounded-[22px] bg-[#350e5267]">
-        <p className='text-white text-opacity-35 font-openSans ml-9 py-4'># Hashtags</p>
+        <p className='text-white text-opacity-35 font-openSans ml-9 py-4'>#Hashtags [ Copy hashtags for Searching ]</p>
         <div className='flex flex-wrap p-2 h-[200px]'>
           {painters.map((painter, painterIndex) => 
             painter.specialised.map((specialisation, index) => (

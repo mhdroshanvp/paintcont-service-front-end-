@@ -21,6 +21,10 @@ function ClientContact() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!validateForm()) {
+      return;
+    }
+
     try {
       const response = await axios.post('/user/contact', formData);
       if (response.data.success) {
@@ -35,8 +39,28 @@ function ClientContact() {
       }
     } catch (error) {
       console.error('Error sending message:', error);
-      alert('An error occurred. Please try again later.');
+      toast.error('An error occurred. Please try again later.');
     }
+  };
+
+  const validateForm = () => {
+    let isValid = true;
+    if (!formData.name.trim()) {
+      toast.error('Name is required');
+      isValid = false;
+    }
+    if (!formData.mail.trim()) {
+      toast.error('Email is required');
+      isValid = false;
+    } else if (!/\S+@\S+\.\S+/.test(formData.mail)) {
+      toast.error('Invalid email format');
+      isValid = false;
+    }
+    if (!formData.message.trim()) {
+      toast.error('Message is required');
+      isValid = false;
+    }
+    return isValid;
   };
 
   return (
@@ -45,46 +69,41 @@ function ClientContact() {
       <div>
         <ClientNavbar />
       </div>
-      <div className='sm:flex sm:justify-center sm:h-[600px] sm:items-center h-[500px] sm:ml-14 xl:ml-4 mt-10'>
-        <div className='sm:w-[600px] xl:ml-9 sm:h-[600px] h-[300px] flex justify-center'>
-          <img src={painter} alt="" className='sm:w-[600px] sm:h-[600px] w-[300px] h-[300px] rounded-[30px]' />
+      <div className="flex flex-col xl:flex-row justify-center items-center h-screen mx-auto px-4 sm:px-0">
+        <div className="xl:w-1/2 flex justify-center mb-10 xl:mb-0">
+          <img src={painter} alt="" className="w-full max-w-[400px] xl:max-w-[600px] h-auto rounded-md" />
         </div>
-        <div className='bg-[#4a206f] ml-[50px] sm:w-[600px] xl:ml-9 sm:h-[600px] sm:ml-10 sm:mt-0 w-[400px] rounded-[30px] h-[420px]'>
-          <form onSubmit={handleSubmit} className='sm:mt-[100px] mt-[30px] pt-3'>
-            <div className='flex justify-center mb-3'>
-              <input
-                type="text"
-                name="name"
-                placeholder='Name'
-                className="w-96 h-11 rounded-[10px] bg-purple-800 focus:outline-none mt-3 pl-4 text-white"
-                value={formData.name}
-                onChange={handleChange}
-              />
-            </div>
-            <div className='flex justify-center mb-3'>
-              <input
-                type="email"
-                name="mail"
-                placeholder='Email'
-                className="w-96 h-11 rounded-[10px] bg-purple-800 focus:outline-none mt-3 pl-4 text-white"
-                value={formData.mail}
-                onChange={handleChange}
-              />
-            </div>
-            <div className='flex justify-center mb-3'>
-              <textarea
-                name="message"
-                placeholder='Message'
-                className='w-96 h-[200px] rounded-[10px] bg-purple-800 focus:outline-none mt-3 pl-4 text-white'
-                value={formData.message}
-                onChange={handleChange}
-              ></textarea>
-            </div>
-            <div className='flex justify-center sm:mt-7 mt-3'>
-              <button type="submit" className='w-20 h-10 rounded-[16px] bg-purple-800 text-white hover:bg-purple-900 hover:text-green-500'>
-                Save
-              </button>
-            </div>
+        <div className="bg-purple-800 xl:ml-10 xl:w-1/2 xl:rounded-lg p-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              name="name"
+              placeholder="Name"
+              className="w-full h-11 rounded-md bg-purple-900 focus:outline-none px-4 text-white"
+              value={formData.name}
+              onChange={handleChange}
+            />
+            <input
+              type="email"
+              name="mail"
+              placeholder="Email"
+              className="w-full h-11 rounded-md bg-purple-900 focus:outline-none px-4 text-white"
+              value={formData.mail}
+              onChange={handleChange}
+            />
+            <textarea
+              name="message"
+              placeholder="Message"
+              className="w-full h-40 rounded-md bg-purple-900 focus:outline-none px-4 py-2 text-white"
+              value={formData.message}
+              onChange={handleChange}
+            ></textarea>
+            <button
+              type="submit"
+              className="w-full h-10 rounded-md bg-purple-900 text-white hover:bg-purple-700 focus:outline-none"
+            >
+              Save
+            </button>
           </form>
         </div>
       </div>

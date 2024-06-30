@@ -7,6 +7,8 @@ import axios from '../../../Services/axiosService';
 import {jwtDecode} from "jwt-decode";
 import { socket } from '../../../socket/socket';
 import PainterNavbar from '../../../Components/Painters/PainterNavbar';
+import chatEmpty from "../../../assets/chat-removebg-preview.png";
+
 
 function Messages() {
   const [conversations, setConversations] = useState([]);
@@ -72,7 +74,7 @@ function Messages() {
       const obj = { conversationId: currentConv?._id, sender: userId, text: newMessage };
       socket.emit("sendData", obj);
       const response = await axios.post('/message/', obj);
-      setNewMessage(''); // Clear the state
+      setNewMessage(''); 
       messageInputRef.current.value = ''; // Clear the textarea
     } catch (error) {
       console.log(error);
@@ -87,23 +89,28 @@ function Messages() {
       
       <div className="messenger">
         <div className="chatMenu">
-          <div className="chatMenuWrapper">
-            <div>
-              {conversations?.map((c) => (
-                <div onClick={() => { setCurrentConv(c); fetchMsgh(c?._id); }} key={c?._id}>
-                  <Conversations painterName={c?.userName?.username} indConv={c} conversation={c} me={user} />
-                </div>
-              ))}
-            </div>
-          </div>
+        <div className="chatMenuWrapper">
+  <div>
+    {conversations?.length ? (
+      conversations.map((c) => (
+        <div onClick={() => { setCurrentConv(c); fetchMsgh(c?._id); }} key={c?._id}>
+          <Conversations painterName={c?.userName?.username} indConv={c} conversation={c} me={user} />
+        </div>
+      ))
+    ) : (
+      <p className="text-center text-red-500 mt-4 text-sm">Sorry, there are no conversations available.</p>
+    )}
+  </div>
+</div>
+
         </div>
         <div className="chatBox">
-          <div className="chatBoxWrapper">
+          <div className="chatBoxWrapper border">
             <div className="chatBoxTop">
               <div>
                 {!messageHistory?.length &&
                   <div className='flex justify-center h-screen items-center'>
-                    no items
+                    <img src={chatEmpty} alt="" className="size-72" />
                   </div>
                 }
                 {messageHistory.map((msg) => {
@@ -117,11 +124,11 @@ function Messages() {
             {currentConv && (
               <div className="chatBoxBottom">
                 <textarea
-                  ref={messageInputRef} // Attach the ref to the textarea
+                  ref={messageInputRef} 
                   className="chatMessageInput"
                   placeholder="write something..."
                   onChange={(e) => setNewMessage(e?.target?.value)}
-                  value={newMessage} // Control the textarea with state
+                  value={newMessage} 
                 ></textarea>
                 <button className="chatSubmitButton" onClick={chatSubmit}>
                   Send
