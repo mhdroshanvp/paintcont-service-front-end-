@@ -27,6 +27,7 @@ function PainterProfile() {
   const [posts, setPosts] = useState([]);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSpecialised, setSelectedSpecialised] = useState('');
+  const [profilePic,setProfilePic] = useState('')
 
   const descriptionRef = useRef(null);
   const token = localStorage.getItem("Painter_token")
@@ -51,6 +52,7 @@ function PainterProfile() {
           setPhone(response.data.painter.phone);
           setSpecialised(response.data.painter.specialised.join(','));
           setAboutMe(response.data.painter.aboutMe);
+          setProfilePic(response.data.painter.profilePicture)
         }
       } catch (error) {
         console.log("Error fetching user profile:", error);
@@ -142,6 +144,9 @@ function PainterProfile() {
 
     e.preventDefault();
 
+    const profilePicture = selectedAvatar ? await uploadImageToFirebase(selectedAvatar, "profile_pictures/") : painter?.profilePicture;
+
+
     const details = {
       age,
       experienceYears,
@@ -149,6 +154,7 @@ function PainterProfile() {
       phone,
       specialised: specialised.split(","),
       aboutMe,
+      profilePicture
     };
 
     try {
@@ -196,7 +202,7 @@ function PainterProfile() {
               <div className="text-white bg-[#50187b67] shadow rounded-lg p-6  mt-7">
                 <div className="flex flex-col items-center">
                   <img
-                    src={painter?.avatarUrl || "/profileIcon.png"}
+                    src={profilePic || "/profileIcon.png"}
                     className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
                     alt="Profile"
                   />
@@ -332,15 +338,37 @@ function PainterProfile() {
                   isOpen={detailsModalIsOpen}
                   onRequestClose={closeDetailsModal}
                   contentLabel="Add/Edit Details Modal"
-                  className="absolute inset-0 flex items-center justify-center "
-                  overlayClassName="fixed inset-0 "
+                  className=""
+                  overlayClassName="fixed inset-0  "
                   closeTimeoutMS={200}
                 >
-                  <div className="bg-[#50187b]   rounded-lg p-8 max-w-lg w-full">
+                  <div className="bg-[#50187b] mt-5  rounded-lg p-9  w-full">
                     <h2 className="text-2xl font-bold mb-4 text-white">
                       {detailsModalIsOpen ? "Edit Details" : "Add Details"}
                     </h2>
                     <form onSubmit={handleDetailsSubmit}>
+
+
+                    <div className="mb-4">
+                                <label className="block text-gray-700 font-bold mb-2" htmlFor="profilePicture">
+                                    Profile Picture
+                                </label>
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    onChange={(e) => handleAvatarChange(e.target.files)}
+                                    className="block w-full text-sm text-gray-900 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#e5398d] file:text-white hover:file:bg-[#1f3752]"
+                                />
+                                {previewAvatar && (
+                                    <img
+                                        src={previewAvatar}
+                                        alt="Selected Avatar"
+                                        className="w-32 h-32 bg-gray-300 rounded-full mb-4 mt-4"
+                                    />
+                                )}
+                    </div>
+
+
                       <label htmlFor="age" className="text-white">Age</label>
                       <input
                         className="border py-2 px-4 mb-4 w-full bg-purple-800 text-white"

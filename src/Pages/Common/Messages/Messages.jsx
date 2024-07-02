@@ -5,7 +5,7 @@ import Conversations from '../../../Components/Common/Conversations/Conversation
 import Message from '../../../Components/Common/Message/Message';
 import { useSelector } from 'react-redux';
 import axios from '../../../Services/axiosService';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { socket } from '../../../socket/socket';
 import chatEmpty from "../../../assets/chat-removebg-preview.png";
 
@@ -15,6 +15,8 @@ function Messages() {
   const [currentConv, setCurrentConv] = useState(null);
   const [newMessage, setNewMessage] = useState('');
   const messageInputRef = useRef(null);
+
+  const navigate = useNavigate()
 
   const user = useSelector((state) => state.user);
   const userId = user?.currentUser?._id;
@@ -62,6 +64,7 @@ function Messages() {
           setMessageHistory(response?.data?.messageHistory);
         }
       } catch (error) {
+        navigate("/user/error")
         console.log("Error fetching messages:", error);
       }
     };

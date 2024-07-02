@@ -109,7 +109,7 @@ function ClientHome() {
                 <p> </p>
               )}
             </div>
-            <div className="w-full flex justify-end pe-11 sticky top-[600px]">
+            <div className="xl:w-full xl:flex xl:justify-end xl:pe-11 xl:sticky xl:top-[600px] sm:hidden hidden">
               <StickyHome scrollToTop={() => {
                 devRef.current.scrollTo({
                   top: 0,

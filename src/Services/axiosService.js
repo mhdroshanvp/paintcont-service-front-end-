@@ -21,7 +21,6 @@ import axios from "axios";
 const instance = axios.create({
   // baseURL: "http://localhost:7777/",
   baseURL:"https://paintcont.online/"
-  // baseURL: "http://10.4.2.23:7777/",
   // timeout: 15000,
 });
 

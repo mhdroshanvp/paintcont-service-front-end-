@@ -1,8 +1,11 @@
 import React from 'react';
+import ClientNavbar from '../Components/Clients/ClientNavbar';
 
 const NotFoundPage = () => {
  return (
-    <div className="bg-[#030005] min-h-screen">
+  <>
+  <ClientNavbar />
+    <div className=" min-h-screen">
       <div className="relative h-screen">
         <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 max-w-[767px] w-full leading-[1.4] text-center">
           <div className="relative h-[180px] mb-[20px] z-[-1]">
@@ -13,6 +16,7 @@ const NotFoundPage = () => {
         </div>
       </div>
     </div>
+  </>
  );
 };
 

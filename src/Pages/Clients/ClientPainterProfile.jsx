@@ -183,8 +183,8 @@ function ClientPainterProfile() {
     setShowChatModal(false);
   };
 
-  const handleSlot = (start, end, date,id) => {
-    const data = { start, end, date,slotId:id };
+  const handleSlot = (date,id) => {
+    const data = {date,slotId:id };
     setBookSlot(data);
     setOutline(id)
     // console.log(data, "-------------------------");
@@ -206,6 +206,10 @@ const handleSlotBooking = async () => {
         console.log(error);
     }
 };
+
+const slotWarning = () => {
+  return toast.error("select a slot before clicking at the Book The Slot")
+}
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -271,13 +275,25 @@ const handleLockedMessage = () => {
                 <div className="flex flex-col items-center">
                   {painter ? (
                     <>
-                      <img
-                        src="/profileIcon.png"
-                        className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0"
-                        alt="Profile"
-                      />
-                      <h1 className="text-xl font-bold">{painter.username}</h1>
-                      <p className="text-gray-700">{painter.email}</p>
+
+                          {
+                            painter?.profilePicture ? (
+                              <img
+                                src={painter.profilePicture}
+                                className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0 object-cover overflow-hidden"
+                                alt="Profile"
+                              />
+                            ) : (
+                              <img
+                                src="/profileIcon.png"
+                                className="w-32 h-32 bg-gray-300 rounded-full mb-4 shrink-0 object-cover overflow-hidden"
+                                alt="Profile"
+                              />
+                            )
+                          } 
+
+                      <h1 className="text-xl font-bold">{painter?.username}</h1>
+                      <p className="text-gray-700">{painter?.email}</p>
 
                       <div className="mt-6 flex flex-wrap gap-4 justify-center">
                         <button onClick={()=>{followPainter()}} className="bg-blue-500 hover:bg-blue-600 text-white py-2 px-4 rounded">
@@ -315,15 +331,11 @@ const handleLockedMessage = () => {
 
 
 
-                  <div className="flex justify-center items-center border rounded-2xl m-2 h-6">
-                   <p className="uppercase text-sm text-[11px] font-bold text-red-600 animate-bounce duration-75">make sure select a slot before clicking at the <span className="text-yellow-500">Book The Slot</span></p>
-                  </div>
-
-
-
                 <div className="flex flex-col bg-white  border rounded-2xl mb-6">
 
-                  <p className="m-3 uppercase font-semibold">Available</p>
+                  <div className="xl:flex xl:justify-center ">
+                    <p className="uppercase text-sm text-[11px] font-bold text-red-600 animate-bounce duration-75 m-3">make sure select a slot before clicking at the <span className="text-yellow-500">Book The Slot</span></p>
+                  </div>
 
 
                   <div className="flex flex-col sm:flex-row items-center justify-center m-5">
@@ -342,8 +354,7 @@ const handleLockedMessage = () => {
                               ) : (
                                 <div 
                                   className={`${outline=== slt._id ? 'border-red-500' : ''} bg-gray-400  focus:outline-none  border-4 focus:outline-green-600  text-center p-3 px-6 m-2 max-w-52 min-w-52   hover:cursor-pointer`}
-                                  onClick={() => handleSlot(slt.start, slt.end, date, slt._id)}
-                                >
+                                  onClick={() => handleSlot(date, slt._id)}>
                                   <p>Available</p>
                                 </div>
                               )}
@@ -359,9 +370,19 @@ const handleLockedMessage = () => {
                     
                     
                     <div className="flex   flex-row items-center justify-center m-5">
-                    <div className="bg-amber-500 hover:bg-amber-600 rounded-lg p-3 m-2">
-                      <p onClick={makePayment}>Book The Slot</p>
-                    </div>
+
+                          {outline ? (
+                            <div className="bg-green-500 hover:bg-green-600 rounded-lg p-3 m-2">
+                              <p onClick={makePayment}>Book The Slot</p>
+                            </div>
+                          ) : (
+                            <div className="bg-gray-500 hover:bg-gray-600 rounded-lg p-3 m-2">
+                              <p onClick={slotWarning}>Book The Slot</p>
+                            </div>
+                          )}
+
+
+                      
 
                       {!slot.filter((i)=>i.status === "booked").length ? (
                               <div

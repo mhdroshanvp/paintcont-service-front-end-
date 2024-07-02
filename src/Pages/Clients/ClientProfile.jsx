@@ -171,14 +171,16 @@ function ClientProfile() {
       <ClientNavbar />
       <Toaster />
       <div className="flex items-center justify-center h-screen ">
-        <div className="flex flex-col items-center bg-gradient-to-br from-purple-950 to-purple-950 rounded-3xl shadow-2xl p-8 h-[420px] w-96">
-          <div className="bg-purple-900 rounded-full overflow-hidden w-24 h-24 mb-4">
+        <div className="flex flex-col items-center bg-gradient-to-br from-purple-950 to-purple-950 rounded-3xl shadow-2xl p-8 h-[460px] xl:w-[500px]">
+
+        <div className="bg-purple-900 rounded-full overflow-hidden w-24 h-24 mb-4">
             <img
               src="/profileIcon.png"
               alt="Profile"
               className="w-full h-full object-cover"
             />
           </div>
+
           <div className="flex flex-col items-center">
             {user ? (
               <>
@@ -198,7 +200,16 @@ function ClientProfile() {
           </div>
 
           <div>
-            <button onClick={openModal} className="bg-purple-900 text-white border-b-2 border-purple-700 px-4 py-2 mb-2 rounded-md focus:outline-none w-32">Add Address</button>
+
+            <div>
+                <button onClick={openModal} className="bg-[#410653] text-white border-b-2 border-purple-700 px-4 py-2 mb-2 rounded-md focus:outline-none w-24 m-2">Address</button>
+                <button onClick={toggleEditDetailsModal} className=" bg-[#410653] text-white border-b-2 border-purple-700 px-4 py-2 mb-2 rounded-md focus:outline-none w-32">Edit Details</button>
+            </div>
+            <div className="flex justify-center">
+                <button onClick={openPasswordModal} className="bg-[#410653] text-white border-b-2 border-purple-700 px-4 py-2 mb-2 rounded-md focus:outline-none w-[170px]">Change Password</button>
+            </div>
+
+
             <Modal isOpen={modalIsOpen} onRequestClose={closeModal} contentLabel="Add Post Modal" className="absolute inset-0 flex items-center justify-center" overlayClassName="fixed inset-0 bg-gray-700 bg-opacity-75" closeTimeoutMS={200}>
               <div className="bg-white rounded-lg p-8 max-w-lg w-full">
                 <h5>Phone No:</h5>
@@ -241,7 +252,6 @@ function ClientProfile() {
             </Modal>
           </div>
 
-          <button onClick={openPasswordModal} className="text-purple-800 border-purple-700 hover:text-purple-600">Change Password</button>
 
           <Modal isOpen={passwordModalIsOpen} onRequestClose={closePasswordModal} contentLabel="Password Change Modal" className="absolute inset-0 flex items-center justify-center" overlayClassName="fixed inset-0 bg-gray-700 bg-opacity-75" closeTimeoutMS={200}>
             <div className="bg-white rounded-lg p-8 max-w-lg w-full">
@@ -262,7 +272,6 @@ function ClientProfile() {
             </div>
           </Modal>
 
-          <button onClick={toggleEditDetailsModal} className=" text-purple-800 border-purple-700 hover:text-purple-600">Edit Details</button>
           
           <Modal isOpen={editDetailsModalIsOpen} onRequestClose={toggleEditDetailsModal} contentLabel="Edit Details Modal" className="absolute inset-0 flex items-center justify-center" overlayClassName="fixed inset-0 bg-gray-700 bg-opacity-75" closeTimeoutMS={200}>
             {!address && 
@@ -363,9 +372,8 @@ function ClientProfile() {
                 <button onClick={toggleEditDetailsModal} className="bg-gray-300 text-gray-700 px-4 py-2 rounded-md ml-2">Close</button>
             </div>
             }
-
-
           </Modal>
+
         </div>
       </div>
     </>
