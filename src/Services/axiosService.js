@@ -2,8 +2,8 @@ import axios from "axios";
 import { useLocation } from "react-router-dom";
 
 const instance = axios.create({
-  baseURL: "http://localhost:7777/",
-  // baseURL:"https://paintcont.online/"
+  // baseURL: "http://localhost:7777/",
+  baseURL:"https://paintcont.online/"
   // timeout: 15000,
 });
 
