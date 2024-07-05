@@ -24,11 +24,12 @@ function ClientNavbar({ setSmState, smState }) {
     const fetchData = async () => {
       try {
         const response = await axios.get('/user/blockornot');
-        if (response) {
-          console.log(response);
+        if(response.status == 200){
+          localStorage.removeItem("token");
+          navigate("/user/login");
         }
       } catch (error) {
-        console.error('Error fetching data:', error);
+        console.log(error,"🚒🚒🚒🚒");
       }
     };
     fetchData();

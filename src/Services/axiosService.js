@@ -1,40 +1,36 @@
 import axios from "axios";
-
-// const instance = axios.create({
-//   baseURL: "http://localhost:7777/",
-//   timeout: 5000,
-// });
-
-// instance.interceptors.request.use(
-//   (config) => {
-//     const token = localStorage.getItem("token");
-//     config.headers.Authorization = token;
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
-
-// export default instance;
+import { useLocation } from "react-router-dom";
 
 const instance = axios.create({
-  // baseURL: "http://localhost:7777/",
-  baseURL:"https://paintcont.online/"
+  baseURL: "http://localhost:7777/",
+  // baseURL:"https://paintcont.online/"
   // timeout: 15000,
 });
 
 instance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+
+    let path = window.location.pathname.split("/")[1]
+    let token 
+
+
+    if(path.toLocaleLowerCase() === "painter"){
+      token = localStorage.getItem("Painter_token")
+    }else if (path.toLocaleLowerCase() === "user"){
+      token = localStorage.getItem("token")
+    }else if(path.toLocaleLowerCase() == "admin"){
+      token = localStorage.getItem("admin_token")
     }
+
+
+    config.headers.Authorization = `Bearer ${token}`;
+
     return config;
   },
   (error) => {
     return Promise.reject(error);
   }
 );
+
 
 export default instance;

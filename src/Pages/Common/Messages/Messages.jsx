@@ -64,8 +64,8 @@ function Messages() {
           setMessageHistory(response?.data?.messageHistory);
         }
       } catch (error) {
-        navigate("/user/error")
         console.log("Error fetching messages:", error);
+        // navigate("/user/error")
       }
     };
 
@@ -84,6 +84,26 @@ function Messages() {
       socket.off("sendToUser");
     };
   }, []);
+  const fetchMsgh = async (id) => {
+    try {
+      const response = await axios.get(`/message/${id}`);
+      setMessageHistory(response?.data);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+    const fetchConversations = async () => {
+      try {
+        const res = await axios.get(`conversation/${userId}`);
+        socket.emit("joinNewUser", res?.data);
+        setConversations(res?.data);
+      } catch (error) {
+        console.log("Error fetching conversations:", error);
+      }
+    };
+
 
   // Function to handle sending a new message
   const chatSubmit = async () => {
@@ -92,7 +112,9 @@ function Messages() {
       socket.emit("sendData", obj);
       const response = await axios.post('/message/', obj);
       setNewMessage('');
-      messageInputRef.current.value = ''; 
+      messageInputRef.current.value = '';
+
+      fetchConversations()
     } catch (error) {
       console.log("Error sending message:", error);
     }
@@ -105,9 +127,6 @@ function Messages() {
       </div>
 
       <div className="messenger">
-        {/* <div>
-          <p>Chat</p>
-        </div> */}
         <div className="chatMenu">
           <div className="chatMenuWrapper">
             <div>
@@ -115,7 +134,7 @@ function Messages() {
                 <p className="text-center text-sm text-red-500 mt-4">Sorry, there are no conversations available.</p>
               ) : (
                 conversations.map((c) => (
-                  <div  onClick={() => { setCurrentConv(c); }} key={c._id}>
+                  <div  onClick={() => { setCurrentConv(c); fetchMsgh(c?._id);  }} key={c._id}>
                     <Conversations painterName={c?.painterName?.username} indConv={c} conversation={c} me={user} />
                   </div>
                 ))
@@ -138,7 +157,7 @@ function Messages() {
               )}
             </div>
 
-            {currentConv && (
+            {messageHistory?.length && (
               <div className="chatBoxBottom">
                 <textarea
                   ref={messageInputRef}
