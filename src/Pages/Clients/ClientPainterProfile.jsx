@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "../../Services/axiosService";
 import { jwtDecode } from "jwt-decode";
 import { useNavigate, useParams } from "react-router-dom";
@@ -12,6 +12,7 @@ import { socket } from "../../socket/socket";
 import { io } from "socket.io-client";
 import { loadStripe } from "@stripe/stripe-js";
 import { FaLock } from "react-icons/fa";
+import StickyHome from "../../Components/Common/StickyHome";
 
 function ClientPainterProfile() {
     const navigate = useNavigate();
@@ -257,6 +258,13 @@ const handleLockedMessage = () => {
   }
 };
 
+const scrollToTop = () => {
+  window.scrollTo({
+    top: 0,
+    behavior: 'smooth'
+  });
+};
+
 
 //////////////////////////////////////////////////////////////////////////////////////////
 
@@ -267,10 +275,10 @@ const handleLockedMessage = () => {
       <div className="  w-full fixed z-20">
         <ClientNavbar />
       </div>
-      <div className="  linear-gradient(to right, #200a31, #1f3752)">
-        <div className="container mx-auto py-8">
+      <div className="linear-gradient(to right, #200a31, #1f3752)">
+        <div className="container mx-auto py-8" >
         <div className="grid grid-cols-4 sm:grid-cols-12 gap-6 px-4">
-        <div className="flex border-red-500 m-1 p-1 col-span-4 sm:col-span-3">
+        <div className="flex border-red-500 m-1 p-1 col-span-4 sm:col-span-3" >
               <div className="bg-white   border-red-500 w-full shadow rounded-lg p-6  mt-5 md:h-[600px]">
                 <div className="flex flex-col items-center">
                   {painter ? (
@@ -450,6 +458,9 @@ const handleLockedMessage = () => {
           </div>
         </div>
       </Modal>
+      <button onClick={scrollToTop} className="flex justify-center w-full">
+      <StickyHome />
+      </button>
     </div>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useMemo } from 'react';
 import ClientNavbar from '../../../Components/Clients/ClientNavbar';
 import './messages.css';
 import Conversations from '../../../Components/Common/Conversations/Conversations';
@@ -14,15 +14,15 @@ function Messages() {
   const [messageHistory, setMessageHistory] = useState([]);
   const [currentConv, setCurrentConv] = useState(null);
   const [newMessage, setNewMessage] = useState('');
-  const messageInputRef = useRef(null);
+  const [inMessage, setInMessage] = useState('');
 
+  const messageInputRef = useRef(null);
   const navigate = useNavigate()
 
   const user = useSelector((state) => state.user);
   const userId = user?.currentUser?._id;
   const { id } = useParams();
 
-  // Socket.io setup and cleanup
   useEffect(() => {
     socket.on("connection");
     socket.on("welcome", (data) => {
@@ -34,14 +34,14 @@ function Messages() {
     };
   }, []);
 
-  // Fetch conversations based on userId or specific conversation id
+
   useEffect(() => {
     const getConversation = async () => {
       try {
         if (id) {
           const res = await axios.post(`conversation`, { senderId: userId, receiverId: id });
           socket.emit("joinNewUser", res.data);
-          setConversations(res.data);
+          setConversations(res?.data);
         } else {
           const res = await axios.get(`conversation/${userId}`);
           socket.emit("joinNewUser", res?.data);
@@ -54,7 +54,6 @@ function Messages() {
     getConversation();
   }, [userId, id]);
 
-  // Fetch message history for a specific conversation id
   useEffect(() => {
     const fetchMsg = async (id) => {
       try {
@@ -74,47 +73,80 @@ function Messages() {
     }
   }, [id, userId]);
 
-  // Socket.io event listener for incoming messages
+
+  useMemo(() => {
+    const newConversations = [...conversations];
+    const index = newConversations.findIndex(val => val._id === currentConv?._id);
+  
+    console.log(newConversations, "[[[]", index);
+  
+    if (index !== -1 && inMessage) {
+      const newInMessage = { ...inMessage };
+      newInMessage.createdAt = new Date();
+      newConversations[index].messages = [...messageHistory, newInMessage];
+  
+      newConversations.sort((a, b) => {
+        const dateA = a.messages[a.messages.length - 1]?.createdAt || 0;
+        const dateB = b.messages[b.messages.length - 1]?.createdAt || 0;
+        return new Date(dateB) - new Date(dateA);
+      });
+    }
+  
+    setConversations(newConversations);
+  }, [inMessage]);
+  
+
+
+
   useEffect(() => {
     socket.on("sendToUser", (data) => {
+      console.log(data, 'test data on ')
       setMessageHistory((prevMessageHistory) => [...prevMessageHistory, data]);
+      setInMessage(data)
     });
+
+
+    socket.on('messagesSeen', (conversationId) => {
+      console.log("entered!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
+      if (conversationId === currentConv?._id) {
+        const updatedMessages = messageHistory.map(msg => ({ ...msg, isSeen: true }));
+        setMessageHistory(updatedMessages);
+      }
+    });
+
+
 
     return () => {
       socket.off("sendToUser");
+      socket.off("messagesSeen");
     };
+
   }, []);
+
+
   const fetchMsgh = async (id) => {
     try {
       const response = await axios.get(`/message/${id}`);
       setMessageHistory(response?.data);
+      const data = { conversationId: id }
+      const updateIsSeen = await axios.post('/message/updateIsSeen', data)
     } catch (error) {
       console.log(error);
     }
   };
 
 
-    const fetchConversations = async () => {
-      try {
-        const res = await axios.get(`conversation/${userId}`);
-        socket.emit("joinNewUser", res?.data);
-        setConversations(res?.data);
-      } catch (error) {
-        console.log("Error fetching conversations:", error);
-      }
-    };
 
 
-  // Function to handle sending a new message
+  
   const chatSubmit = async () => {
     try {
-      const obj = { conversationId: currentConv?._id, sender: userId, text: newMessage };
+      const obj = { conversationId: currentConv?._id, sender: userId, text: newMessage, createdAt: new Date(Date.now()) };
       socket.emit("sendData", obj);
       const response = await axios.post('/message/', obj);
       setNewMessage('');
       messageInputRef.current.value = '';
 
-      fetchConversations()
     } catch (error) {
       console.log("Error sending message:", error);
     }
@@ -131,11 +163,11 @@ function Messages() {
           <div className="chatMenuWrapper">
             <div>
               {!conversations.length ? (
-                <p className="text-center text-sm text-red-500 mt-4">Sorry, there are no conversations available.</p>
+                <p className="text-center text-sm  mt-4">Sorry, there are no conversations available.</p>
               ) : (
                 conversations.map((c) => (
-                  <div  onClick={() => { setCurrentConv(c); fetchMsgh(c?._id);  }} key={c._id}>
-                    <Conversations painterName={c?.painterName?.username} indConv={c} conversation={c} me={user} />
+                  <div onClick={() => { setCurrentConv(c); fetchMsgh(c?._id); }} key={c._id}>
+                    <Conversations painterId={c.members[1]} painterName={c?.painterName?.username} indConv={c} conversation={c} me={user} />
                   </div>
                 ))
               )}
@@ -152,12 +184,12 @@ function Messages() {
                 </div>
               ) : (
                 messageHistory.map((msg) => (
-                  <Message own={userId === msg.sender} msgData={msg.text} key={msg._id} />
+                  <Message own={userId === msg.sender} msgData={msg.text} msgTime={msg?.createdAt} key={msg._id} msgSeen={msg?.isSeen} />
                 ))
               )}
             </div>
 
-            {messageHistory?.length && (
+            {(currentConv || id) && (
               <div className="chatBoxBottom">
                 <textarea
                   ref={messageInputRef}

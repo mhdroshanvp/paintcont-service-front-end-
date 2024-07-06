@@ -9,7 +9,7 @@ import {
 } from "../../Redux/user/userSlice";
 import { useNavigate } from 'react-router-dom';
 import { PainterEndpoints } from '../../Services/endpoints/painter';
-import { ToastContainer, toast } from 'react-toastify';
+import toast, { Toaster } from "react-hot-toast";
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -48,21 +48,21 @@ function PainterLogin() {
     }
 
     try {
-      dispatch(signInStart())
+      dispatch(signInStart());
       const response = await axios.post(PainterEndpoints.Login, { username, password });
 
       if (response.status === 200) {
         if (response.data.success) {
           const data = response.data;
-          localStorage.setItem("Painter_token", data.token);
-          dispatch(signInSuccess(data.admin));
-          navigate("/painter/home");
-        } else {
-          if (response.data.message === 'Forbidden') {
-            toast.error('Your account is blocked. Please contact support.');
+          if (data?.painter?.isBlocked) {
+            toast.error("Your account is blocked. Please contact support.");
           } else {
-            toast.error('Login failed. Please check your credentials.');
+            localStorage.setItem("Painter_token", data.token);
+            dispatch(signInSuccess(data.painter));
+            navigate("/painter/home");
           }
+        } else {
+          toast.error('Login failed. Please check your credentials.');
         }
       } else {
         console.error('Login request failed:', response.status);
@@ -86,6 +86,8 @@ function PainterLogin() {
 
   return (
     <>
+    <Toaster />
+
       <div className="flex justify-center items-center h-screen bg-gradient-to-r from-[#200a31] to-[#1f3752]">
         <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[90%] sm:w-[400px] p-10 bg-black bg-opacity-50 rounded-lg shadow-lg">
           <h2 className="text-white text-center mb-8 font-serif text-4xl">Painter Login</h2>

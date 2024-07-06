@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState,useMemo } from 'react';
 import './messages.css';
 import Conversations from '../../../Components/Common/Conversations/Conversations';
 import Message from '../../../Components/Common/Message/Message';
@@ -16,6 +16,7 @@ function Messages() {
   const [messageHistory, setMessageHistory] = useState([]);
   const [currentConv, setCurrentConv] = useState(null);
   const [newMessage, setNewMessage] = useState('');
+  const [inMessage, setInMessage] = useState('');
 
   const messageInputRef = useRef(null);
 
@@ -50,10 +51,34 @@ function Messages() {
     getConversation();
   }, [userId]);
 
+  useMemo(() => {
+    const newConversations = [...conversations];
+    const index = newConversations.findIndex(val => val._id === currentConv?._id);
+  
+    console.log(newConversations, "[[[]", index);
+  
+    if (index !== -1 && inMessage) {
+      const newInMessage = { ...inMessage };
+      newInMessage.createdAt = new Date();
+      newConversations[index].messages = [...messageHistory, newInMessage];
+  
+      newConversations.sort((a, b) => {
+        const dateA = a.messages[a.messages.length - 1]?.createdAt || 0;
+        const dateB = b.messages[b.messages.length - 1]?.createdAt || 0;
+        return new Date(dateB) - new Date(dateA);
+      });
+    }
+  
+    setConversations(newConversations);
+  }, [inMessage]);
+  
+
   const fetchMsgh = async (id) => {
     try {
       const response = await axios.get(`/message/${id}`);
       setMessageHistory(response?.data);
+      const data = {conversationId:id}
+      const updateIsSeen = await axios.post('/message/updateIsSeen', data)
     } catch (error) {
       console.log(error);
     }
@@ -61,7 +86,10 @@ function Messages() {
 
   useEffect(() => {
     socket.on("sendToUser", (data) => {
+      console.log(data,'onnnnnnnnnnn')
       setMessageHistory((prevMessageHistory) => [...prevMessageHistory, data]);
+      setInMessage(data)
+
     });
 
     return () => {
@@ -71,7 +99,7 @@ function Messages() {
 
   const chatSubmit = async () => {
     try {
-      const obj = { conversationId: currentConv?._id, sender: userId, text: newMessage };
+      const obj = { conversationId: currentConv?._id, sender: userId, text: newMessage ,createdAt:new Date(Date.now())};
       socket.emit("sendData", obj);
       const response = await axios.post('/message/', obj);
       setNewMessage(''); 
@@ -98,7 +126,7 @@ function Messages() {
         </div>
       ))
     ) : (
-      <p className="text-center text-red-500 mt-4 text-sm">Sorry, there are no conversations available.</p>
+      <p className="text-center  mt-4 text-sm">Sorry, there are no conversations available.</p>
     )}
   </div>
 </div>
@@ -115,9 +143,9 @@ function Messages() {
                 }
                 {messageHistory.map((msg) => {
                   if (userId === msg?.sender) {
-                    return <Message own={true} msgData={msg?.text} key={msg?._id} />;
+                    return <Message own={true} msgData={msg?.text} msgTime={msg?.createdAt} key={msg?._id} msgSeen={msg?.isSeen} />;
                   }
-                  return <Message msgData={msg?.text} key={msg?._id} />;
+                  return <Message msgData={msg?.text} msgTime={msg?.createdAt} key={msg?._id} msgSeen={msg?.isSeen}/>;
                 })}
               </div>
             </div>

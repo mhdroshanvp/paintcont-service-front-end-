@@ -436,13 +436,12 @@ function PainterProfile() {
                 </Modal>
 
                 {/* Render Posts */}
-                {posts.map((post,index) => (
+                {posts.slice().reverse().map((post, index) => (
+  <div className="block rounded-xl bg-[#50187b67] m-5 h-100" key={post._id}>
+    <ClientPost onDelete={handleDelete} painterId={id} edit={true} id={index} post={post} indPostId={post._id} />
+  </div>
+))}
 
-                  <div className="block rounded-xl bg-[#50187b67] m-5 h-100" key={post._id}>
-                    <ClientPost onDelete={handleDelete} painterId={id} edit={true} id={index} post={post} indPostId={post._id} />
-                  </div>
-                
-                ))}
                 
               </div>
             </div>

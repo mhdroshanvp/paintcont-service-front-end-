@@ -12,6 +12,7 @@ function ClientLogin() {
   const [password, setPassword] = useState("");
   const [usernameFocus, setUsernameFocus] = useState(false);
   const [passwordFocus, setPasswordFocus] = useState(false);
+  const [user,setUser] = useState('')
 
   useEffect(()=>{
     const token = localStorage.getItem("token")
@@ -41,24 +42,32 @@ function ClientLogin() {
       return;
     }
 
-    // Clean and convert username to lowercase
     const cleanedUsername = username.replace(/\s+/g, '').toLowerCase();
 
     try {
       const response = await axios.post(UserEndpoints.login, { username: cleanedUsername, password });
-      // console.log(response.data);
+      
       if (response.data.success) {
-        localStorage.setItem("token", response.data.token);
-        dispatch(signInSuccess(response.data.user));
-        navigate("/user/home");
+
+        if(response?.data?.user?.isBlocked){
+          toast.error("Your account is blocked. Please contact support.");
+        }else{
+          localStorage.setItem("token", response.data.token);
+          dispatch(signInSuccess(response.data.user));
+          navigate("/user/home");
+        }
+        
       } else {
         toast.error("Username or password is incorrect");
       }
+
     } catch (error) {
       console.error("Error:", error.message);
       toast.error("Wrong credentials, try again :(");
     }
   };
+
+
 
   return (
     <>

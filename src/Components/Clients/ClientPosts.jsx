@@ -82,8 +82,6 @@ function ClientPosts({ post, postFetching ,edit,painterId,indPostId,id,onDelete,
       const data = { postId, userId };
       const response = await axios.post(UserEndpoints.like, data);
       if (response.data.success) {
-        // console.log(response.data,"======")
-        // console.log(liked)
         setLiked(response?.data?.liked);
         setCountLike(response?.data?.post?.likes?.length);
       }

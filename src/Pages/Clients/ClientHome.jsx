@@ -80,7 +80,7 @@ function ClientHome() {
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search by painter name | #hashtags | location"
+                placeholder="Search by painter name | #hashtags "
                 className="w-full h-10 px-4 py-2 border-gray-300 rounded-lg focus:outline-none focus:border-indigo-800 bg-[#50187b67] text-white"
               />
               <button onClick={handleSearch} className="ml-4 px-4 py-2 bg-[#50187b67] text-white rounded-lg hover:bg-[#7a45a3] focus:outline-none">
