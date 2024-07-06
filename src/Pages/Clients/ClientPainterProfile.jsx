@@ -194,7 +194,6 @@ function ClientPainterProfile() {
   
 const handleSlotBooking = async () => {
     try {
-      // console.log("gds")
         if (Object.keys(bookSlot).length > 0) {
             const data = { userId, bookSlot, painterId: id };
             const response = await axios.post(UserEndpoints.booked, data);
@@ -220,27 +219,26 @@ const makePayment = async () => {
 
     const data = {slot,userId}
 
-    console.log(data,"-------------------------------");
-
     const response = await axios.post('/stripe/create-checkout-session', data);
 
     const session = response.data;
 
-    console.log(session);
+    console.log(session,"session");
 
-    if(session.save == true){
-      handleSlotBooking()
-    }
-    
 
     const result = await stripe.redirectToCheckout({
       sessionId: session.id,
     });
 
     if(result){
-      const response = await axios.post('/stripe/create-checkout-session', data);
+      console.log(result,"-----------")
+      const response = await axios.post('/stripe/webhook', data);
       console.log(response)
     }
+
+     // if(session){
+    //   handleSlotBooking()
+    // }
 
     if (result.error) {
       console.log(result.error);

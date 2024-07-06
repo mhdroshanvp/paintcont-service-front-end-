@@ -36,6 +36,7 @@ import ClientSuccessPage from "./Pages/Clients/ClientSuccessPage";
 import ClientContact from "./Pages/Clients/ClientContact";
 import AdminDashboard from "./Pages/Admin/AdminDashboard";
 import PainterDashboard from "./Pages/Painters/PainterDashboard";
+import ClientFailurePage from "./Pages/Clients/ClientFailurePage";
 
 
 function App() {
@@ -71,6 +72,7 @@ function App() {
                     <Route path="user/chat/:id" element={<UserProtectedRoute allowedRole="user"> <Message /> </UserProtectedRoute>} />
                     <Route path="user/chat/" element={<UserProtectedRoute allowedRole="user"> <Message /> </UserProtectedRoute>} />
                     <Route path="user/payment-success" element={<UserProtectedRoute allowedRole="user"> <ClientSuccessPage /> </UserProtectedRoute>} />
+                    <Route path="user/payment-failure" element={<UserProtectedRoute allowedRole="user"> <ClientFailurePage /> </UserProtectedRoute>} />
 
                     {/* Painter-side */}
                     <Route path="painter/home" element={<PainterProtectedRoute allowedRole="painter"><PainterHome /></PainterProtectedRoute>} />
