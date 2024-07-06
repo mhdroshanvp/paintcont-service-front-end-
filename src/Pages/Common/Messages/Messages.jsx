@@ -100,18 +100,19 @@ function Messages() {
 
   useEffect(() => {
     socket.on("sendToUser", (data) => {
+      socket.emit("isSeen",data)
       console.log(data, 'test data on ')
       setMessageHistory((prevMessageHistory) => [...prevMessageHistory, data]);
       setInMessage(data)
     });
 
 
-    socket.on('messagesSeen', (conversationId) => {
-      console.log("entered!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1");
-      if (conversationId === currentConv?._id) {
-        const updatedMessages = messageHistory.map(msg => ({ ...msg, isSeen: true }));
-        setMessageHistory(updatedMessages);
-      }
+    socket.on('msIsSeen', (data) => {
+      console.log("entered!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!1",data);
+      // if (conversationId === currentConv?._id) {
+      //   const updatedMessages = messageHistory.map(msg => ({ ...msg, isSeen: true }));
+      //   setMessageHistory(updatedMessages);
+      // }
     });
 
 
